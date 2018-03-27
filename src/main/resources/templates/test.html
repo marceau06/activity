@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="fragments/header :: header">
+</head>
+<body>
+
+
+<h1>Création activité:</h1>
+<!-- <div class="formContainer"> -->
+
+	<form action="#" th:action="@{/activity/create}" th:object="${activity}" method="POST" enctype="multipart/form-data">
+
+
+<!-- One "tab" for each step in the form: -->
+		
+<!-- FIRST STEP : Title, category & description -->
+
+		<div class="tab">
+<!-- 			<div class="formContainer"> -->
+				<div class="form-group" th:class="${#fields.hasErrors('title')}? has-error" >
+					<span th:text="#{title}"></span>
+				  	<input type="text" th:field="*{title}" class="form-control" id="title" name="title" oninput="this.className = ''" autocomplete="off" />
+					<span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" th:errorclass="fieldError">Title Error</span>
+			    </div>
+				
+				  <div class="form-group" th:class="${#fields.hasErrors('category')}? has-error">
+	     			<span th:text="#{category}"></span>
+					<select class="form-control form-control-lg" th:field="*{category}">
+					  <option th:value="#{cat_art}" th:text="#{cat_art}"></option>
+					  <option th:value="#{cat_sport}" th:text="#{cat_sport}"></option>
+					  <option th:value="#{cat_nature}" th:text="#{cat_nature}"></option>
+					  <option th:value="#{cat_food}" th:text="#{cat_food}"></option>
+					  <option th:value="#{cat_entertainment}" th:text="#{cat_entertainment}"></option>
+					  <option th:value="#{cat_nightlife}" th:text="#{cat_nightlife}"></option>
+					  <option th:value="#{cat_discovery}" th:text="#{cat_discovery}"></option>
+					</select>
+				   </div>
+				
+			  <div class="form-group" th:class="${#fields.hasErrors('description')}? has-error">
+			 	<span th:text="#{description}"></span>
+			   	<textarea id="activityDescriptionField" th:field="*{description}" class="form-control" oninput="this.className = 'form-control'"></textarea>
+			   	<span th:if="${#fields.hasErrors('description')}" th:errors="*{description}" th:errorclass="fieldError">Description Error</span>
+			  </div>
+<!-- 			</div> -->
+		</div>
+
+
+<!-- SECOND STEP : meetingPoint, city, address and map  -->
+
+		<div class="tab">
+				<div>
+<!-- 					geolocs & zoom  -->
+					<input type="hidden" th:field="*{latitude}"></input>
+					<input type="hidden" th:field="*{longitude}"></input>
+					<input type="hidden" id="zoom" name="zoom"></input>
+<!-- 					meeting point name  -->
+					<p>
+						<span th:text="#{meeting_point_name}"></span>
+						<input  type="text" class="form-control" value="" th:field="*{meetingPoint}" th:placeholder="#{meeting_point_name}" oninput="this.className = ''" onclick="changeDestinationCityWithId(this.id)" autocomplete="off" />
+					</p>
+<!-- 					city  -->
+					<p>
+						<span th:text="#{city}"></span>
+						<input type="text" class="form-control" value="" th:field="*{city}" th:placeholder="#{city}" oninput="this.className = ''" onclick="changeDestinationCityWithId(this.id)" autocomplete="off" />
+					</p>
+<!-- 					country 					 -->
+					<input type="hidden" th:field="*{country}"></input>
+<!-- 					address  -->
+					<p>
+						<span th:text="#{address}"></span>
+<!-- 						<input id="activityAddressField" name="addresseField" type="text" class="form-control" value="" th:field="*{address}" th:placeholder="#{address}" oninput="this.className = ''" onclick="changeDestinationCityWithId(this.id)" autocomplete="off" /> -->
+						<input type="text" class="form-control" value="" th:field="*{address}" th:placeholder="#{address}" oninput="this.className = ''" onclick="changeDestinationCityWithId(this.id)" autocomplete="off" />
+					</p>
+				</div>
+<!-- 				google map  -->
+				<div>
+					<span th:text="#{map}"></span>
+					<div id="googleMap">
+					</div>
+				</div>
+		</div>
+
+
+<!-- THIRD STEP : schedules  -->
+
+		<!-- TODO -->
+		<!-- Convertir la date pour mapping en DB -->
+		<div class="tab">
+			<p>
+				Date de début de la période : 
+				<input type="text" id="beginDateText" name="beginDateText" onchange="changeReturnDate(); onChangeDate();" />
+			</p>		
+			<input type="date" th:field="*{beginDate}" />
+			
+			<p>
+				Date de fin de la période : 
+				<input type="text" id="endDateText" name="endDateText" onchange="onChangeDate();" />
+			</p>	
+			
+			<div>
+				<input type="date" th:field="*{endDate}"/>
+			</div>
+		
+			Du
+			<div class="form-group">
+				<select class="form-control form-control-lg" id="beginHour" name="beginHour">
+				</select>
+			</div>
+			Au
+			<div class="form-group">
+				<select class="form-control form-control-lg" id="endHour" name="endHour">
+				</select>
+			</div>
+		
+		</div>
+
+
+
+<!-- FOURTH STEP : Images and videos  -->
+		<div class="tab">
+				<p>
+					<span th:text="#{download_cover_image}"></span>
+					<input type="file" th:field="*{mainPictureFile}" th:placeholder="#{mainPictureFile}" oninput="this.className = ''" onchange="displayImg()"/>
+					<p>
+						<input id="imgDisplay" type="image" src="" value="overview" style="width: 150px; heigth: 150px;" />
+					</p>
+		</div>
+
+
+
+<!-- NAVIGATION BUTTON & SUBMIT  -->
+		<div style="overflow: auto;">
+			<div style="float: right;">
+				<button type="button" id="prevBtn" class="btn btn-default" onclick="nextPrev(-1)">Previous</button>
+				<button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
+			</div>
+		</div>
+
+		<!-- Circles which indicates the steps of the form: -->
+		<div style="text-align: center; margin-top: 40px;">
+			<span class="step"></span> 
+			<span class="step"></span> 
+			<span class="step"></span> 
+			<span class="step"></span>
+		</div>
+		
+	</form>
+	
+<script type="text/javascript">
+
+	window.onload = function(){
+	    initMap(0, 0);
+	    showTab(0); // Display the current tab
+	    populate("#beginHour");
+	    populate("#endHour");
+	    autocomplete("#address"); // Init autocomplete
+		autocomplete("#city");
+	}
+	    
+	jQuery(function() {
+	    $("#beginDateText").datepicker();
+	    $("#endDateText").datepicker();
+	});
+	    
+</script>
+		
+</body>
+</html>

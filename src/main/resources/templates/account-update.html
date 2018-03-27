@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+	<head th:include="fragments/header :: header"></head>
+    <body>
+        <h1 th:inline="text">Page de modification des informations du compte</h1>
+       
+        <!-- Infos sur la mise à jour des données -->
+        <h4><span th:text="${updateInfoMessage}"></span></h4>
+        
+        
+        <p>Retour sur espace perso <a th:href="@{/account}">ICI</a></p>    
+        
+        
+        <form action="#" th:action="@{/account/update}" th:object="${user}" method="post">
+		  
+		  <!-- FIRSTNAME -->
+		  <div class="form-group" th:class="${#fields.hasErrors('firstname')}? has-error" >
+			<span th:text="#{firstname}"></span>
+		  	<input type="text" th:id="firstname" th:name="firstname" class="form-control" id="firstname" th:value="${user.firstname}"/>
+			<span th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}" th:errorclass="fieldError">Firstname Error</span>
+		  </div>
+		  
+  		  <!-- LASTNAME -->
+		  <div class="form-group" th:class="${#fields.hasErrors('lastname')}? has-error">
+		  <span th:text="#{lastname}"></span>
+		   	<input type="text" th:id="lastname" th:name="lastname" class="form-control" id="lastname" th:value="${user.lastname}"/>
+		   	<span th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}" th:errorclass="fieldError">Lastname Error</span>
+		  </div>
+		  
+		  <!-- EMAIL -->
+		  <div class="form-group" th:class="${#fields.hasErrors('email')}? has-error">
+		  <span th:text="#{email}"></span>
+		   	<input type="text" th:id="email" th:name="email" class="form-control" id="email" th:value="${user.email}"/>
+		   	<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" th:errorclass="fieldError">Email Error</span>
+		  </div>
+		  
+		  <!-- WEBSITE ADDRESS -->
+		  <div class="form-group" th:class="${#fields.hasErrors('websiteAddress')}? has-error">
+		  <span th:text="#{websiteAddress}"></span>
+		   	<input type="text" th:id="websiteAddress" th:name="websiteAddress" class="form-control" id="websiteAddress" th:value="${user.websiteAddress}"/>
+		   	<span th:if="${#fields.hasErrors('websiteAddress')}" th:errors="*{websiteAddress}" th:errorclass="fieldError">>Website's url Error</span>
+		  </div>
+		  
+		  <!-- ADDRESS -->
+		  <div class="form-group" th:class="${#fields.hasErrors('address')}? has-error">
+		  <span th:text="#{address}"></span>
+		   	<input type="text" th:id="address" th:name="address" class="form-control" id="address" th:value="${user.address}"/>
+		   	<span th:if="${#fields.hasErrors('address')}" th:errors="*{address}" th:errorclass="fieldError">Address Error</span>
+		  </div>
+		  
+		  <!-- CITY -->
+		  <div class="form-group" th:class="${#fields.hasErrors('city')}? has-error">
+		  <span th:text="#{city}"></span>
+		   	<input type="text" th:id="city" th:name="city" class="form-control" id="city" th:value="${user.city}"/>
+		   	<span th:if="${#fields.hasErrors('city')}" th:errors="*{city}" th:errorclass="fieldError">City Error</span>
+		  </div>
+		  
+		  <!-- COUNTRY -->
+		  <div class="form-group" th:class="${#fields.hasErrors('country')}? has-error">
+		  <span th:text="#{country}"></span>
+		   	<input type="text" th:id="country" th:name="country" class="form-control" id="country" th:value="${user.country}"/>
+		   	<span th:if="${#fields.hasErrors('country')}" th:errors="*{country}" th:errorclass="fieldError">Country Error</span>
+		  </div>
+		  
+		  <!-- PHONE -->
+		  <div class="form-group" th:class="${#fields.hasErrors('phone')}? has-error">
+		  <span th:text="#{phone}"></span>
+		   	<input type="text" th:id="phone" th:name="phone" class="form-control" id="phone" th:value="${user.phone}"/>
+		   	<span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" th:errorclass="fieldError">Phone Error</span>
+		  </div>
+		  
+		  <input type="hidden" th:id="active" th:name="active" th:value="${user.active}" />
+		  
+		  <button style="margin-top:10px" class="btn btn-default" type="submit">Submit</button>
+	   </form>
+        
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Sign Out"/>
+        </form>
+    
+    </body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+   	<head th:include="fragments/header :: header">
+	<title>Registration Form</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/registration.css}" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<form th:action="@{/}" method="get">
+		<button class="btn btn-md btn-warning btn-block" type="Submit">Go To Login Page</button>
+	</form>	
+	
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<form autocomplete="off" action="#" th:action="@{/registration}" th:object="${user}" method="post" class="form-horizontal" role="form">
+					<h2 th:text="#{registrationForm}">Registration Form</h2>
+					
+					<!-- Firstname -->
+					<div class="form-group">
+						<div class="col-sm-9">
+						<label th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}" class="validation-message"></label>
+						<input type="text" th:field="*{firstname}" th:placeholder="#{firstname}" class="form-control" /> 
+						</div>
+					</div>
+					<!-- Lastname -->
+					<div class="form-group">
+						<div class="col-sm-9">
+						<label th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}" class="validation-message"></label>
+						<input type="text" th:field="*{lastname}" th:placeholder="#{lastname}" class="form-control" /> 
+						</div>
+					</div>
+					<!-- WebsiteAddress -->
+					<div class="form-group">
+						<div class="col-sm-9">
+						<label th:if="${#fields.hasErrors('websiteAddress')}" th:errors="*{websiteAddress}"class="validation-message"></label>
+						<input type="text" th:field="*{websiteAddress}" th:placeholder="#{websiteAddress}" class="form-control" /> 
+						</div>
+					</div>
+					<!-- Address -->
+					<div class="form-group">
+						<div class="col-sm-9">
+						<label th:if="${#fields.hasErrors('address')}" th:errors="*{address}"class="validation-message"></label>
+						<input type="text" th:field="*{address}" th:placeholder="#{address}" class="form-control" /> 
+						</div>
+					</div>
+					<!-- City -->
+					<div class="form-group">
+						<div class="col-sm-9">
+						<label	th:if="${#fields.hasErrors('city')}" th:errors="*{city}" class="validation-message"></label>
+						<input type="text" th:field="*{city}" th:placeholder="#{city}" class="form-control" /> 
+						</div>
+					</div>
+					<!-- Country -->
+					<div class="form-group">
+						<div class="col-sm-9">
+						<label	th:if="${#fields.hasErrors('country')}" th:errors="*{country}" class="validation-message"></label>
+						<input type="text" th:field="*{country}" th:placeholder="#{country}" class="form-control" /> 
+						</div>
+					</div>
+					<!-- Phone -->
+					<div class="form-group">
+						<div class="col-sm-9">
+						<input type="text" th:field="*{phone}" placeholder="Phone"class="form-control" /> 
+						<label th:if="${#fields.hasErrors('phone')}" th:placeholder="#{phone}" class="form-control"></label>
+						</div>
+					</div>
+					<!-- Email -->
+					<div class="form-group">
+						<div class="col-sm-9">
+						<input type="text" th:field="*{email}" th:placeholder="#{email}" class="form-control" /> 
+						<label th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="validation-message"></label>
+						</div>
+					</div>
+					<!-- Password -->
+					<div class="form-group">
+						<div class="col-sm-9">
+						<input type="password" th:field="*{password}" th:placeholder="#{password}" class="form-control" />
+						<label th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="validation-message"></label>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="col-sm-9">
+							<button type="submit" class="btn btn-primary btn-block" th:text="#{registerUser}">Register User</button>
+						</div>
+					</div>
+					
+				</form>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

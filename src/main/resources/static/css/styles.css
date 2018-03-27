@@ -1,0 +1,289 @@
+/******** General *************/
+
+html, body {
+	background: #ffffff;
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	color: #384452;
+	font-family: sans-serif;
+	font-weight: 400;
+	padding-top: 50px;
+}
+
+h1 {
+	margin-top: 150px;
+/* 	color: white; */
+	font-size: 50px;
+	font-weight: 700;
+}
+
+h2, h3, h4, H5, H6 {
+	font-family: 'Raleway', sans-serif;
+	font-weight: 700;
+}
+
+p {
+/* 	padding: 0; */
+/* 	margin-bottom: 12px; */
+/* 	font-family: 'Raleway', sans-serif; */
+/* 	font-weight: 400; */
+/* 	font-size: 14px; */
+/* 	line-height: 24px; */
+/* 	color: #384452; */
+/* 	margin-top: 10px; */
+}
+
+span {
+  font-family: 'Raleway', sans-serif;
+  clear: both;
+}
+
+img {
+	height: auto;
+	max-width: 100%;
+}
+
+a {
+	padding: 0;
+	margin: 0;
+	text-decoration: none;
+	-webkit-transition: background-color .4s linear, color .4s linear;
+	-moz-transition: background-color .4s linear, color .4s linear;
+	-o-transition: background-color .4s linear, color .4s linear;
+	-ms-transition: background-color .4s linear, color .4s linear;
+	transition: background-color .4s linear, color .4s linear;
+}
+
+contener {
+	border: 1px solid black;
+}
+
+a:hover, a:focus {
+	text-decoration: underline;
+	color: rgba(195, 197, 198, 0.87);
+}
+
+::moz-selection {
+	color: #fff;
+	text-shadow: none;
+	background: #2B2E31;
+}
+
+::selection {
+	color: #fff;
+	text-shadow: none;
+	background: #2B2E31;
+}
+
+.centered {
+	text-align: center;
+}
+
+
+.showBorder {
+	border: 1px solid;
+}
+
+/************ Style navigation bar ************/
+.navbar {
+	min-height: 30px;
+	padding-top: 0px;
+	margin-bottom: 500px;
+	display: inline;
+}
+
+.navbar-brand {
+	font-family: 'Raleway', sans-serif;
+	font-weight: 900;
+}
+
+.navbar-header .navbar-brand {
+	color: white;
+}
+
+.navbar-default .navbar-nav>li>a {
+	color: white;
+	font-weight: 700;
+	font-size: 16px;
+}
+
+.navbar-default .navbar-nav>li>a:hover {
+	color: rgba(172, 186, 191, 0.82);
+}
+
+.navbar-default .navbar-nav>.active>a,
+.navbar-default .navbar-nav>.active>a:hover,
+.navbar-default .navbar-nav>.active>a:focus d{
+	color: rgba(172, 186, 191, 0.82);
+	background: transparent;
+}
+
+.navbar-default {
+	background-color: #003a9e;
+	border-color: transparent;
+}
+
+/************ Style Home ************/
+#home {
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	min-height: 100%;
+	}
+
+#home h1 {
+	margin-top: 150px;
+	color: white;
+	font-size: 50px;
+	font-weight: 700;
+}
+
+#home h3 {
+	color: white;
+	font-size: 30px;
+	font-weight: 100;
+	font-family: 'Raleway', sans-serif;
+	font-style: oblique;
+}
+
+
+/***** Account ******************/
+#accountImage {
+	border: 1px solid grey;
+}
+
+
+/***** Bloc activité (list) *****/
+
+.activityBloc {
+	display: flex;
+	flex-direction: column;
+	border-bottom: 1px solid grey;
+}
+
+.activityBlocDesc {
+	border-bottom: 1px solid grey;
+	display: flex;
+	flex-direction: row-reverse;
+	justify-content: space-around;
+	padding: 9px;
+	flex: 5;
+}
+
+.activityBlocDescImage {
+	overflow: auto;
+	border-left: 1px solid grey;
+	vertical-align: middle;
+	flex: 2;
+}
+
+.activityBlocDescDetails {
+	flex: 4;
+}
+
+.activityBlocDescTitle {
+	display:flex;
+	justify-content: space-arround;
+}
+
+.activityBlocDescAddress {
+}
+
+.activityBlocDescPrice {
+}
+
+.activityBlocPrice {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: space-between;
+}
+
+.activityBlocDescText {
+	flex: 3;
+}
+
+.activityBlocBtn {
+	background-color: #f2f2f2;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: space-between;
+	padding: 1px;
+}
+
+/****** Activity creation page *****/
+
+input {
+  padding: 10px;
+  width: 100%;
+  font-size: 17px;
+  font-family: Raleway;
+  border: 1px solid #aaaaaa;
+}
+
+input.invalid {
+  background-color: #ffdddd;
+}
+
+input[type="date"] {
+
+	display: none;	
+}
+
+textarea.invalid {
+  background-color: #ffdddd;
+}
+
+.input-lg {
+	height: 150px;
+}
+
+.tab {
+  display: none;
+  padding-top: 10%;
+  padding-bottom: 10%;
+  border: 1px solid orange;
+}
+
+.step {
+  flex: 1;
+  height: 15=px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbbbbb;
+  border: none; 
+  border-radius: 50%;
+  display: inline-block;
+  opacity: 0.5;
+}
+
+.step.active {
+  opacity: 1;
+}
+
+.step.finish {
+  background-color: #4CAF50;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  min-height: 80%;
+  padding-left: 10%;
+  border: 1px solid red;
+}
+
+
+
+/***** Google map ***********/
+
+ #googleMap {
+   flex: 2;
+   width: 500px;
+   min-height: 500px;
+   background-color: grey;
+    border: 1px solid green;
+ }

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+   	<head th:include="fragments/header :: header">
+        <title>Activity overview</title>
+    </head>
+    <body>
+        <h1 th:inline="text">Page Aperçu d'une activité</h1>
+        <br>
+        
+        <span th:text="${creationInfoMessage}"></span>
+        <br>
+        <br>
+        
+        <!-- TITLE -->
+		<span th:text="${activityCreated.title}"></span>
+		<br>
+		<br>
+        <!-- DESCRIPTION -->
+        <span th:text="${activityCreated.description}"></span>
+        <br>
+        <br>
+        <h3>Retour à Liste des activités <a th:href="@{/activity/list}">ICI</a></h3> 
+        <br>
+        <br>
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Sign Out"/>
+        </form>
+        
+        <br>
+    </body>
+</html>

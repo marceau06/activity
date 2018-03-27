@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+   	<head th:include="fragments/header :: header">
+        <title>Activities list</title>
+    </head>
+    <body>
+        <h1 th:inline="text">Liste des activités</h1>
+        
+        TEST
+        <h3 th:text="#{activitiesListLabel}">test surcharge</h3>
+        FIN TEST
+        
+        <div>
+			<p>
+				Cliquez <a th:href="@{modification}">ici</a> pour accéder au formulaire de modification d'activités
+			</p>
+		</div>
+        
+        <div>
+        	TEST VALEUR DES ACTIVITES DU MODEL :
+        	
+        	
+			<ul>
+				<li th:each="element : ${activitiesList}" th:text="'['+ ${element.title} + ', ' +${element.description}+ ', ' + ${element.userId} + ']'">[titre, description, userId]</li>
+			</ul>
+			
+			
+        	FIN TEST VALEUR DES ACTIVITES DU MODEL
+        </div>
+        
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Sign Out"/>
+        </form>
+    </body>
+</html>
