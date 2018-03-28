@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -15,15 +14,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.koedia.activity.activityManager.model.entity.Activity;
 import com.koedia.activity.activityManager.model.entity.User;
 import com.koedia.activity.activityManager.service.ActivityService;
-import com.koedia.activity.activityManager.service.UserService;
 import com.koedia.common.tool.StringUtil;
 
 
@@ -32,15 +30,12 @@ import com.koedia.common.tool.StringUtil;
 @RequestMapping("activity")
 public class ActivityController {
 
-	private static String UPLOADED_FOLDER_ABSOLUTE= "/home/user/Images/images_storages_activity";
+	private static String UPLOADED_FOLDER_ABSOLUTE= "/home/user/workspace_web_escurity/activityManager/src/main/resources/static/img/stored/";
 	
 	private static String UPLOAD_FOLDER_RELATIVE= "../img/stored/";
 	
 	@Autowired
 	private ActivityService activityService;
-	
-	@Autowired
-	private UserService userService;
 	
 	@Autowired
 	HttpSession httpSession;
@@ -95,34 +90,10 @@ public class ActivityController {
 	@PostMapping("/create")
 	public ModelAndView createActivity(Activity activity) {
 		
-		// TODO
-		String picFileEndName = "mainpic" + Math.random() * 10; 
-		Integer userId = (Integer)httpSession.getAttribute("userId");
-		
-		if (userId != null) {
-			activity.setUserId(userId);
-			picFileEndName += "_user" + userId.toString();
-		}
-		
-		String absolutePicturePath = UPLOADED_FOLDER_ABSOLUTE + picFileEndName + ".jpg";
-		String relativePicturePath = UPLOAD_FOLDER_RELATIVE + picFileEndName + ".jpg";
 		String creationInfoMessage = "L'activité a bien été créée";
-		MultipartFile mainPictureFile = activity.getMainPictureFile();
-				 
-		if (mainPictureFile != null && mainPictureFile.getSize() > 0) {
-			
-	        if (!mainPictureFile.getOriginalFilename().equals("")) {
-	        	activity.setMainPicture(relativePicturePath);
-	            try {
-					 mainPictureFile.transferTo(new File(absolutePicturePath));
-				} catch (IllegalStateException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-	        }
-		}
-
+		// TODO
+		saveImage(activity);
+		
 		// Redirection vers page aperçu activité
 		ModelAndView mav = new ModelAndView("activities-overview");
 		
@@ -159,19 +130,12 @@ public class ActivityController {
 	
 	
 	/********************************** Activer / Désactiver une activité ****************************************/
-
-    @RequestMapping(value = "toggle", method = RequestMethod.GET)
-    public void redirectToAccount(HttpServletResponse httpServletResponse) {
-        httpServletResponse.setHeader("Location", "account");
-    }
-	
 	
 	@PostMapping("toggle")
-	@ModelAttribute("activity")
 	public ModelAndView toggleActivity(@RequestParam String activityId) {	
 		
 		// Redirection vers page compte 
-		ModelAndView mav = new ModelAndView("account");
+		ModelAndView mav = new ModelAndView("redirect:/account");
 		
 		if(StringUtil.isPresent(activityId)) {
 		
@@ -186,32 +150,102 @@ public class ActivityController {
 				// Traitement & enregistrement en DB
 				activityService.saveActivity(activityToUpdate);
 			}
-			
-			// Retrieve user
-			User user = (User)httpSession.getAttribute("user");
-			
-			// Retrieve activities created by user
-			List<Activity> allActivitiesForUser = activityService.findAllByUserId((Integer)httpSession.getAttribute("userId"));
-			
-			// Add users informations in account view
-			mav.addObject("activitiesList", allActivitiesForUser);
-			mav.addObject("numberActivities", allActivitiesForUser.size());
-			mav.addObject("userId", user.getId());
-			mav.addObject("email", user.getEmail());
-			mav.addObject("address", user.getAddress());
-			mav.addObject("websiteAddress", user.getWebsiteAddress());
-			mav.addObject("phone", user.getPhone());
-			
-			// TODO Add all activities in the model to update them
-			for(int i= 0; i < allActivitiesForUser.size(); i++) {
-				mav.addObject(allActivitiesForUser.get(i));
-			}
+			// Retrieve user's informations
+			retrieveUserInfos(mav);
 		}
+		
+		return mav;
+	}
+	
+	/********************************** Supprimer une activité **********************************************************/
+	@PostMapping("remove")
+	public ModelAndView removeActivity(@RequestParam String activityId) {
+		
+		if(StringUtil.isPresent(activityId)) {
+				// Traitement & enregistrement en DB
+				activityService.deleteById(Integer.valueOf(activityId));
+			}
+		
+		// Redirection vers page compte 
+		ModelAndView mav = new ModelAndView("account");
+		
+		// Retrieve user's informations
+		retrieveUserInfos(mav);
+		
+		return mav;
+	}
+	
+	
+	/********************************** Modifier une activité **********************************************************/
+	@GetMapping("edit")
+	public ModelAndView editActivity(@RequestParam String activityId) {
+		
+		if(StringUtil.isPresent(activityId)) {
+				// Mise a jour de l'activité
+			}
+		
+		// Redirection vers page compte 
+		ModelAndView mav = new ModelAndView("account");
 		
 		return mav;
 	}
 	
 	/********************************** Méthodes utiles **********************************************************/
 
+	private void retrieveUserInfos(ModelAndView mav) {
+		// Retrieve user
+		User user = (User)httpSession.getAttribute("user");
+		
+		// Retrieve activities created by user
+		List<Activity> allActivitiesForUser = activityService.findAllByUserId((Integer)httpSession.getAttribute("userId"));
+		
+		// Add users informations in account view
+		mav.addObject("activitiesList", allActivitiesForUser);
+		mav.addObject("numberActivities", allActivitiesForUser.size());
+		mav.addObject("userId", user.getId());
+		mav.addObject("email", user.getEmail());
+		mav.addObject("address", user.getAddress());
+		mav.addObject("websiteAddress", user.getWebsiteAddress());
+		mav.addObject("phone", user.getPhone());
+		
+		// TODO Add all activities in the model to update them
+		for(int i= 0; i < allActivitiesForUser.size(); i++) {
+			mav.addObject(allActivitiesForUser.get(i));
+		}
+	}
+	
+	
+	private void saveImage(Activity activity) {
+		
+		String picFileEndName = "mainpic" + Math.round(Math.random()*101);
+		
+		Integer userId = (Integer)httpSession.getAttribute("userId");
+		
+		if (userId != null) {
+			activity.setUserId(userId);
+			picFileEndName += "_user" + userId.toString();
+		}
+		
+		String absolutePicturePath = UPLOADED_FOLDER_ABSOLUTE + picFileEndName + ".jpg";
+		String relativePicturePath = UPLOAD_FOLDER_RELATIVE + picFileEndName + ".jpg";
+
+		MultipartFile mainPictureFile = activity.getMainPictureFile();
+				 
+		if (mainPictureFile != null && mainPictureFile.getSize() > 0) {
+			
+	        if (!mainPictureFile.getOriginalFilename().equals("")) {
+	        	activity.setMainPicture(relativePicturePath);
+	            try {
+					 mainPictureFile.transferTo(new File(absolutePicturePath));
+				} catch (IllegalStateException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+	        }
+		}
+
+	}
+	
 }
 

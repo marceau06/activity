@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.koedia.activity.activityManager.model.entity.Activity;
 import com.koedia.activity.activityManager.repository.ActivityRepository;
 import com.koedia.activity.activityManager.service.ActivityService;
 
 @Service("activityService")
+@Transactional
 public class ActivityServiceImpl implements ActivityService{
 
 	@Autowired
@@ -33,6 +35,11 @@ public class ActivityServiceImpl implements ActivityService{
 	@Override
 	public Activity findById(Integer id) {
 		return activityRepository.findById(id);
+	}
+
+	@Override
+	public void deleteById(Integer id) {
+		activityRepository.deleteById(id);
 	}
 	
 }

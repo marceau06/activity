@@ -13,4 +13,6 @@ public interface ActivityRepository extends JpaRepository<Activity, Integer>{
 	List<Activity> findAllByUserId(Integer userId);
 	
 	Activity findById(Integer id);
+	
+	void deleteById(Integer id);
 }

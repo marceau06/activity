@@ -14,4 +14,6 @@ public interface ActivityService {
 	
 	public Activity findById(Integer id);
 	
+	public void deleteById(Integer id);
+	
 }

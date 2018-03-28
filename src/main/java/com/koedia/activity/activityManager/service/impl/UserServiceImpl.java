@@ -6,6 +6,7 @@ import java.util.HashSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.koedia.activity.activityManager.model.entity.Role;
 import com.koedia.activity.activityManager.model.entity.User;
@@ -14,6 +15,7 @@ import com.koedia.activity.activityManager.repository.UserRepository;
 import com.koedia.activity.activityManager.service.UserService;
 
 @Service("userService")
+@Transactional
 public class UserServiceImpl implements UserService{
 	
 	@Autowired

@@ -18,16 +18,6 @@ public class UploadController {
 
 	private static String UPLOADED_FOLDER_DEFAULT= "../img/stored/";
 	
-	private static String UPLOADED_FOLDER_COVER= "../img/stored/";
-	
-	private static String UPLOADED_FOLDER_HOST= "/home/user/Bureau/PROJET_ACTIVITES_IMAGES_STORAGE/";
-
-	private static String UPLOADED_FOLDER_DETAILS= "/home/user/Bureau/PROJET_ACTIVITES_IMAGES_STORAGE/";
-
-	private static String UPLOADED_FOLDER_PLACE_= "/home/user/Bureau/PROJET_ACTIVITES_IMAGES_STORAGE/";
-
-	
-	
     @PostMapping("/upload")
     public ModelAndView singleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
 

@@ -66,12 +66,15 @@
 		
 		
 		
-			<th:block th:each="activity : ${activitiesList}" class="activityBloc">
-				<div class="activityBlocDesc">
+<!-- 			<th:block > -->
+				<div  th:if="!${#lists.isEmpty(activitiesList)}">
+				<div class="activityBlocDesc" th:each="activity : ${activitiesList}" >
+					
 					<!-- Image -->
 					<div class="activityBlocDescImage">
 						<img th:src="${activity.mainPicture}" class="rounded">
 					</div>
+					
 					<div class="activityBlocDescText"><span th:text="${activity.description}"></span></div>
 					<div class="activityBlocDescDetails">
 						<div class="activityBlocDescTitle">
@@ -96,26 +99,32 @@
 							</div>
 						</div>
 					</div>
-				</div>
+
 				<div class="activityBlocBtn">
 						
 					<form th:action="@{/activity/toggle}" method="POST" enctype="multipart/form-data">
-						<input type="checkbox" data-toggle="toggle" th:attr="data-on=#{activate}" th:attr="data-on=#{deactivate}" th:checked="${activity.active}" data-onstyle="success" data-offstyle="danger" onChange="submit();">
+						<input type="checkbox" data-toggle="toggle" th:attr="data-on=#{activate}" th:attr="data-on=#{deactivate}" th:checked="${activity.active}" data-onstyle="success" data-offstyle="danger" onchange="submit();">
 						<input type="hidden" th:id="activityId" th:name="activityId" th:value="${activity.id}" />
 					</form>
-					
-<!-- 					${activity.active ? "checked='checked'" : ""}  -->
-					<div class="btn btn-primary">
-						<span th:text="#{edit}"></span>
-					</div>
-					<div class="btn btn-warning">
-						<span th:text="#{remove}"></span>
-					</div>
+					<form th:action="@{/activity/edit}" method="GET" enctype="multipart/form-data" >
+						<div class="btn btn-primary">
+							<button type="button"  class="btn btn-outline-primary" onclick="submit();"><span th:text="#{edit}"></span></button>
+							<input type="hidden" th:id="activityId" th:name="activityId" th:value="${activity.id}" />
+						</div>
+					</form>
+					<form th:action="@{/activity/remove}" method="POST" enctype="multipart/form-data" >
+						<div class="btn btn-warning">
+							<button type="button"  class="btn btn-outline-danger" onclick="submit();"><span th:text="#{remove}"></span></button>
+							<input type="hidden" th:id="activityId" th:name="activityId" th:value="${activity.id}" />
+						</div>
+					</form>
 				</div>
-				<div>
-				</div>
+				
 			</div>
 		</div>
-	</th:block>
+	</div>
+		
+		</div>
+<!-- 	</th:block> -->
 </body>
 	</html>
