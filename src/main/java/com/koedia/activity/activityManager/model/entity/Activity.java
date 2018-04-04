@@ -35,7 +35,7 @@ public class Activity {
    	private String title;
  
 	@NotNull
-    @Size(min=10, max=254)
+    @Size(min=10, max=1000)
 	@Column(name = "description")
    	private String description;
  
@@ -83,6 +83,9 @@ public class Activity {
 	
 	@Column(name="country")
 	private String country; 
+	
+	@Column(name="zip_code")
+	private String zipCode;
 	
 	@Transient
 	private MultipartFile mainPictureFile;
@@ -276,5 +279,13 @@ public class Activity {
 
 	public void setMainPictureFile(MultipartFile mainPictureFile) {
 		this.mainPictureFile = mainPictureFile;
+	}
+
+	public String getZipCode() {
+		return zipCode;
+	}
+
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
 	}
 }

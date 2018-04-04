@@ -72,7 +72,7 @@ function validateForm() {
 			valid = false;
 		}
 		if (z[i] != null) {
-			if (z[i].value == "" || z[i].value.length < 100 || z[i].value.length > 1000) {
+			if (z[i].value == "" || z[i].value.length < 2 || z[i].value.length > 1000) {
 				// add an "invalid" class to the field:
 				z[i].className += " invalid";
 				z[i].placeholder += "Vous devez "
@@ -127,6 +127,14 @@ function changeReturnDate() {
 		date.setDate(date.getDate() + 1);
 		jQuery("#endDateText").datepicker('option', 'minDate', date);
 		jQuery("#endDateText").datepicker('setDate', date);
+	}
+}
+
+//Change l'heure de retour
+function changeReturnTime() {
+	var beginHour = jQuery("#beginHour").val();
+	if (beginHour) {
+		jQuery("#endHour").val(parseInt(beginHour) + 60);
 	}
 }
 

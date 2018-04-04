@@ -3,8 +3,8 @@ function autocomplete(code) {
 	labels = {};
 	var _lang = "fr";
 	var item;
-	var haveToShowDestiPopup = !jQuery(code).val().length > 0;
-
+//	var haveToShowDestiPopup = !jQuery(code).val().length > 0;
+	var haveToShowDestiPopup;
 	jQuery(code).ws_autocomplete().on('start', function(){
 		delete item;
 	}).on('_select', function(event, item) {
@@ -102,6 +102,8 @@ function setItem(item, nameId, codeId, catId, latId, lngId, zoomId, radiusId, ha
 	// Update google map only for address input
 	if(item.categoryType === "ADDRESS") {
 		initMap(jQuery(latId).val(), jQuery(lngId).val(), jQuery(zoom).val());
+		// Set input city country and zip code
+		geoNameByGeolocs(jQuery(latId).val(), jQuery(lngId).val());
 	} 
 }
 

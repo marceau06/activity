@@ -35,7 +35,7 @@ function initMap(latMeetingPoint, lngMeetingPoint, zoomSearch, radius) {
 			marker = [marker];
 			map = [map];
 
-			geonameByGeolocs(geocoder, map, marker, infowindow, event.latLng.lat(), event.latLng.lng());
+			updateMarkerWithGeolocs(geocoder, map, marker, infowindow, event.latLng.lat(), event.latLng.lng());
 			
 			// Retrieve variables by reference
 			marker = marker[0];
@@ -44,7 +44,7 @@ function initMap(latMeetingPoint, lngMeetingPoint, zoomSearch, radius) {
 	}
 }
 
-function geonameByGeolocs(geocoder, map, marker, infowindow, latStr, lngStr) {
+function updateMarkerWithGeolocs(geocoder, map, marker, infowindow, latStr, lngStr) {
 
 	var latlng = {lat: parseFloat(latStr), lng: parseFloat(lngStr)};
 
@@ -66,6 +66,42 @@ function geonameByGeolocs(geocoder, map, marker, infowindow, latStr, lngStr) {
 		} else {
 			window.alert('Geocoder failed due to: ' + status);
 		}
+	});
+}
+
+// TODO Externaliser remplissage des inputs dans un autre fichier
+function geoNameByGeolocs(lat, lng) {
+	
+	var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat + ',' + lng + '&key=AIzaSyDMVRF60y0zxhEqVF1vArJvTyWk5d81kJ4&sensor=false';
+	var city;
+	var area;
+	var country;
+	
+	var test = jQuery.getJSON(url, function(data) {
+		
+		console.log(data);
+	
+		var results = data.results;
+		for (var ac = 0; ac < results[0].address_components.length; ac++) {
+            var component = results[0].address_components[ac];
+
+            switch(component.types[0]) {
+                case 'locality':
+                    city = component.long_name;
+                    break;
+                case 'postal_code':
+                    zipCode = component.short_name;
+                    break;
+                case 'country':
+                    country = component.long_name;
+                    break;
+            }
+        };
+
+	}).always(function() {
+		jQuery("#city").val(city);
+		jQuery("#country").val(country);
+		jQuery("#zipCode").val(zipCode);
 	});
 }
 

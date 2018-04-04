@@ -61,20 +61,24 @@
 <!-- 					meeting point name  -->
 					<p>
 						<span th:text="#{meeting_point_name}"></span>
-						<input  type="text" class="form-control" value="" th:field="*{meetingPoint}" th:placeholder="#{meeting_point_name}" oninput="this.className = ''" onclick="changeDestinationCityWithId(this.id)" autocomplete="off" />
+						<input  type="text" class="form-control" value="" th:field="*{meetingPoint}" th:placeholder="#{meeting_point_name}" oninput="this.className = ''" autocomplete="off" />
 					</p>
-<!-- 					city  -->
+<!-- 					address  -->
+					<p>
+						<span th:text="#{address}"></span>
+						<input type="text" class="form-control" value="" th:field="*{address}" th:placeholder="#{address}" oninput="this.className = ''" onclick="changeDestinationCityWithId(this.id)" autocomplete="off" />
+					</p>
 					<p>
 						<span th:text="#{city}"></span>
 						<input type="text" class="form-control" value="" th:field="*{city}" th:placeholder="#{city}" oninput="this.className = ''" onclick="changeDestinationCityWithId(this.id)" autocomplete="off" />
 					</p>
-<!-- 					country 					 -->
-					<input type="hidden" th:field="*{country}"></input>
-<!-- 					address  -->
 					<p>
-						<span th:text="#{address}"></span>
-<!-- 						<input id="activityAddressField" name="addresseField" type="text" class="form-control" value="" th:field="*{address}" th:placeholder="#{address}" oninput="this.className = ''" onclick="changeDestinationCityWithId(this.id)" autocomplete="off" /> -->
-						<input type="text" class="form-control" value="" th:field="*{address}" th:placeholder="#{address}" oninput="this.className = ''" onclick="changeDestinationCityWithId(this.id)" autocomplete="off" />
+						<span th:text="#{country}"></span>
+						<input type="text" class="form-control" value="" th:field="*{country}" th:placeholder="#{country}" oninput="this.className = ''" autocomplete="off" />
+					</p>
+					<p>
+						<span th:text="#{zip_code}"></span>
+						<input type="text" class="form-control" value="" th:field="*{zipCode}" th:placeholder="#{zip_code}" oninput="this.className = ''" autocomplete="off" />
 					</p>
 				</div>
 <!-- 				google map  -->
@@ -108,7 +112,7 @@
 		
 			Du
 			<div class="form-group">
-				<select class="form-control form-control-lg" id="beginHour" name="beginHour">
+				<select class="form-control form-control-lg" id="beginHour" name="beginHour" onchange="changeReturnTime();">
 				</select>
 			</div>
 			Au
