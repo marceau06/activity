@@ -138,6 +138,11 @@
 		    <version>1.12.1</version>
 		</dependency>
 		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>normalize.css</artifactId>
+		    <version>3.0.1</version>
+		</dependency>
+		<dependency>
     		<groupId>com.google.maps</groupId>
     		<artifactId>google-maps-services</artifactId>
     		<version>0.1.1</version>
@@ -180,14 +185,7 @@
 			</plugin>
 		</plugins>
 	</build>
-	
-<!--  <repositories> -->
-<!--         <repository> -->
-<!--             <id>spring-releases</id> -->
-<!--             <name>Spring Releases</name> -->
-<!--             <url>https://repo.spring.io/libs-release</url> -->
-<!--         </repository> -->
-<!--     </repositories> -->
+
     <pluginRepositories>
         <pluginRepository>
             <id>spring-releases</id>

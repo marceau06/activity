@@ -2,8 +2,11 @@ package com.koedia.activity.activityManager.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
 
+import javax.rmi.CORBA.UtilDelegate;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -98,6 +101,7 @@ public class ActivityController {
 		
 		// Traitement & enregistrement en DB
 		if (activity != null) {
+			activity.setCreationDate(new Date(Calendar.getInstance().getTime().getTime()));
 			try{
 				activityService.saveActivity(activity);
 			} catch(Exception ex) {

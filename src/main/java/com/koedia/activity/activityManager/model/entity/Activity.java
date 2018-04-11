@@ -50,6 +50,9 @@ public class Activity {
 
 	@Column(name = "end_date")
    	private Date endDate;
+	
+	@Column(name = "creation_date")
+   	private Date creationDate;
    	
 	@Column(name = "price")
    	private Double price;
@@ -86,6 +89,9 @@ public class Activity {
 	
 	@Column(name="zip_code")
 	private String zipCode;
+	
+	@Column(name="place")
+	private String place;
 	
 	@Transient
 	private MultipartFile mainPictureFile;
@@ -287,5 +293,21 @@ public class Activity {
 
 	public void setZipCode(String zipCode) {
 		this.zipCode = zipCode;
+	}
+
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public String getPlace() {
+		return place;
+	}
+
+	public void setPlace(String place) {
+		this.place = place;
 	}
 }

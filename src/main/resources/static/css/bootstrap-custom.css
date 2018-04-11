@@ -1,4 +1,140 @@
+body {
+  padding-top: 10px;
+}
+[class*="col-"], footer {
+/*   background-color: lightgreen; */
+  border: 1px solid black;
+  border-radius: 6px;
+/*   line-height: 40px; */
+  text-align: center;
+}
+
+.container-fluid {
+  padding-right: 50px;
+/*   padding-left: 50px; */
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.row {
+	border: 1px solid black;
+}
 
 .glyphicon:before {
-	margin-right: 5px;
+	margin-right: 10px;
+}
+
+.align-start {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+}
+
+.align-center {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.shift-right {
+	text-indent: 20em;
+}
+
+/***************** Account *****************/
+
+.contResultBloc {
+	background-color: #ffffff;
+	border-radius: 5px;
+	line-height: 26px;
+	font-size: 34px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	border: 1px solid grey;
+}
+
+.constResultInfos {
+	display: flex;
+	flex-direction: column;
+}
+
+.contDescriptionBloc {
+	height: 105px;
+}
+
+.contDescriptionArea {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4; 
+  line-height: 20px;        
+  font-size: 15px;
+  margin: 7px;
+}
+
+.contAddressBloc {
+	font-size: 20px;
+	font-color: YellowGreen;
+	line-height: 20px; 
+	margin-top: 2px;
+	margin-bottom: 21px;
+}
+
+.contButtonBloc {
+	display: flex;
+	padding-top: 10px;
+	padding-bottom: 4px;
+}
+
+.contPriceBloc {
+	border-top: 0.5px solid grey;
+	border-left: 0.5px solid grey;
+	height: 66px;
+	background-color: rgba(15, 157, 195, 0.1);
+}
+
+.activityPrice {
+	font-size: 24px;
+	padding-top: 10px;
+	border-radius: 3px;
+	font-weight: bold;
+	line-height: 20px; 
+}
+
+.labelPrice {
+	font-size: 12px;
+	padding: 10px 4px;
+	color: #002db3;
+	border-radius: 3px;
+	font-weight: bold;
+	text-align: center;
+	line-height: 20px; 
+}
+
+.btnStep {
+	padding-top: 14%;
+}
+
+/***************** Creation activity form *****************/
+
+
+
+/**************************** MEDIAS ***************************/
+
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
 }
