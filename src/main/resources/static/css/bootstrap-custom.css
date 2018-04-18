@@ -11,7 +11,6 @@ body {
 
 .container-fluid {
   padding-right: 50px;
-/*   padding-left: 50px; */
   margin-right: auto;
   margin-left: auto;
 }
@@ -40,6 +39,10 @@ body {
 
 .shift-right {
 	text-indent: 20em;
+}
+
+.container-form {
+	height: 700px;
 }
 
 /***************** Account *****************/

@@ -79,8 +79,6 @@ function geoNameByGeolocs(lat, lng) {
 	
 	var test = jQuery.getJSON(url, function(data) {
 		
-		console.log(data);
-	
 		var results = data.results;
 		for (var ac = 0; ac < results[0].address_components.length; ac++) {
             var component = results[0].address_components[ac];
@@ -110,7 +108,8 @@ function toggleBounce() {
 		marker.setAnimation(null);
 	} else {
 		marker.setAnimation(google.maps.Animation.BOUNCE);
-	}
+ }
+	
 }
 
 

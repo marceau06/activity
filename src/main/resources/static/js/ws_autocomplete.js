@@ -100,11 +100,12 @@ function setItem(item, nameId, codeId, catId, latId, lngId, zoomId, radiusId, ha
 	jQuery(radiusId).val(item.radius);
 	
 	// Update google map only for address input
-	if(item.categoryType === "ADDRESS") {
-		initMap(jQuery(latId).val(), jQuery(lngId).val(), jQuery(zoom).val());
-		// Set input city country and zip code
-		geoNameByGeolocs(jQuery(latId).val(), jQuery(lngId).val());
-	} 
+//	if(item.categoryType === "ADDRESS") {
+	initMap(jQuery(latId).val(), jQuery(lngId).val(), jQuery(zoom).val());
+    document.getElementById("googleMap").style.display= "block";
+	// Set input city country and zip code
+	geoNameByGeolocs(jQuery(latId).val(), jQuery(lngId).val());
+//	} 
 }
 
 function hydrateItem(nameId, codeId, catId, latId, lngId, zoomId, radiusId, resetItem) {

@@ -216,6 +216,15 @@ textarea.invalid {
 	overflow: auto;
 }
 
+#category {
+	heigth: 50;
+}
+
+#description {
+	heigth: 50;
+	width: 	1500;
+}
+
 /***** Google map ***********/
 
  #googleMap {
@@ -223,5 +232,6 @@ textarea.invalid {
    width: 500px;
    min-height: 500px;
    background-color: grey;
-    border: 1px solid green;
+   border: 1px solid green;
+   
  }
