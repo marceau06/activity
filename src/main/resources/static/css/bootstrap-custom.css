@@ -45,6 +45,10 @@ body {
 	height: 700px;
 }
 
+.input-place {
+	min-width: 400px;
+}
+
 /***************** Account *****************/
 
 .contResultBloc {

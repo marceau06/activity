@@ -221,8 +221,8 @@ textarea.invalid {
 }
 
 #description {
-	heigth: 50;
-	width: 	1500;
+	min-height : 200px;
+	min-width: 	500px;
 }
 
 /***** Google map ***********/

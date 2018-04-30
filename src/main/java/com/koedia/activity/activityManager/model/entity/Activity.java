@@ -1,6 +1,7 @@
 package com.koedia.activity.activityManager.model.entity;
 
 import java.sql.Date;
+import java.sql.Time;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -51,15 +52,15 @@ public class Activity {
 	@Column(name = "end_date")
    	private Date endDate;
 	
+	@Column(name="begin_hour")
+	private Time beginHour;
+	
+	@Column(name="end_hour")
+	private Time endHour;
+	
 	@Column(name = "creation_date")
    	private Date creationDate;
    	
-	@Column(name = "price")
-   	private Double price;
-   	
-	@Column(name = "minimum_age")
-   	private Integer minimuAge;
-
 	@Column(name = "main_picture")
 	private String mainPicture;
 
@@ -78,9 +79,9 @@ public class Activity {
 	@Column(name = "active")
 	private boolean active;
 	
-	@Column(name="nb_persons")
-	private Integer nbPersons; 
-	
+	@Column(name = "alcohol")
+	private boolean alcohol;
+
 	@Column(name = "city")
 	private String city;
 	
@@ -96,6 +97,19 @@ public class Activity {
 	@Transient
 	private MultipartFile mainPictureFile;
 	
+	@Column(name = "price")
+   	private Double price;
+	
+	@Column(name = "minimum_age")
+	private Integer minimumAge;
+	
+	@Column(name="nb_persons")
+	private Integer nbPersons; 
+
+	
+	@Column(name="additional_infos")
+	private String additionalInfos;
+	
 	public Activity() {
 		super();
 	}
@@ -104,7 +118,8 @@ public class Activity {
 			String category, String address, Date beginDate, Date endDate,
 			String planification, Double price, Integer minimumAge,
 			String mainPicture, String secondPicture, boolean active, 
-			int nbPersons, String city, String country) {
+			int nbPersons, String city, String country, String place, String zipCode,
+			boolean alcohol, String additionalInfos) {
 		
 		super();
 		
@@ -117,13 +132,17 @@ public class Activity {
 		this.beginDate = beginDate;
 		this.endDate = endDate;
 		this.price = price;
-		this.minimuAge = minimumAge;
+		this.minimumAge = minimumAge;
 		this.mainPicture = mainPicture;
 		this.secondPicture = secondPicture;
 		this.active = active;
 		this.nbPersons = nbPersons;
 		this.city = city;
 		this.country = country;
+		this.alcohol = alcohol;
+		this.place = place;
+		this.additionalInfos = additionalInfos;
+		this.zipCode = zipCode;
 	}
 
 
@@ -200,11 +219,11 @@ public class Activity {
 	}
 
 	public Integer getMinimumAge() {
-		return minimuAge;
+		return minimumAge;
 	}
 
 	public void setMinimumAge(Integer minimumAge) {
-		this.minimuAge = minimumAge;
+		this.minimumAge = minimumAge;
 	}
 
 	public Double getLatitude() {
@@ -230,7 +249,15 @@ public class Activity {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
+	
+	public boolean isAlcohol() {
+		return alcohol;
+	}
 
+	public void setAlcohol(boolean alcohol) {
+		this.alcohol = alcohol;
+	}
+	
 	public String getMeetingPoint() {
 		return meetingPoint;
 	}
@@ -309,5 +336,29 @@ public class Activity {
 
 	public void setPlace(String place) {
 		this.place = place;
+	}
+
+	public String getAdditionalInfos() {
+		return additionalInfos;
+	}
+
+	public void setAdditionalInfos(String additional_infos) {
+		this.additionalInfos = additional_infos;
+	}
+
+	public Time getBeginHour() {
+		return beginHour;
+	}
+
+	public void setBeginHour(Time beginHour) {
+		this.beginHour = beginHour;
+	}
+
+	public Time getEndHour() {
+		return endHour;
+	}
+
+	public void setEndHour(Time endHour) {
+		this.endHour = endHour;
 	}
 }

@@ -61,8 +61,13 @@ function validateForm() {
 	x = document.getElementsByClassName("tab");
 	y = x[currentTab].getElementsByTagName("input");
 	z = x[currentTab].getElementsByTagName("textarea");
+	w = x[currentTab].getElementsByTagName("select")
 	// A loop that checks every input field in the current tab:
 	for (i = 0; i < y.length; i++) {
+		
+		console.log(z[i]);
+		console.log(y[i]);
+		console.log(w[i]);
 		
 		// If a field is empty...
 		if (y[i].value == "" || y[i].value.length < 2) {
@@ -76,6 +81,14 @@ function validateForm() {
 				// add an "invalid" class to the field:
 				z[i].className += " invalid";
 				z[i].placeholder += "Vous devez "
+				// and set the current valid status to false:
+				valid = false;
+			}
+		}
+		if(w[i] != null) {
+			if(w[i].value == "") {
+				w[i].className += " invalid";
+				w[i].placeholder += "Vous devez renseigner une valeur pour l'heure de départ";
 				// and set the current valid status to false:
 				valid = false;
 			}
