@@ -61,13 +61,9 @@ function validateForm() {
 	x = document.getElementsByClassName("tab");
 	y = x[currentTab].getElementsByTagName("input");
 	z = x[currentTab].getElementsByTagName("textarea");
-	w = x[currentTab].getElementsByTagName("select")
+//	w = x[currentTab].getElementsByTagName("select")
 	// A loop that checks every input field in the current tab:
 	for (i = 0; i < y.length; i++) {
-		
-		console.log(z[i]);
-		console.log(y[i]);
-		console.log(w[i]);
 		
 		// If a field is empty...
 		if (y[i].value == "" || y[i].value.length < 2) {
@@ -85,17 +81,17 @@ function validateForm() {
 				valid = false;
 			}
 		}
-		if(w[i] != null) {
-			if(w[i].value == "") {
-				w[i].className += " invalid";
-				w[i].placeholder += "Vous devez renseigner une valeur pour l'heure de départ";
-				// and set the current valid status to false:
-				valid = false;
-			}
-		}
+//		if(w[i] != null) {
+//			if(w[i].value == "") {
+//				w[i].className += " invalid";
+//				w[i].placeholder += "Vous devez renseigner une valeur pour l'heure de départ";
+//				// and set the current valid status to false:
+//				valid = false;
+//			}
+//		}
 	}
 	// If the valid status is true, mark the step as finished and valid:
-	if (valid) {
+	if (valid) {	
 		document.getElementsByClassName("step")[currentTab].className += " finish";
 	}
 	return valid; // return the valid status

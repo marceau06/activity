@@ -122,14 +122,18 @@
 								<button type="button"  class="btn btn-secondary" onclick="submit();"><span th:text="#{remove}"></span></button>
 								<input type="hidden" th:id="activityId" th:name="activityId" th:value="${activity.id}" />
 							</form>
+							<form th:action="@{/activity/export}" method="POST" enctype="multipart/form-data" >
+								<button type="button"  class="btn btn-secondary" onclick="submit();">Export</button>
+								<input type="hidden" th:id="activityId" th:name="activityId" th:value="${activity.id}" />
+							</form>
 						</div>
 				
 						<div class="col-lg-2 labelPrice">
 							<span th:text="#{price_per_pers}"></span>
 						</div>
 						<section class="col-lg-2 activityPrice">
-							<span>10 euros</span>
-<!-- 						<p><span th:text="${activity.price}">10 euros</span></p> -->
+<!-- 							<span>10 euros</span> -->
+						<p><span th:text="${activity.price}"></span> Euros</p>
 						</section>
 					</div>
         		</div>

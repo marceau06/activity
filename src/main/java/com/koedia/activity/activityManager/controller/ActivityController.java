@@ -1,7 +1,10 @@
 package com.koedia.activity.activityManager.controller;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
@@ -177,6 +180,43 @@ public class ActivityController {
 		return mav;
 	}
 	
+	
+	/********************************** Supprimer une activité **********************************************************/
+	@PostMapping("export")
+	public ModelAndView exportActivity(@RequestParam String activityId) {
+		
+	 String CSV_SEPARATOR = ",";
+	 
+	 if(StringUtil.isPresent(activityId)) {
+			
+			// Récupérer l'activité à activer/désactiver
+			Activity activityToexport = activityService.findById(Integer.valueOf(activityId));
+
+			 try
+				{
+				    BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("activity.csv"), "UTF-8"));
+		
+				    StringBuffer oneLine = new StringBuffer();
+				    oneLine.append(activityToexport.getId() <=0 ? "" : activityToexport.getId());
+				    oneLine.append(CSV_SEPARATOR);
+				    oneLine.append(activityToexport.getTitle().trim().length() == 0? "" : activityToexport.getTitle());
+				    oneLine.append(CSV_SEPARATOR);
+		            bw.write(oneLine.toString());
+				    bw.newLine();
+				    bw.flush();
+				    bw.close();
+				}
+			 	catch (IOException e){}
+			 }
+		
+		// Redirection vers page compte 
+		ModelAndView mav = new ModelAndView("account");
+		
+		// Retrieve user's informations
+		retrieveUserInfos(mav);
+		
+		return mav;
+	}
 	
 	/********************************** Modifier une activité **********************************************************/
 	@GetMapping("edit")

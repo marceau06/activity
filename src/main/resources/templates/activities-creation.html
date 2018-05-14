@@ -18,7 +18,6 @@
 				
 				<!-- Barre latérale de progression -->
 				<div class="col-lg-2">
-					TEST
 				</div>
 				
 				<!-- Title -->
@@ -42,7 +41,7 @@
 				 </div>
 				 
 <!-- FIRST STEP : Title, category & description -->
-				<div class="tab">
+		<div class="tab">
 					<div class="row inputStyle">
 						<p>
 							<span class="inputTitle" th:text="#{category}"></span>
@@ -64,7 +63,7 @@
 					 </div>
 				</div>
 				
-				<div class="tab">
+		<div class="tab">
 				
 					<div class="row inputStyle">
 						<p>
@@ -111,7 +110,7 @@
 						</p>
 					</div>
 					<div>
-						<span  th:text="#{map}"></span>
+<!-- 						<span  th:text="#{map}"></span> -->
 						<div id="googleMap">
 						</div>
 					</div>
@@ -138,13 +137,13 @@
 					</div>
 						<span th:text="#{from}"></span>
 						<div class="form-group">
-							<select class="form-control" id="beginHour" name="beginHour" onchange="changeReturnTime();">
+							<select class="form-control" id="beginHourT" name="beginHourT" onchange="changeReturnTime();">
 							</select>
 						</div>
 						
 						<span th:text="#{to}"></span>
 						<div class="form-group">
-							<select class="form-control" id="endHour" name="endHour">
+							<select class="form-control" id="endHourT" name="endHourT">
 							</select>
 						</div>
 				</div>
@@ -171,39 +170,50 @@
 				<div class="row">
 				
 					<div>
-					
 						<p>
 						TEST
 						</p>
 					</div>
-<!-- 					<span th:text="">ALCOHOL</span> -->
+
 					<div class ="form-check">
+					Alcool ?
 						<input type="checkbox" class="form-check-input" th:field="*{alcohol}" />
 					</div>
 					
-<!-- 					minimum age -->
-<!-- 					<span th:text="">MINIMUM AGE</span> -->
-<!-- 					<div class="form-group"> -->
-<!-- 						<select class="form-control form-control-lg" th:field="*{minimumAge}"> -->
-<!-- 						  <option th:each="i : 18"> -->
-<!-- 						  </option> -->
-<!-- 						</select> -->
-<!-- 					 </div> -->
+					<div class="form-group">
+						<select class="form-control form-control-lg" th:field="*{minimumAge}">
+							<option value="0">0</option>
+							 <option value="1">1</option>
+							 <option value="2">2</option>
+							 <option value="3">3</option>
+							 <option value="4">4</option>
+							 <option value="5">5</option>
+							 <option value="6">6</option>
+							 <option value="7">7</option>
+							 <option value="8">8</option>
+							 <option value="9">9</option>
+							 <option value="10">10</option>
+							 <option value="11">11</option>
+							 <option value="12">12</option>
+							 <option value="13">13</option>
+							 <option value="14">14</option>
+							 <option value="15">15</option>
+							 <option value="16">16</option>
+							 <option value="17">17</option>
+							 <option value="18">18</option>
+						</select>
+					 </div>
+					 
+					 <div class ="form-check">
+					 	Verification ID ?
+						<input type="checkbox" class="form-check-input" th:field="*{alcohol}" />
+					</div>
 					
-<!-- 					<div> -->
-<!-- 						<input type="date" th:field="*{endDate}"/> -->
-<!-- 					</div> -->
-<!-- 						<span th:text="#{from}"></span> -->
-<!-- 						<div class="form-group"> -->
-<!-- 							<select class="form-control" id="beginHour" name="beginHour" onchange="changeReturnTime();"> -->
-<!-- 							</select> -->
-<!-- 						</div> -->
-						
-<!-- 						<span th:text="#{to}"></span> -->
-<!-- 						<div class="form-group"> -->
-<!-- 							<select class="form-control" id="endHour" name="endHour"> -->
-<!-- 							</select> -->
-<!-- 						</div> -->
+					<div class ="form-check">
+					 	Price
+						<input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" th:field="*{price}" />
+					</div>
+
 				</div>
 			</div>
 	
@@ -220,7 +230,7 @@
 			<!-- We need as many circles as there are steps -->
 			<div style="text-align: center; margin-top: 40px;">
 				<span class="step"></span> 
-<!-- 				<span class="step"></span>  -->
+				<span class="step"></span> 
 				<span class="step"></span> 
 				<span class="step"></span>
 				<span class="step"></span>
@@ -244,9 +254,9 @@
 	window.onload = function(){
 	    initMap(0, 0);
 	    document.getElementById("googleMap").style.display= "none";
-	    showTab(6); // Display the current tab
-	    populate("#beginHour");
-	    populate("#endHour");
+	    showTab(0); // Display the current tab
+	    populate("#beginHourT");
+	    populate("#endHourT");
 	    autocomplete("#address"); // Init autocomplete
 		autocomplete("#city");
 		jQuery("#charsCount").text(minNumCharsDescription - jQuery("#description").val().length);
@@ -285,7 +295,7 @@
 			map.style.display = "none";
 		}
 	 }
-	    
+	
 </script>
 		
 </body>
