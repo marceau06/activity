@@ -64,22 +64,52 @@
 				</div>
 				
 		<div class="tab">
-				
-					<div class="row inputStyle">
-						<p>
-							<span class="inputTitle" th:text="#{description}"></span>
-						</p>
-						<p>
-							<span class="inputIndication" th:text="#{title_indication}"></span>
-						</p>
-					</div>
-					 <div class="form-group" th:class="${#fields.hasErrors('description')}? has-error">
-					   	<textarea th:field="*{description}" class="form-control form-control-lg" oninput="this.className = 'form-control'"></textarea>
-					   	<span th:if="${#fields.hasErrors('description')}" th:errors="*{description}" th:errorclass="fieldError">Description Error</span>
-		 				<span id="charsCount"></span> 				
-		 				<span id="charsRequiredField" th:text="#{chars_required}"></span> 
+			<div class="row inputStyle">
+				<p>
+					<span class="inputTitle" th:text="#{description}"></span>
+				</p>
+				<p>
+					<span class="inputIndication" th:text="#{title_indication}"></span>
+				</p>
+				<p>
+					<span>Select the language of the description</span>
+				</p>
+				<select id="selectDescLang" class="form-control" onChange="switchDescLang();">
+					<option>FR</option>
+					<option>EN</option>
+					<option>ES</option>
+				</select>
+
+				<br/>
+
+			   <div id="blocDescFr">
+					<div class="form-group" th:class="${#fields.hasErrors('descriptionFre')}? has-error">
+						 <textarea th:field="*{descriptionFre}" class="form-control form-control-lg form-desc" oninput="this.className = 'form-control'" th:placeholder="#{desc_indication}"></textarea>
+						   	<span th:if="${#fields.hasErrors('descriptionFre')}" th:errors="*{descriptionFre}" th:errorclass="fieldError">Description Error</span>
+<!-- 			 				<span id="charsCount"></span> 				 -->
+<!-- 			 				<span id="charsRequiredField" th:text="#{chars_required}"></span>  -->
+						 </div>
+					 </div>
+
+					<div id="blocDescEn">
+						 <div class="form-group" th:class="${#fields.hasErrors('descriptionEng')}? has-error">
+						   	<textarea th:field="*{descriptionEng}" class="form-control form-control-lg form-desc" oninput="this.className = 'form-control'" th:placeholder="#{desc_indication}"></textarea>
+						   	<span th:if="${#fields.hasErrors('descriptionEng')}" th:errors="*{descriptionEng}" th:errorclass="fieldError">Description Error</span>
+<!-- 			 				<span id="charsCount"></span> 				 -->
+<!-- 			 				<span id="charsRequiredField" th:text="#{chars_required}"></span>  -->
+						 </div>
+					 </div>
+
+					 <div id="blocDescEs">
+						 <div class="form-group" th:class="${#fields.hasErrors('descriptionEsp')}? has-error">
+						   	<textarea th:field="*{descriptionEsp}" class="form-control form-control-lg form-desc" oninput="this.className = 'form-control'" th:placeholder="#{desc_indication}"></textarea>
+						   	<span th:if="${#fields.hasErrors('descriptionEsp')}" th:errors="*{descriptionEsp}" th:errorclass="fieldError">Description Error</span>
+<!-- 			 				<span id="charsCount"></span> 				 -->
+<!-- 			 				<span id="charsRequiredField" th:text="#{chars_required}"></span>  -->
+						 </div>
 					 </div>
 				</div>
+		</div>
 	
 	
 	<!-- SECOND STEP : MeetingPoint, city, address and map -->
@@ -175,11 +205,6 @@
 						</p>
 					</div>
 
-					<div class ="form-check">
-					Alcool ?
-						<input type="checkbox" class="form-check-input" th:field="*{alcohol}" />
-					</div>
-					
 					<div class="form-group">
 						<select class="form-control form-control-lg" th:field="*{minimumAge}">
 							<option value="0">0</option>
@@ -206,7 +231,7 @@
 					 
 					 <div class ="form-check">
 					 	Verification ID ?
-						<input type="checkbox" class="form-check-input" th:field="*{alcohol}" />
+						<input type="checkbox" class="form-check-input" th:field="*{requiredId}" />
 					</div>
 					
 					<div class ="form-check">
@@ -214,6 +239,12 @@
 						<input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" th:field="*{price}" />
 					</div>
 
+				</div>
+			</div>
+			
+			<div class="tab">
+				<div class="row">
+					
 				</div>
 			</div>
 	
@@ -252,35 +283,25 @@
 	var maxNumCharsDescription = 1000;
 
 	window.onload = function(){
-	    initMap(0, 0);
+	    // Init google map
+		initMap(0, 0);
+	    // Hide google map
 	    document.getElementById("googleMap").style.display= "none";
-	    showTab(0); // Display the current tab
+	    // Display the current step
+	    showTab(6); 
+	    // Populate select input
 	    populate("#beginHourT");
 	    populate("#endHourT");
-	    autocomplete("#address"); // Init autocomplete
+	    // Init autocomplete
+	    autocomplete("#address"); 
 		autocomplete("#city");
-		jQuery("#charsCount").text(minNumCharsDescription - jQuery("#description").val().length);
+		// Init desc per lang
+		jQuery('#blocDescFr').show();
+		jQuery('#blocDescEn').hide();
+		jQuery('#blocDescEs').hide();
 	}
 	    
-	jQuery("#description").bind('input change keyup keydown paste', function() {
-		
-		var charsRequiredField = jQuery("#charsRequiredField");
-		var charsRemainsMessage = 'caracteres restants';
-		var charsRequiredMessage = 'caracteres requis';
-		
-	    if(this.value.length){
-	    	if(this.value.length == 0) {
-		    	jQuery("#charsCount").text(minNumCharsDescription);
-	    	} else if(this.value.length < minNumCharsDescription) {
-	    		charsRequiredField.text(charsRequiredMessage);
-		    	jQuery("#charsCount").text(minNumCharsDescription - this.value.length);
-	    	} else {
-		    	jQuery("#charsCount").text(maxNumCharsDescription - this.value.length);
-	    		charsRequiredField.text(charsRemainsMessage);
-	    	}
-	    }
-	    
-	});
+
 	
 	jQuery(function() {
 	    $("#beginDateText").datepicker();
@@ -295,6 +316,27 @@
 			map.style.display = "none";
 		}
 	 }
+	
+	function switchDescLang() {
+		var descLang = jQuery('#selectDescLang').val();
+		if(descLang == 'FR') {
+			jQuery('#blocDescFr').show();
+			jQuery('#blocDescEn').hide();
+			jQuery('#blocDescEs').hide();
+		} else if (descLang == 'EN') {
+			jQuery('#blocDescEn').show();
+			jQuery('#blocDescFr').hide();
+			jQuery('#blocDescEs').hide();
+		} else if (descLang == 'ES') {
+			jQuery('#blocDescEs').show();
+			jQuery('#blocDescEn').hide();
+			jQuery('#blocDescFr').hide();
+		} else {
+			jQuery('#blocDescFr').show();
+			jQuery('#blocDescEn').hide();
+			jQuery('#blocDescEs').hide();
+		}
+	}
 	
 </script>
 		

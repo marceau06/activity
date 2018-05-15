@@ -124,9 +124,9 @@ body {
 	padding-top: 14%;
 }
 
-/***************** Creation activity form *****************/
-
-
+.form-desc {
+	min-height: 200px; 
+}
 
 /**************************** MEDIAS ***************************/
 

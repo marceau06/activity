@@ -125,7 +125,7 @@ public class AccountController {
 	@PostMapping("/send-link-password")
 	public ModelAndView sendMailAndGoToAccount(@RequestParam(value="email",required=false) String email) {
 		
-		ModelAndView mav = new ModelAndView("login");
+		ModelAndView mav = new ModelAndView("home");
 		System.out.println(email);
 		logger.info("[AccountController]-sendMailAndGoToAccount : Email du destinataire (Utilisateur en demande de changement de mot de passe) : " + email); 
 		
@@ -211,7 +211,7 @@ public class AccountController {
 	@PostMapping("/reset-password")
 	public ModelAndView resetPassword(@RequestParam("newPassword") String newPassword){
 		
-		ModelAndView mav = new ModelAndView("login");
+		ModelAndView mav = new ModelAndView("home");
 		String emailUser = "";
 		
 		if(StringUtil.isPresent(newPassword)) {

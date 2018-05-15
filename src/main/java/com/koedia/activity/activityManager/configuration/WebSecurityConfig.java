@@ -45,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.
 			authorizeRequests()
 				.antMatchers("/").permitAll()
-				.antMatchers("/login").permitAll()
+				.antMatchers("/home").permitAll()
 				.antMatchers("/registration").permitAll()
 				.antMatchers("/faq").permitAll()
 				.antMatchers("/forgot-password").permitAll()
@@ -56,7 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.authenticated()
 			.and()
 				.csrf().disable().formLogin()
-				.loginPage("/login").failureUrl("/login?error=true")
+				.loginPage("/home").failureUrl("/home?error=true")
 				.defaultSuccessUrl("/account")
 				.usernameParameter("email")
 				.passwordParameter("password")

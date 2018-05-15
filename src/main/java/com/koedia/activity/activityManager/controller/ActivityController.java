@@ -180,6 +180,12 @@ public class ActivityController {
 		return mav;
 	}
 	
+	@GetMapping("/remove")
+	public ModelAndView returnToAccountAfterRemove(Activity activity) {
+		ModelAndView mav = new ModelAndView("activities-update");
+		return mav;
+	}
+	
 	
 	/********************************** Supprimer une activité **********************************************************/
 	@PostMapping("export")

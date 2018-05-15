@@ -36,9 +36,17 @@ public class Activity {
    	private String title;
  
 	@NotNull
-    @Size(min=10, max=1000)
-	@Column(name = "description")
-   	private String description;
+    @Size(max=1500)
+	@Column(name = "description_fre")
+   	private String descriptionFre;
+	
+    @Size(max=1500)
+	@Column(name = "description_eng")
+   	private String descriptionEng;
+	
+    @Size(max=1500)
+	@Column(name = "description_esp")
+   	private String descriptionEsp;
  
 	@Column(name = "category")
    	private String category;
@@ -79,8 +87,8 @@ public class Activity {
 	@Column(name = "active")
 	private boolean active;
 	
-	@Column(name = "alcohol")
-	private boolean alcohol;
+	@Column(name="required_id")
+	private boolean requiredId;
 
 	@Column(name = "city")
 	private String city;
@@ -114,19 +122,22 @@ public class Activity {
 		super();
 	}
 
-	public Activity(int id, int userId, String title, String description,
+	public Activity(int id, int userId, String title, String descriptionFre, 
+			String descriptionEng, String descriptionEsp, 
 			String category, String address, Date beginDate, Date endDate,
 			String planification, Double price, Integer minimumAge,
 			String mainPicture, String secondPicture, boolean active, 
 			int nbPersons, String city, String country, String place, String zipCode,
-			boolean alcohol, String additionalInfos) {
+			String additionalInfos) {
 		
 		super();
 		
 		this.id = id;
 		this.userId = userId;
 		this.title = title;
-		this.description = description;
+		this.descriptionFre = descriptionFre;
+		this.descriptionEng = descriptionEng;
+		this.descriptionEsp = descriptionEsp;
 		this.category = category;
 		this.address = address;
 		this.beginDate = beginDate;
@@ -139,7 +150,6 @@ public class Activity {
 		this.nbPersons = nbPersons;
 		this.city = city;
 		this.country = country;
-		this.alcohol = alcohol;
 		this.place = place;
 		this.additionalInfos = additionalInfos;
 		this.zipCode = zipCode;
@@ -170,12 +180,28 @@ public class Activity {
 		this.userId = userId;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getDescriptionFre() {
+		return descriptionFre;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDescriptionFre(String descriptionFre) {
+		this.descriptionFre = descriptionFre;
+	}
+	
+	public String getDescriptionEng() {
+		return descriptionEng;
+	}
+
+	public void setDescriptionEng(String descriptionEng) {
+		this.descriptionEng = descriptionEng;
+	}
+
+	public String getDescriptionEsp() {
+		return descriptionEsp;
+	}
+
+	public void setDescriptionEsp(String descriptionEsp) {
+		this.descriptionEsp = descriptionEsp;
 	}
 
 	public String getCategory() {
@@ -248,14 +274,6 @@ public class Activity {
 
 	public void setActive(boolean active) {
 		this.active = active;
-	}
-	
-	public boolean isAlcohol() {
-		return alcohol;
-	}
-
-	public void setAlcohol(boolean alcohol) {
-		this.alcohol = alcohol;
 	}
 	
 	public String getMeetingPoint() {
@@ -360,5 +378,13 @@ public class Activity {
 
 	public void setEndHour(Time endHour) {
 		this.endHour = endHour;
+	}
+
+	public boolean isRequiredId() {
+		return requiredId;
+	}
+
+	public void setRequiredId(boolean requiredId) {
+		this.requiredId = requiredId;
 	}
 }
