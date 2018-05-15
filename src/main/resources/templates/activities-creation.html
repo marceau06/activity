@@ -244,7 +244,20 @@
 			
 			<div class="tab">
 				<div class="row">
-					
+					<div>
+						<p>
+						   <span class="inputTitle" th:text="#{minCapacityGroup}"></span>
+						   <b></b>
+						   <input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" th:field="*{minCapacityGroup}" />
+						</p>
+					</div>
+					<div>
+						<p>
+						   <span class="inputTitle" th:text="#{maxCapacityGroup}"></span>
+						   <b></b>
+						   <input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" th:field="*{maxCapacityGroup}" />
+						</p>
+					</div>
 				</div>
 			</div>
 	
@@ -288,7 +301,7 @@
 	    // Hide google map
 	    document.getElementById("googleMap").style.display= "none";
 	    // Display the current step
-	    showTab(6); 
+	    showTab(7); 
 	    // Populate select input
 	    populate("#beginHourT");
 	    populate("#endHourT");

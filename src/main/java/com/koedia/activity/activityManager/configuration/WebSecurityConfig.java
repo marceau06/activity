@@ -44,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		http.
 			authorizeRequests()
-				.antMatchers("/").permitAll()
+//				.antMatchers("/").permitAll()
 				.antMatchers("/home").permitAll()
 				.antMatchers("/registration").permitAll()
 				.antMatchers("/faq").permitAll()
@@ -63,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 				.logout()
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-				.logoutSuccessUrl("/").and().exceptionHandling()
+				.logoutSuccessUrl("/home").and().exceptionHandling()
 				.accessDeniedPage("/access-denied");
 		
 //		http.sessionManagement().sessionFixation().migrateSession().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)

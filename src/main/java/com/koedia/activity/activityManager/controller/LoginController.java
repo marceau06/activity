@@ -33,7 +33,7 @@ public class LoginController {
 	// Go to login page
     @GetMapping("/login")
     public ModelAndView goToLogin(Model m) {
-    	ModelAndView mav = new ModelAndView("login");
+    	ModelAndView mav = new ModelAndView("home");
     	return mav;
     }
     
