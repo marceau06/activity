@@ -58,7 +58,7 @@ public class LoginController {
 			bindingResult.rejectValue("email", "error.user", "There is already a user registered with the email provided");
 		}
 		if (bindingResult.hasErrors()) {
-			// TODO
+			// TODO Redirect to home with error message parameter
 		} else {
 			mav.setViewName("home");
 			userService.saveUser(user);

@@ -66,6 +66,12 @@
 								<div class="">
 									<a th:href="@{/account/update}"><span th:text="#{update_account}"></span></a>
 								</div>
+								<div class="">
+									<a th:href="@{/account/testSaveActivityWithPaxPrice}">TESTS DE FONCTIONS</a>
+								</div>
+								<div class="">
+									<a th:href="@{/account/testRetrieveActivityWithPaxPrice}">TESTS DE FONCTIONS</a>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -132,14 +138,12 @@
 							<span th:text="#{price_per_pers}"></span>
 						</div>
 						<section class="col-lg-2 activityPrice">
-<!-- 							<span>10 euros</span> -->
-						<p><span th:text="${activity.price}"></span> Euros</p>
+<!-- 						<p><span th:text="${activity.price}"></span> Euros</p> -->
 						</section>
 					</div>
         		</div>
         	</div>
         </section>
-<!-- PARAM TOGGLE data-onstyle="success" data-offstyle="danger" -->
       </div>
     </div>
 

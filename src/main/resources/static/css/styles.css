@@ -1,10 +1,6 @@
 /******** General *************/
 
 html, body {
-/* 	background: #fff; */
-/* 	background-image:url(/img/bg-act.jpg); */
-/* 	no-repeat center fixed; */
-/*   	background-size: cover; */
 	background-color: #f1f1f1;
 	margin: 0;
 	padding: 0;
@@ -110,6 +106,26 @@ a:hover, a:focus {
 	border-color: transparent;
 }
 
+/************ Style form progression bar ************/
+.nav-item {
+	cursor: pointer;
+}
+
+.nav-item>.active {
+	background-color: #003a9e;
+	text-align: center;
+}
+
+.progbar {
+	border: solid 1px black;
+}
+
+.progbar-item {
+	border: solid 1px black;
+	width: 260px;
+	height: 50px;
+}
+
 /************ Style Home ************/
 #home {
 	margin: 0;
@@ -165,10 +181,11 @@ textarea.invalid {
 }
 
 .tab {
+  border: 1px solid black;
   dispay: flex;
   flex-wrap: wrap;
   display: none;
-  padding-top: 1%;
+/*   padding-top: 1%; */
   padding-bottom: 5%;
 }
 
@@ -240,15 +257,15 @@ textarea.invalid {
  
 /******* Home page *********/
 body.homePage {
-  	background-image:url(/img/bg-act.jpg);
-  	background-size: cover;
+  background-image:url(/img/bg-act.jpg);
+  background-size: cover;
 }
 
  .bloc-login {
-   display: flex;
-   height: 200px;
-   align-items: center;
-     margin-left: 200px;
+  display: flex;
+  height: 200px;
+  align-items: center;
+  margin-left: 200px;
  }
  
  .bloc-login > div {
@@ -269,4 +286,16 @@ body.homePage {
 	border-radius: 1px;
   	background: rgba(0, 0, 0, 0.16);
   	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+.row {
+}
+
+.row-form {
+/* 	border: 0.5px solid black; */
+	font-size: 25px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }

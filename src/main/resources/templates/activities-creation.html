@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:include="fragments/header :: header">
 </head>
 <body>
@@ -9,22 +7,76 @@
 
 <h1><span th:text="#{activity_creation}"></span></h1>
 
-<form action="#" th:action="@{/activity/create}" th:object="${activity}" method="POST" enctype="multipart/form-data">
+<form th:action="@{/activity/create}" th:object="${activity}" method="POST" enctype="multipart/form-data">
 
 <!-- One "tab" for each step in the form: -->
 
 		<div class="container-fluid">
-			<div class="row">
 				
 				<!-- Barre latérale de progression -->
-				<div class="col-lg-2">
+				<div class="col-lg-2 progbar">
+					
+					<ul class="nav flex-column">
+					  <li class="nav-item">
+					  		<div id="goToStepTitle" class="progbar-item" onclick="showTabFromNavBar('0');">
+								<span class="inputIndication" th:text="#{title}"></span>
+					  		</div>
+					  </li>
+					  <li class="nav-item">
+					    	<div class="progbar-item" onclick="showTabFromNavBar('1');">
+								<span class="inputIndication" th:text="#{category}"></span>
+					  		</div>
+					  </li>
+					  <li class="nav-item">
+						 	 <div class="progbar-item" onclick="showTabFromNavBar('2');">
+						  		<span class="inputIndication" th:text="#{description}"></span>
+						  	</div>
+					  </li>
+					  <li class="nav-item">
+						  <div class="progbar-item" onclick="showTabFromNavBar('3');">
+						  		<span class="inputIndication" th:text="#{meeting_point}"></span>
+						  	</div>
+					  </li>
+					  <li class="nav-item">
+						  <div class="progbar-item" onclick="showTabFromNavBar('4');">
+						  		<span class="inputIndication" th:text="#{schedule}"></span>
+						  	</div>
+					  </li>
+					  <li class="nav-item">
+						  <div class="progbar-item" onclick="showTabFromNavBar('5');">
+						  		<span class="inputIndication" th:text="#{images}"></span>
+						  	</div>
+					  </li>
+					  <li class="nav-item">
+						  <div class="progbar-item" onclick="showTabFromNavBar('6');">
+						  		<span class="inputIndication" th:text="#{participation_criterias}"></span>
+						  	</div>
+					  </li>
+					  <li class="nav-item">
+						  <div class="progbar-item" onclick="showTabFromNavBar('7');">
+						  		<span class="inputIndication" th:text="#{price}"></span>
+						  	</div>
+					  </li>
+					  <li class="nav-item">
+						  <div class="progbar-item" onclick="showTabFromNavBar('8');">
+						  		<span class="inputIndication" th:text="#{group_capacity}"></span>
+						  	</div>
+					  </li>
+					  <li class="nav-item">
+						  <div class="progbar-item" onclick="showTabFromNavBar('9');">
+						  		<span class="inputIndication" th:text="#{validate_and_send}"></span>
+						  	</div>
+					  </li>
+					</ul>
+					
 				</div>
 				
-				<!-- Title -->
+				
+		<!-- STEP 1 : Title -->
 				<div class="col-lg-4 container-form">
 					
 				  <div class="tab">
-					<div class="row inputStyle">
+					<div class="row-form  inputStyle">
 						<p>
 							<span class="inputTitle" th:text="#{title}"></span>
 						</p>
@@ -34,15 +86,15 @@
 					</div>
 					
 					<div class="form-group" th:class="${#fields.hasErrors('title')}? has-error" >
-					  	<input type="text" th:field="*{title}" class="form-control form-control-lg" id="title" name="title" oninput="this.className = ''" autocomplete="off" />
+					  	<input type="text" th:field="*{title}" class="form-control form-control-lg" id="title" name="title" autocomplete="off" />
 						<span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" th:errorclass="fieldError">Title Error</span>
 				    
 				    </div>
 				 </div>
 				 
-<!-- FIRST STEP : Title, category & description -->
-		<div class="tab">
-					<div class="row inputStyle">
+		<!-- STEP 1 : Category -->
+				<div class="tab">
+					<div class="row-form  inputStyle">
 						<p>
 							<span class="inputTitle" th:text="#{category}"></span>
 						</p>
@@ -62,9 +114,10 @@
 						</select>
 					 </div>
 				</div>
-				
+			
+		<!-- STEP 1 : description -->
 		<div class="tab">
-			<div class="row inputStyle">
+			<div class="row-form  inputStyle">
 				<p>
 					<span class="inputTitle" th:text="#{description}"></span>
 				</p>
@@ -112,9 +165,16 @@
 		</div>
 	
 	
-	<!-- SECOND STEP : MeetingPoint, city, address and map -->
+		<!-- STEP 2 : MeetingPoint, city, address and map -->
 				<div class="tab">
 					<div class="inputStyle">
+						<p>
+							<span class="inputTitle" th:text="#{meeting_point}"></span>
+						</p>
+						<p>
+							<span class="inputIndication" th:text="#{meeting_point_indication}"></span>
+						</p>
+					
 						<input type="hidden" th:field="*{latitude}"></input>
 						<input type="hidden" th:field="*{longitude}"></input>
 						<input type="hidden" id="zoom" name="zoom"></input>
@@ -147,9 +207,16 @@
 			</div>
 	
 	
-	<!-- THIRD STEP : schedules  -->
+	<!-- STEP 3 : schedules  -->
 			<div class="tab">
-				<div class="row">
+				<div class="row-form ">
+					<p>
+						<span class="inputTitle" th:text="#{schedule}"></span>
+					</p>
+					<p>
+						<span class="inputIndication" th:text="#{meeting_point_indication}"></span>
+					</p>
+			
 					<p>
 						<span th:text="#{start_date_period}"></span>
 						<input type="text" id="beginDateText" name="beginDateText" onchange="changeReturnDate(); onChangeDate();" />
@@ -165,13 +232,13 @@
 					<div>
 						<input type="date" th:field="*{endDate}"/>
 					</div>
-						<span th:text="#{from}"></span>
+						<span th:text="#{from_time}"></span>
 						<div class="form-group">
 							<select class="form-control" id="beginHourT" name="beginHourT" onchange="changeReturnTime();">
 							</select>
 						</div>
 						
-						<span th:text="#{to}"></span>
+						<span th:text="#{to_time}"></span>
 						<div class="form-group">
 							<select class="form-control" id="endHourT" name="endHourT">
 							</select>
@@ -182,11 +249,16 @@
 	
 	
 	
-	<!-- FOURTH STEP : Images and videos  -->
+	<!-- STEP 4: Images and videos  -->
 			<div class="tab">
-				<div class="row">
+				<div class="row-form ">
 					<p>
-						<span th:text="#{download_cover_image}"></span>
+						<span class="inputTitle" th:text="#{images}"></span>
+					</p>
+					<p>
+						<span class="inputIndication" th:text="#{download_cover_image}"></span>
+					</p>
+					<p>
 						<input type="file" th:field="*{mainPictureFile}" th:placeholder="#{mainPictureFile}" oninput="this.className = ''" onchange="displayImg()"/>
 					<p>
 						<input id="imgDisplay" type="image" src="" value="overview" style="width: 150px; heigth: 150px;" />
@@ -194,17 +266,16 @@
 				</div>
 			</div>
 			
-	<!-- LAST STEP : Additional informations  -->
-	
+	<!-- STEP 5 : Additional informations, criteria for participation -->
 			<div class="tab">
-				<div class="row">
-				
-					<div>
-						<p>
-						TEST
-						</p>
-					</div>
-
+				<p>
+					<span class="inputTitle" th:text="#{participation_criteria}"></span>
+				</p>
+				<p>
+					<span class="inputIndication" th:text="#{download_cover_image}"></span>
+				</p>
+				<div class="row-form ">
+					<span th:text="#{minimum_age}"></span>
 					<div class="form-group">
 						<select class="form-control form-control-lg" th:field="*{minimumAge}">
 							<option value="0">0</option>
@@ -228,36 +299,149 @@
 							 <option value="18">18</option>
 						</select>
 					 </div>
-					 
-					 <div class ="form-check">
-					 	Verification ID ?
-						<input type="checkbox" class="form-check-input" th:field="*{requiredId}" />
 					</div>
 					
+					<div class="row-form ">
+						<span th:text="#{required_id}"></span>
+						 <div class ="form-check">
+							<input type="checkbox" class="form-check-input" th:field="*{requiredId}" />
+						</div>
+					</div>
+			</div>
+			
+			
+		<!-- STEP 6 : Price  -->
+			<div class="tab">
+			
+				<div class="row-form ">
+					<p>
+						<span class="inputTitle" th:text="#{price}"></span>
+					</p>
+					<p>
+						<span class="inputIndication" th:text="#{price_indication}"></span>
+					</p>
+					<p>
+						<select id="selectPaxType" class="form-control" onChange="switchPaxType();">
+							<option value="Global">Global</option>
+							<option value="Baby">Bebes</option>
+							<option value="Infant">Enfants</option>
+							<option value="Adult">Adultes</option>
+							<option value="Senior">Seniors</option>
+							<option value="Students">Etudiants</option>
+							<option value="Create">Créer type de client</option>
+						</select>
+					</p>
+				
 					<div class ="form-check">
-					 	Price
-						<input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" th:field="*{price}" />
+<!-- 						<input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" th:field="*{}" /> -->
+							
+							<div id="global">
+								<span>Nom du pax - (défini ?)</span>
+								<input class="form-control" type="text" th:field="*{paxs[0].name}" />
+								<span>Age minimum</span>
+								<input class="form-control" type="text" th:id="paxAgeMin" th:field="*{paxs[0].ageMin}" />
+								<span>Age maximum</span>
+								<input class="form-control" type="text" th:id="paxAgeMax" th:field="*{paxs[0].ageMax}" />
+								<span>Prix</span>
+								<input class="form-control" type="text" th:id="paxPrice" th:field="*{paxs[0].price}" />
+							</div>
+							
+							<div id="baby">
+								<span>Nom du pax - (défini ?)</span>
+								<input class="form-control" type="text" th:field="*{paxs[1].name}" placeholder="Bébés" />
+								<span>Age minimum</span>
+								<input class="form-control" type="text" th:id="paxAgeMin" th:field="*{paxs[1].ageMin}" />
+								<span>Age maximum</span>
+								<input class="form-control" type="text" th:id="paxAgeMax" th:field="*{paxs[1].ageMax}" />
+								<span>Prix</span>
+								<input class="form-control" type="text" th:id="paxPrice" th:field="*{paxs[1].price}" />
+							</div>
+							
+							<div id="infant">
+								<span>Nom du pax - (défini ?)</span>
+								<input class="form-control" type="text" th:field="*{paxs[2].name}" placeholder="Enfants" />
+								<span>Age minimum</span>
+								<input class="form-control" type="text" th:id="paxAgeMin" th:field="*{paxs[2].ageMin}" />
+								<span>Age maximum</span>
+								<input class="form-control" type="text" th:id="paxAgeMax" th:field="*{paxs[2].ageMax}" />
+								<span>Prix</span>
+								<input class="form-control" type="text" th:id="paxPrice" th:field="*{paxs[2].price}" />
+							</div>
+							
+							<div id="adult">
+								<span>Nom du pax - (défini ?)</span>
+								<input class="form-control" type="text" th:field="*{paxs[3].name}" placeholder="Adultes" />
+								<span>Age minimum</span>
+								<input class="form-control" type="text" th:id="paxAgeMin" th:field="*{paxs[3].ageMin}" />
+								<span>Age maximum</span>
+								<input class="form-control" type="text" th:id="paxAgeMax" th:field="*{paxs[3].ageMax}" />
+								<span>Prix</span>
+								<input class="form-control" type="text" th:id="paxPrice" th:field="*{paxs[3].price}" />
+							</div>		
+							
+							<div id="senior">
+								<span>Nom du pax - (défini ?)</span>
+								<input class="form-control" type="text" th:field="*{paxs[4].name}" th:placeholder="Seniors" />
+								<span>Age minimum</span>
+								<input class="form-control" type="text" th:id="paxAgeMin" th:field="*{paxs[4].ageMin}" />
+								<span>Age maximum</span>
+								<input class="form-control" type="text" th:id="paxAgeMax" th:field="*{paxs[4].ageMax}" />
+								<span>Prix</span>
+								<input class="form-control" type="text" th:id="paxPrice" th:field="*{paxs[4].price}" />
+							</div>	
+							
+							<div id="create">
+								<span>Nom du pax - (défini ?)</span>
+								<input class="form-control" type="text" th:field="*{paxs[5].name}" placeholder="Create you pax category" />
+								<span>Age minimum</span>
+								<input class="form-control" type="text" th:id="paxAgeMin" th:field="*{paxs[5].ageMin}" />
+								<span>Age maximum</span>
+								<input class="form-control" type="text" th:id="paxAgeMax" th:field="*{paxs[5].ageMax}" />
+								<span>Prix</span>
+								<input class="form-control" type="text" th:id="paxPrice" th:field="*{paxs[5].price}" />
+							</div>																				
 					</div>
 
 				</div>
+				
+				
 			</div>
 			
+		<!-- STEP 7 : Group Capacity  -->
 			<div class="tab">
-				<div class="row">
+				<div class="row-form ">
+					<p>
+						<span class="inputTitle" th:text="#{group_capacity}"></span>
+					</p>
+					<p>
+						<span class="inputIndication" th:text="#{group_capacity_indication}"></span>
+					</p>
 					<div>
 						<p>
-						   <span class="inputTitle" th:text="#{minCapacityGroup}"></span>
+						   <span th:text="#{minCapacityGroup}"></span>
 						   <b></b>
-						   <input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" th:field="*{minCapacityGroup}" />
+						   <input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" th:field="*{minCapacityGroup}" autocomplete="off" />
 						</p>
 					</div>
 					<div>
 						<p>
-						   <span class="inputTitle" th:text="#{maxCapacityGroup}"></span>
+						   <span th:text="#{maxCapacityGroup}"></span>
 						   <b></b>
-						   <input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" th:field="*{maxCapacityGroup}" />
+						   <input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" th:field="*{maxCapacityGroup}" autocomplete="off" />
 						</p>
 					</div>
+				</div>
+			</div>
+			
+			<!-- LAST STEP : Validate and submit form -->
+			<div class="tab">
+				<div class="row-form ">
+					<p>
+						<span class="inputTitle" th:text="#{validate_and_send}"></span>
+					</p>
+					<p>
+						<span class="inputIndication" th:text="#{validate_and_submit_indication}"></span>
+					</p>
 				</div>
 			</div>
 	
@@ -280,10 +464,10 @@
 				<span class="step"></span>
 				<span class="step"></span>
 				<span class="step"></span>
+				<span class="step"></span>
+				<span class="step"></span>
+				<span class="step"></span>
 			</div>
-			
-		</div>
-			
 			
 		</div>
 	</div>
@@ -301,7 +485,7 @@
 	    // Hide google map
 	    document.getElementById("googleMap").style.display= "none";
 	    // Display the current step
-	    showTab(7); 
+	    showTab(0); 
 	    // Populate select input
 	    populate("#beginHourT");
 	    populate("#endHourT");
@@ -312,6 +496,13 @@
 		jQuery('#blocDescFr').show();
 		jQuery('#blocDescEn').hide();
 		jQuery('#blocDescEs').hide();
+		// Init paxs inputs
+		jQuery('#global').show();
+		jQuery('#baby').hide();
+		jQuery('#infant').hide();
+		jQuery('#adult').hide();
+		jQuery('#senior').hide();
+		jQuery('#create').hide();
 	}
 	    
 
@@ -350,6 +541,117 @@
 			jQuery('#blocDescEs').hide();
 		}
 	}
+	
+	function switchPaxType() {
+		var paxType = jQuery("#selectPaxType").val();
+		
+		if(paxType =='global') {
+			
+			jQuery('#global').show();
+			jQuery('#baby').hide();
+			jQuery('#infant').hide();
+			jQuery('#adult').hide();
+			jQuery('#senior').hide();
+			jQuery('#create').hide();
+			
+		} else if(paxType == 'Baby') {
+			
+			jQuery('#baby').show();
+			jQuery('#infant').hide();
+			jQuery('#adult').hide();
+			jQuery('#senior').hide();
+			jQuery('#create').hide();
+			jQuery('#global').hide();
+			
+			jQuery("#paxs[1].name").val("Bébés");
+			
+		} else if(paxType == 'Infant') {
+			
+			jQuery('#infant').show();
+			jQuery('#baby').hide();
+			jQuery('#adult').hide();
+			jQuery('#senior').hide();
+			jQuery('#create').hide();
+			jQuery('#global').hide();
+			
+			jQuery("#paxs[2].name").val("Enfants");
+
+		} else if(paxType == 'Adult') {
+			
+			jQuery('#adult').show();
+			jQuery('#baby').hide();
+			jQuery('#infant').hide();
+			jQuery('#senior').hide();
+			jQuery('#create').hide();
+			jQuery('#global').hide();
+			
+			jQuery("#paxs[3].name").val("Adultes");
+
+		} else if(paxType == 'Senior') {
+			
+			jQuery('#senior').show();
+			jQuery('#baby').hide();
+			jQuery('#adult').hide();
+			jQuery('#infant').hide();
+			jQuery('#create').hide();
+			jQuery('#global').hide();
+			
+			jQuery("#paxs[4].name").val("Seniors");
+			
+		} else if(paxType == 'Create') {
+			
+			jQuery('#create').show();
+			jQuery('#baby').hide();
+			jQuery('#adult').hide();
+			jQuery('#senior').hide();
+			jQuery('#infant').hide();
+			jQuery('#global').hide();
+			
+			jQuery("#paxs[5].name").val("Fill the pax category name");
+			
+		}
+	}
+
+	
+	
+// 	function switchPaxType() {
+// 		var paxType = jQuery("#selectPaxType").val();
+		
+// 		console.log(paxType);
+		
+// 		if(paxType == 'Baby') {
+			
+// 		} else if(paxType == 'Infant') {
+			
+// 			jQuery('#paxName').attr('th:field', '*{paxs[1].name}');
+// 			jQuery('#paxAgeMin').attr('th:field', '*{paxs[1].ageMin}');
+// 			jQuery('#paxAgeMax').attr('th:field', '*{paxs[1].ageMax}');
+// 			jQuery('#paxPrice').attr('th:field', '*{paxs[1].price}');
+
+// 		} else if(paxType == 'Adult') {
+			
+// 			jQuery('#paxAgeMin').attr('th:field', '*{paxs[2].ageMin}');
+// 			jQuery('#paxName').attr('th:field', '*{paxs[2].name}');
+// 			jQuery('#paxAgeMax').attr('th:field', '*{paxs[2].ageMax}');
+// 			jQuery('#paxPrice').attr('th:field', '*{paxs[2].price}');
+
+// 		} else if(paxType == 'Senior') {
+			
+// 			jQuery('#paxName').attr('th:field', '*{paxs[3].name}');
+// 			jQuery('#paxAgeMin').attr('th:field', '*{paxs[3].ageMin}');
+// 			jQuery('#paxAgeMax').attr('th:field', '*{paxs[3].ageMax}');
+// 			jQuery('#paxPrice').attr('th:field', '*{paxs[3].price}');
+			
+// 		} else if(paxType == 'Create') {
+			
+// 			jQuery('#paxName').attr('th:field', '*{paxs[4].name}');
+// 			jQuery('#paxAgeMin').attr('th:field', '*{paxs[4].ageMin}');
+// 			jQuery('#paxAgeMax').attr('th:field', '*{paxs[4].ageMax}');
+// 			jQuery('#paxPrice').attr('th:field', '*{paxs[4].price}');
+			
+// 		}
+		
+// 	}
 	
 </script>
 		

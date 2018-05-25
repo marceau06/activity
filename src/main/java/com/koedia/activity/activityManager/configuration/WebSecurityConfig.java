@@ -44,7 +44,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		http.
 			authorizeRequests()
-//				.antMatchers("/").permitAll()
 				.antMatchers("/home").permitAll()
 				.antMatchers("/registration").permitAll()
 				.antMatchers("/faq").permitAll()
@@ -65,12 +64,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				.logoutSuccessUrl("/home").and().exceptionHandling()
 				.accessDeniedPage("/access-denied");
-		
-//		http.sessionManagement().sessionFixation().migrateSession().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-//			.invalidSessionUrl("/invalid_session.html")
-//			.maximumSessions(10)
-//			.expiredUrl("/session_expired.html");
-		
 	}
     
 	@Override

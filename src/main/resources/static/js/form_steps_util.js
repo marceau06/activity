@@ -7,7 +7,6 @@
 var currentTab = 0; // Current tab is set to be the first tab (0)
 
 function showTab(n) {
-	
 	// This function will display the specified tab of the form ...
 	var x = document.getElementsByClassName("tab");
 	x[n].style.display = "flex";
@@ -31,28 +30,74 @@ function showTab(n) {
 	fixStepIndicator(n)
 }
 
+function showTabFromNavBar(n) {
+	var y = document.getElementsByClassName("tab");
+
+	// Exit the function if any field in the current tab is invalid:
+	if (n < 0) {
+		return false;
+	}
+	
+	// Hide the current tab:
+//	console.log("==> showTabFromNavBar");
+//	console.log(nextTabToHide);
+//	console.log(y);
+	
+	y[currentTab].style.display = "none";
+	currentTab = n;
+	
+	console.log(currentTab);
+	showTab(currentTab)
+	
+	// This function will display the specified tab of the form ...
+//	var x = document.getElementsByClassName("tab");
+//	x[n].style.display = "flex";
+//	x[n].style.flexDirection = "row";
+//	x[n].style.justifyContent = "space-around";
+//
+//	// ... and fix the Previous/Next buttons:
+//	if (n == 0) {
+//		document.getElementById("prevBtn").style.display = "none";
+//		x[n].style.flexDirection = "column";
+//	} else {
+//		document.getElementById("prevBtn").style.display = "inline";
+//		x[n].style.flexDirection = "row";
+//	}
+//	if (n == (x.length - 1)) {
+//		document.getElementById("nextBtn").innerHTML = "Envoyer";
+//	} else {
+//		document.getElementById("nextBtn").innerHTML = "Next";
+//	}
+	// ... and run a function that displays the correct step indicator:
+//	fixStepIndicator(n)
+}
+
 //Efface les inputs renseignées et affiche les suivantes
 function nextPrev(n) {
+	console.log("==> nextPrev n = " + n);
 	// This function will figure out which tab to display
 	var x = document.getElementsByClassName("tab");
 	// Exit the function if any field in the current tab is invalid:
+
 	if (n == 1 && !validateForm()) {
 		return false;
+		// TODO afficher message d'erreur
 	}
 	// Hide the current tab:
 	x[currentTab].style.display = "none";
 	// Increase or decrease the current tab by 1:
-	currentTab = currentTab + n;
+	console.log("Before parse currentTab = " + currentTab);
+	currentTab = parseInt(currentTab) + parseInt(n);
+	console.log("After parse currentTab = " + currentTab);
 	// if you have reached the end of the form... :
 	if (currentTab >= x.length) {
 		//...the form gets submitted:
-		document.getElementById("nextBtn").type = "submit";
-		return false;
+//		document.getElementById("nextBtn").type = "submit";
+//		return false;
 	}
 	// Otherwise, display the correct tab:
 	showTab(currentTab);
 }
-
 
 // Add conditions to validate activitie's attributes dynamically
 function validateForm() {
@@ -61,18 +106,18 @@ function validateForm() {
 	x = document.getElementsByClassName("tab");
 	y = x[currentTab].getElementsByTagName("input");
 	z = x[currentTab].getElementsByTagName("textarea");
-//	w = x[currentTab].getElementsByTagName("select")
+	
 	// A loop that checks every input field in the current tab:
 	for (i = 0; i < y.length; i++) {
-		
 		// If a field is empty...
-		if (y[i].value == "" || y[i].value.length < 2) {
+		if (y[i].value == "" || y[i].value.length < 1) {
 			// add an "invalid" class to the field:
 			y[i].className += " invalid";
 			// and set the current valid status to false:
 			valid = false;
 		}
 		if (z[i] != null) {
+			console.log(z[i]);
 			if (z[i].value == "" || z[i].value.length < 2 || z[i].value.length > 1000) {
 				// add an "invalid" class to the field:
 				z[i].className += " invalid";
@@ -81,19 +126,12 @@ function validateForm() {
 				valid = false;
 			}
 		}
-//		if(w[i] != null) {
-//			if(w[i].value == "") {
-//				w[i].className += " invalid";
-//				w[i].placeholder += "Vous devez renseigner une valeur pour l'heure de départ";
-//				// and set the current valid status to false:
-//				valid = false;
-//			}
-//		}
 	}
 	// If the valid status is true, mark the step as finished and valid:
-	if (valid) {	
+	if (valid) {
 		document.getElementsByClassName("step")[currentTab].className += " finish";
-	}
+	} 
+	
 	return valid; // return the valid status
 }
 
@@ -175,7 +213,4 @@ function onChangeDate(){
 	
 	jQuery("#beginDate").val(formattedBeginDate);
 	jQuery("#endDate").val(formattedEndDate);
-}
-
-function countChars(inputId){	
 }

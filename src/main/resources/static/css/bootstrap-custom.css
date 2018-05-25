@@ -15,10 +15,6 @@ body {
   margin-left: auto;
 }
 
-.row {
-/* 	border: 1px solid black; */
-}
-
 .glyphicon:before {
 	margin-right: 10px;
 }
@@ -126,6 +122,13 @@ body {
 
 .form-desc {
 	min-height: 200px; 
+}
+
+/**************************** Vertical navigation bar ***************************/
+.vertical-nav-bar {
+	list-style-type: none;
+    margin: 0;
+    padding: 0;
 }
 
 /**************************** MEDIAS ***************************/

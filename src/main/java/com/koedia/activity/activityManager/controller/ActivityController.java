@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,16 +47,8 @@ public class ActivityController {
 	
 	protected final static Logger logger = Logger.getLogger(ActivityController.class);
 	
-	/********************************** Redirection vers test **********************************/
 	
-	@GetMapping("/testForm")
-	public ModelAndView goToTest(Activity activity) {
-		ModelAndView mav = new ModelAndView("test");
-		return mav;
-	}
-	
-	
-	/********************************** Redirection vers création d'activité **********************************/
+	/********************************** Redirection to activity creation form ******************************/
 	
 	@GetMapping("/create")
 	public ModelAndView goToCreationActivity(Activity activity) {
@@ -64,7 +57,7 @@ public class ActivityController {
 	}
 	
 	
-	/********************************** Redirection vers modification d'activité *******************************/
+	/********************************** Redirection to activity update form *******************************/
 	
 	@GetMapping("/modification")
 	public ModelAndView goToUpdateActivity(Activity activity) {
@@ -72,7 +65,7 @@ public class ActivityController {
 		return mav;
 	}
 	
-	/********************************** Redirection vers liste des activités **********************************/
+	/********************************** Redirection activities list ***************************************/
 	
 	@GetMapping("/list")
 	public ModelAndView goToListActivity(Activity activity) {
@@ -92,10 +85,10 @@ public class ActivityController {
 	/********************************** Créer une nouvelle activité *******************************************/
 
 	@PostMapping("/create")
-	public ModelAndView createActivity(Activity activity) {
+	public ModelAndView createActivity(final Activity activity, final BindingResult bindingResult) {
 		
 		String creationInfoMessage = "L'activité a bien été créée";
-		// TODO
+
 		saveImage(activity);
 		
 		// Redirection vers page aperçu activité
@@ -187,7 +180,7 @@ public class ActivityController {
 	}
 	
 	
-	/********************************** Supprimer une activité **********************************************************/
+	/********************************** Exporter une activité **********************************************************/
 	@PostMapping("export")
 	public ModelAndView exportActivity(@RequestParam String activityId) {
 		

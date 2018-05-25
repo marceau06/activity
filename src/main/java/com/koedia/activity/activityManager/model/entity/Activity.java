@@ -2,13 +2,19 @@ package com.koedia.activity.activityManager.model.entity;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -24,7 +30,7 @@ public class Activity {
 
 	@Id
    	@GeneratedValue(strategy = GenerationType.AUTO) 
-	@Column(name = "id")
+	@Column(name = "activity_id")
    	private Integer id;
 	
 	@Column(name = "user_id")
@@ -105,18 +111,26 @@ public class Activity {
 	@Transient
 	private MultipartFile mainPictureFile;
 	
-	@Column(name = "price")
-   	private Double price;
-	
 	@Column(name = "minimum_age")
 	private Integer minimumAge;
 	
 	@Column(name="nb_persons")
 	private Integer nbPersons; 
 
-	
 	@Column(name="additional_infos")
 	private String additionalInfos;
+	
+	@Column(name="min_capacity_group")
+	private Integer minCapacityGroup;
+	
+	@Column(name="max_capacity_group")
+	private Integer maxCapacityGroup;
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="activity_id")
+    @OrderBy("price")
+	@Size(min=1, max=4)
+	private List<PaxPrice> paxs = new ArrayList<PaxPrice>();
 	
 	public Activity() {
 		super();
@@ -125,10 +139,10 @@ public class Activity {
 	public Activity(int id, int userId, String title, String descriptionFre, 
 			String descriptionEng, String descriptionEsp, 
 			String category, String address, Date beginDate, Date endDate,
-			String planification, Double price, Integer minimumAge,
+			String planification, Integer minimumAge,
 			String mainPicture, String secondPicture, boolean active, 
 			int nbPersons, String city, String country, String place, String zipCode,
-			String additionalInfos) {
+			String additionalInfos, int minCapacityGroup, int maxCapacityGroup) {
 		
 		super();
 		
@@ -142,7 +156,6 @@ public class Activity {
 		this.address = address;
 		this.beginDate = beginDate;
 		this.endDate = endDate;
-		this.price = price;
 		this.minimumAge = minimumAge;
 		this.mainPicture = mainPicture;
 		this.secondPicture = secondPicture;
@@ -153,6 +166,8 @@ public class Activity {
 		this.place = place;
 		this.additionalInfos = additionalInfos;
 		this.zipCode = zipCode;
+		this.minCapacityGroup = minCapacityGroup;
+		this.maxCapacityGroup = maxCapacityGroup;
 	}
 
 
@@ -160,10 +175,6 @@ public class Activity {
 		return id;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	
 	public String getTitle() {
 		return title;
 	}
@@ -234,14 +245,6 @@ public class Activity {
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
-	}
-
-	public Double getPrice() {
-		return price;
-	}
-
-	public void setPrice(Double price) {
-		this.price = price;
 	}
 
 	public Integer getMinimumAge() {
@@ -386,5 +389,29 @@ public class Activity {
 
 	public void setRequiredId(boolean requiredId) {
 		this.requiredId = requiredId;
+	}
+
+	public Integer getMinCapacityGroup() {
+		return minCapacityGroup;
+	}
+
+	public void setMinCapacityGroup(Integer minCapacityGroup) {
+		this.minCapacityGroup = minCapacityGroup;
+	}
+
+	public Integer getMaxCapacityGroup() {
+		return maxCapacityGroup;
+	}
+
+	public void setMaxCapacityGroup(Integer maxCapacityGroup) {
+		this.maxCapacityGroup = maxCapacityGroup;
+	}
+
+	public List<PaxPrice> getPaxs() {
+		return paxs;
+	}
+
+	public void setPaxs(List<PaxPrice> paxs) {
+		this.paxs = paxs;
 	}
 }

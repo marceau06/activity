@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.koedia.activity.activityManager.model.entity.Activity;
+import com.koedia.activity.activityManager.model.entity.PaxPrice;
 import com.koedia.activity.activityManager.model.entity.User;
 import com.koedia.activity.activityManager.service.ActivityService;
 import com.koedia.activity.activityManager.service.UserService;
@@ -194,7 +195,6 @@ public class AccountController {
 				logger.info("[AccountController]-goToResetPassword : "
 						+ "Email de l'utilisateur non récupéré");
 				emailUser = "Email inconnu";
-				// TODO Email inconnu en DB
 			}
 			
 		} else {
@@ -240,6 +240,46 @@ public class AccountController {
 			mav.addObject("password", null);
 		}
 		return mav;
+	}
+	
+	/********************************** Méthode de tests **********************************************************/
+	@GetMapping("/testSaveActivityWithPaxPrice")
+	public ModelAndView testSaveActivityWithPaxPrice() {	
+		Activity a = new Activity();
+		a.setTitle("aaaaaaaaaaaa");
+		a.setDescriptionFre("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+		
+		PaxPrice p = new PaxPrice();
+		p.setName("test pax price");
+		p.setPrice(30);
+		a.getPaxs().add(p);
+		
+		try{
+			activityService.saveActivity(a);
+		} catch(Exception ex) {
+			logger.debug("ERREUR Lors de l'enregistrement de l'activité : \n" +ex.getMessage());
+		}
+		
+		System.out.println(p);
+		int testMapping = p.getActivityId();
+		System.out.println(testMapping);
+		
+		return new ModelAndView("/account");
+	}
+	
+	@GetMapping("/testRetrieveActivityWithPaxPrice")
+	public ModelAndView testRetrieveActivityFromDb() {
+		
+		// Retrieve user
+		User user = (User)httpSession.getAttribute("user");
+		
+		List<Activity> actList = activityService.findAllByUserId(user.getId());
+		
+		for(int i=0; i < actList.size(); i++) {
+			System.out.println(actList);
+		}
+		
+		return new ModelAndView("/account");
 	}
 	
 	
