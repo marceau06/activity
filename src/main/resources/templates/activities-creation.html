@@ -5,78 +5,86 @@
 <body>
 
 
-<h1><span th:text="#{activity_creation}"></span></h1>
+	<h1>
+		<span th:text="#{activity_creation}"></span>
+	</h1>
 
-<form th:action="@{/activity/create}" th:object="${activity}" method="POST" enctype="multipart/form-data">
+	<form th:action="@{/activity/create}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
 
-<!-- One "tab" for each step in the form: -->
+		<!-- One "tab" for each step in the form: -->
 
 		<div class="container-fluid">
-				
-				<!-- Barre latérale de progression -->
-				<div class="col-lg-2 progbar">
-					
-					<ul class="nav flex-column">
-					  <li class="nav-item">
-					  		<div id="goToStepTitle" class="progbar-item" onclick="showTabFromNavBar('0');">
-								<span class="inputIndication" th:text="#{title}"></span>
-					  		</div>
-					  </li>
-					  <li class="nav-item">
-					    	<div class="progbar-item" onclick="showTabFromNavBar('1');">
-								<span class="inputIndication" th:text="#{category}"></span>
-					  		</div>
-					  </li>
-					  <li class="nav-item">
-						 	 <div class="progbar-item" onclick="showTabFromNavBar('2');">
-						  		<span class="inputIndication" th:text="#{description}"></span>
-						  	</div>
-					  </li>
-					  <li class="nav-item">
-						  <div class="progbar-item" onclick="showTabFromNavBar('3');">
-						  		<span class="inputIndication" th:text="#{meeting_point}"></span>
-						  	</div>
-					  </li>
-					  <li class="nav-item">
-						  <div class="progbar-item" onclick="showTabFromNavBar('4');">
-						  		<span class="inputIndication" th:text="#{schedule}"></span>
-						  	</div>
-					  </li>
-					  <li class="nav-item">
-						  <div class="progbar-item" onclick="showTabFromNavBar('5');">
-						  		<span class="inputIndication" th:text="#{images}"></span>
-						  	</div>
-					  </li>
-					  <li class="nav-item">
-						  <div class="progbar-item" onclick="showTabFromNavBar('6');">
-						  		<span class="inputIndication" th:text="#{participation_criterias}"></span>
-						  	</div>
-					  </li>
-					  <li class="nav-item">
-						  <div class="progbar-item" onclick="showTabFromNavBar('7');">
-						  		<span class="inputIndication" th:text="#{price}"></span>
-						  	</div>
-					  </li>
-					  <li class="nav-item">
-						  <div class="progbar-item" onclick="showTabFromNavBar('8');">
-						  		<span class="inputIndication" th:text="#{group_capacity}"></span>
-						  	</div>
-					  </li>
-					  <li class="nav-item">
-						  <div class="progbar-item" onclick="showTabFromNavBar('9');">
-						  		<span class="inputIndication" th:text="#{validate_and_send}"></span>
-						  	</div>
-					  </li>
-					</ul>
-					
-				</div>
-				
-				
-		<!-- STEP 1 : Title -->
-				<div class="col-lg-4 container-form">
-					
-				  <div class="tab">
-					<div class="row-form  inputStyle">
+
+			<!-- Barre latérale de progression -->
+			<div class="col-lg-2 progbar">
+
+				<ul class="nav flex-column">
+					<li class="nav-item">
+						<div id="go-to-stepTitle" class="progbar-item" onclick="showTabFromNavBar('0');">
+							<span class="inputIndication" th:text="#{title}"></span>
+						</div>
+					</li>
+					<li class="nav-item">
+						<div id="go-to-stepCategory" class="progbar-item" onclick="showTabFromNavBar('1');">
+							<span class="inputIndication" th:text="#{category}"></span>
+						</div>
+					</li>
+					<li class="nav-item">
+						<div id="go-to-stepDescription" class="progbar-item" onclick="showTabFromNavBar('2');">
+							<span class="inputIndication" th:text="#{description}"></span>
+						</div>
+					</li>
+					<li class="nav-item">
+						<div id="go-to-stepMeetingPoint" class="progbar-item" onclick="showTabFromNavBar('3');">
+							<span class="inputIndication" th:text="#{meeting_point}"></span>
+						</div>
+					</li>
+					<li class="nav-item">
+						<div id="go-to-stepSchedules" class="progbar-item" onclick="showTabFromNavBar('4');">
+							<span class="inputIndication" th:text="#{schedule}"></span>
+						</div>
+					</li>
+					<li class="nav-item">
+						<div id="go-to-stepImages" class="progbar-item" onclick="showTabFromNavBar('5');">
+							<span class="inputIndication" th:text="#{images}"></span>
+						</div>
+					</li>
+					<li class="nav-item">
+						<div id="go-to-stepParticipationCriterias" class="progbar-item" onclick="showTabFromNavBar('6');">
+							<span class="inputIndication" th:text="#{participation_criterias}"></span>
+						</div>
+					</li>
+					<li class="nav-item">
+						<div id="go-to-stepDefaultPrice" class="progbar-item" onclick="showTabFromNavBar('7');">
+							<span class="inputIndication" th:text="#{price}"></span>
+						</div>
+					</li>
+					<li class="nav-item">
+						<div id="go-to-stepPaxs" class="progbar-item" onclick="showTabFromNavBar('8');">
+							<span class="inputIndication" th:text="#{pax_type}"></span>
+						</div>
+					</li>
+					<li class="nav-item">
+						<div id="go-to-stepCapacity" class="progbar-item" onclick="showTabFromNavBar('9');">
+							<span class="inputIndication" th:text="#{group_capacity}"></span>
+						</div>
+					</li>
+					<li class="nav-item">
+						<div id="go-to-stepValidate" class="progbar-item" onclick="showTabFromNavBar('10');">
+							<span class="inputIndication" th:text="#{validate_and_send}"></span>
+						</div>
+					</li>
+				</ul>
+
+			</div>
+
+
+			<!-- STEP 1 : Title -->
+
+			<div class="col-lg-4 container-form">
+
+				<div class="tab form-row" id="stepTitle">
+					<div class="row-form inputStyle">
 						<p>
 							<span class="inputTitle" th:text="#{title}"></span>
 						</p>
@@ -84,16 +92,24 @@
 							<span class="inputIndication" th:text="#{title_indication}"></span>
 						</p>
 					</div>
-					
-					<div class="form-group" th:class="${#fields.hasErrors('title')}? has-error" >
-					  	<input type="text" th:field="*{title}" class="form-control form-control-lg" id="title" name="title" autocomplete="off" />
-						<span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" th:errorclass="fieldError">Title Error</span>
-				    
-				    </div>
-				 </div>
-				 
-		<!-- STEP 1 : Category -->
-				<div class="tab">
+
+					<div class="form-group" th:class="${#fields.hasErrors('title')}? has-error">
+
+						<input type="text" th:field="*{title}" class="form-control form-control-lg" id="title" name="title" autocomplete="off" />
+						<!-- <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" th:errorclass="fieldError">Title Error</span> -->
+
+						<div class="alert alert-danger error-message-title" role="alert">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span class="sr-only">Error:</span>
+							Enter a valid title
+						</div>
+					</div>
+				</div>
+
+
+				<!-- STEP 1 : Category -->
+
+				<div class="tab" id="stepCategory">
 					<div class="row-form  inputStyle">
 						<p>
 							<span class="inputTitle" th:text="#{category}"></span>
@@ -104,69 +120,96 @@
 					</div>
 					<div class="form-group" th:class="${#fields.hasErrors('category')}? has-error">
 						<select class="form-control form-control-lg" th:field="*{category}">
-						  <option th:value="#{cat_art}" th:text="#{cat_art}"></option>
-						  <option th:value="#{cat_sport}" th:text="#{cat_sport}"></option>
-						  <option th:value="#{cat_nature}" th:text="#{cat_nature}"></option>
-						  <option th:value="#{cat_food}" th:text="#{cat_food}"></option>
-						  <option th:value="#{cat_entertainment}" th:text="#{cat_entertainment}"></option>
-						  <option th:value="#{cat_nightlife}" th:text="#{cat_nightlife}"></option>
-						  <option th:value="#{cat_discovery}" th:text="#{cat_discovery}"></option>
+							<option th:value="#{cat_art}" th:text="#{cat_art}"></option>
+							<option th:value="#{cat_sport}" th:text="#{cat_sport}"></option>
+							<option th:value="#{cat_nature}" th:text="#{cat_nature}"></option>
+							<option th:value="#{cat_food}" th:text="#{cat_food}"></option>
+							<option th:value="#{cat_entertainment}" th:text="#{cat_entertainment}"></option>
+							<option th:value="#{cat_nightlife}" th:text="#{cat_nightlife}"></option>
+							<option th:value="#{cat_discovery}" th:text="#{cat_discovery}"></option>
 						</select>
-					 </div>
+					</div>
 				</div>
-			
-		<!-- STEP 1 : description -->
-		<div class="tab">
-			<div class="row-form  inputStyle">
-				<p>
-					<span class="inputTitle" th:text="#{description}"></span>
-				</p>
-				<p>
-					<span class="inputIndication" th:text="#{title_indication}"></span>
-				</p>
-				<p>
-					<span>Select the language of the description</span>
-				</p>
-				<select id="selectDescLang" class="form-control" onChange="switchDescLang();">
-					<option>FR</option>
-					<option>EN</option>
-					<option>ES</option>
-				</select>
 
-				<br/>
+				<!-- STEP 2 : description -->
 
-			   <div id="blocDescFr">
-					<div class="form-group" th:class="${#fields.hasErrors('descriptionFre')}? has-error">
-						 <textarea th:field="*{descriptionFre}" class="form-control form-control-lg form-desc" oninput="this.className = 'form-control'" th:placeholder="#{desc_indication}"></textarea>
-						   	<span th:if="${#fields.hasErrors('descriptionFre')}" th:errors="*{descriptionFre}" th:errorclass="fieldError">Description Error</span>
-<!-- 			 				<span id="charsCount"></span> 				 -->
-<!-- 			 				<span id="charsRequiredField" th:text="#{chars_required}"></span>  -->
-						 </div>
-					 </div>
+				<div class="tab" id="stepDescription">
+					<div class="row-form  inputStyle">
+						<p>
+							<span class="inputTitle" th:text="#{description}"></span>
+						</p>
+						<p>
+							<span class="inputIndication" th:text="#{title_indication}"></span>
+						</p>
+						<p>
+							<span>Select the language of the description</span>
+						</p>
+						<select id="selectDescLang" class="form-control" onChange="switchDescLang();">
+							<option>FR</option>
+							<option>EN</option>
+							<option>ES</option>
+						</select>
 
-					<div id="blocDescEn">
-						 <div class="form-group" th:class="${#fields.hasErrors('descriptionEng')}? has-error">
-						   	<textarea th:field="*{descriptionEng}" class="form-control form-control-lg form-desc" oninput="this.className = 'form-control'" th:placeholder="#{desc_indication}"></textarea>
-						   	<span th:if="${#fields.hasErrors('descriptionEng')}" th:errors="*{descriptionEng}" th:errorclass="fieldError">Description Error</span>
-<!-- 			 				<span id="charsCount"></span> 				 -->
-<!-- 			 				<span id="charsRequiredField" th:text="#{chars_required}"></span>  -->
-						 </div>
-					 </div>
+						<br />
 
-					 <div id="blocDescEs">
-						 <div class="form-group" th:class="${#fields.hasErrors('descriptionEsp')}? has-error">
-						   	<textarea th:field="*{descriptionEsp}" class="form-control form-control-lg form-desc" oninput="this.className = 'form-control'" th:placeholder="#{desc_indication}"></textarea>
-						   	<span th:if="${#fields.hasErrors('descriptionEsp')}" th:errors="*{descriptionEsp}" th:errorclass="fieldError">Description Error</span>
-<!-- 			 				<span id="charsCount"></span> 				 -->
-<!-- 			 				<span id="charsRequiredField" th:text="#{chars_required}"></span>  -->
-						 </div>
-					 </div>
+						<div id="blocDescFr">
+							<div class="form-group" th:class="${#fields.hasErrors('descriptionFre')}? has-error">
+								<textarea th:field="*{descriptionFre}" class="form-control form-control-lg form-desc" oninput="this.className = 'form-control'" th:placeholder="#{desc_indication}"></textarea>
+								<span th:if="${#fields.hasErrors('descriptionFre')}" th:errors="*{descriptionFre}" th:errorclass="fieldError">Description Error</span>
+
+								<!-- 			 				<span id="charsCount"></span> 				 -->
+								<!-- 			 				<span id="charsRequiredField" th:text="#{chars_required}"></span>  -->
+
+								<div class="alert alert-danger error-message-descriptionFre" role="alert">
+									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+									<span class="sr-only">Error:</span>
+									Message erreur description
+								</div>
+
+							</div>
+						</div>
+
+						<div id="blocDescEn">
+							<div class="form-group" th:class="${#fields.hasErrors('descriptionEng')}? has-error">
+								<textarea th:field="*{descriptionEng}" class="form-control form-control-lg form-desc" oninput="this.className = 'form-control'" th:placeholder="#{desc_indication}"></textarea>
+								<span th:if="${#fields.hasErrors('descriptionEng')}" th:errors="*{descriptionEng}" th:errorclass="fieldError">Description Error</span>
+
+								<!-- 			 				<span id="charsCount"></span> 				 -->
+								<!-- 			 				<span id="charsRequiredField" th:text="#{chars_required}"></span>  -->
+
+								<div class="alert alert-danger error-message-descriptionEng" role="alert">
+									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+									<span class="sr-only">Error:</span>
+									Message erreur description
+								</div>
+							</div>
+						</div>
+
+						<div id="blocDescEs">
+							<div class="form-group" th:class="${#fields.hasErrors('descriptionEsp')}? has-error">
+								<textarea th:field="*{descriptionEsp}" class="form-control form-control-lg form-desc" oninput="this.className = 'form-control'" th:placeholder="#{desc_indication}"></textarea>
+								<span th:if="${#fields.hasErrors('descriptionEsp')}" th:errors="*{descriptionEsp}" th:errorclass="fieldError">Description Error</span>
+
+								<!-- 			 				<span id="charsCount"></span> 				 -->
+								<!-- 			 				<span id="charsRequiredField" th:text="#{chars_required}"></span>  -->
+								<div class="alert alert-danger error-message-descriptionEsp" role="alert">
+									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+									<span class="sr-only">Error:</span>
+									Message erreur description
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-		</div>
-	
-	
-		<!-- STEP 2 : MeetingPoint, city, address and map -->
-				<div class="tab">
+
+
+				<!-- STEP 3 : MeetingPoint, city, address and map -->
+
+				<input type="hidden" th:field="*{latitude}"></input>
+				<input type="hidden" th:field="*{longitude}"></input>
+				<input type="hidden" id="zoom" name="zoom"></input>
+
+				<div class="tab" id="stepMeetingPoint">
 					<div class="inputStyle">
 						<p>
 							<span class="inputTitle" th:text="#{meeting_point}"></span>
@@ -174,486 +217,371 @@
 						<p>
 							<span class="inputIndication" th:text="#{meeting_point_indication}"></span>
 						</p>
-					
-						<input type="hidden" th:field="*{latitude}"></input>
-						<input type="hidden" th:field="*{longitude}"></input>
-						<input type="hidden" id="zoom" name="zoom"></input>
-						<span  th:text="#{meeting_point_name}"></span>
+
+						<span th:text="#{meeting_point_name}"></span>
 						<p>
-							<input  type="text" class="form-control input-place" value="" th:field="*{meetingPoint}" th:placeholder="#{meeting_point_name}" oninput="this.className = ''" autocomplete="off" />
+							<input type="text" class="form-control input-place" value="" th:field="*{meetingPoint}" th:placeholder="#{meeting_point_name}" oninput="this.className = ''" autocomplete="off" />
 						</p>
-						<span  th:text="#{address}"></span>
+						<span th:text="#{address}"></span>
 						<p>
 							<input type="text" class="form-control input-place" value="" th:field="*{address}" th:placeholder="#{address}" oninput="this.className = ''" onclick="changeDestinationCityWithId(this.id)" autocomplete="off" />
 						</p>
-						<span  th:text="#{city}"></span>
+						<span th:text="#{city}"></span>
 						<p>
 							<input type="text" class="form-control input-place" value="" th:field="*{city}" th:placeholder="#{city}" oninput="this.className = ''" onclick="changeDestinationCityWithId(this.id)" autocomplete="off" />
 						</p>
-						<span  th:text="#{country}"></span>
+						<span th:text="#{country}"></span>
 						<p>
 							<input type="text" class="form-control input-place" value="" th:field="*{country}" th:placeholder="#{country}" oninput="this.className = ''" autocomplete="off" />
 						</p>
-						<span  th:text="#{zip_code}"></span>
+						<span th:text="#{zip_code}"></span>
 						<p>
 							<input type="text" class="form-control input-place" value="" th:field="*{zipCode}" th:placeholder="#{zip_code}" oninput="this.className = ''" autocomplete="off" />
 						</p>
 					</div>
 					<div>
-<!-- 						<span  th:text="#{map}"></span> -->
-						<div id="googleMap">
+						<!-- 						<span  th:text="#{map}"></span> -->
+						<div id="googleMap"></div>
+					</div>
+				</div>
+
+
+				<!-- STEP 4 : schedules  -->
+
+				<div class="tab" id="stepSchedules">
+					<div class="row-form ">
+						<p>
+							<span class="inputTitle" th:text="#{schedule}"></span>
+						</p>
+						<p>
+							<span class="inputIndication" th:text="#{meeting_point_indication}"></span>
+						</p>
+						<!-- Period  -->
+						<p>
+							<span th:text="#{start_date_period}"></span>
+							<input type="text" id="beginDateText" name="beginDateText" onchange="changeReturnDate(); onChangeDate();" />
+						</p>
+						<div>
+							<input type="date" th:field="*{beginDate}" />
 						</div>
-					</div>
-			</div>
-	
-	
-	<!-- STEP 3 : schedules  -->
-			<div class="tab">
-				<div class="row-form ">
-					<p>
-						<span class="inputTitle" th:text="#{schedule}"></span>
-					</p>
-					<p>
-						<span class="inputIndication" th:text="#{meeting_point_indication}"></span>
-					</p>
-			
-					<p>
-						<span th:text="#{start_date_period}"></span>
-						<input type="text" id="beginDateText" name="beginDateText" onchange="changeReturnDate(); onChangeDate();" />
-					</p>		
-					<div>
-						<input type="date" th:field="*{beginDate}" />
-					</div>
-					<p>
-						<span th:text="#{end_date_period}"></span>
-						<input type="text" id="endDateText" name="endDateText" onchange="onChangeDate();" />
-					</p>	
-					
-					<div>
-						<input type="date" th:field="*{endDate}"/>
-					</div>
+						<p>
+							<span th:text="#{end_date_period}"></span>
+							<input type="text" id="endDateText" name="endDateText" onchange="onChangeDate();" />
+						</p>
+
+						<div>
+							<input type="date" th:field="*{endDate}" />
+						</div>
+						
+						<!-- Hours  -->
 						<span th:text="#{from_time}"></span>
-						<div class="form-group">
-							<select class="form-control" id="beginHourT" name="beginHourT" onchange="changeReturnTime();">
-							</select>
+						
+						<div class="form-group clockpicker">
+						
+							<input th:field="*{beginHourText}" type="text" class="form-control" onchange="onChangeTime(); increaseTimeByOneHour(this, endHourText);">
+<!-- 							<input type="time" th:field="*{beginHour}" /> -->
+							 <span class="input-group-addon">
+							 	<span class="glyphicon glyphicon-time"></span>
+							 </span>
+							 
 						</div>
 						
 						<span th:text="#{to_time}"></span>
-						<div class="form-group">
-							<select class="form-control" id="endHourT" name="endHourT">
-							</select>
+						
+						<div class="form-group clockpicker">
+						
+							<input th:field="*{endHourText}" type="text" class="form-control" onchange="onChangeTime();">
+<!-- 							<input type="time" th:field="*{endHour}" /> -->
+							 <span class="input-group-addon">
+							 	<span class="glyphicon glyphicon-time"></span>
+							 </span>
+							 
 						</div>
+						
+					</div>
+
 				</div>
-			
-			</div>
-	
-	
-	
-	<!-- STEP 4: Images and videos  -->
-			<div class="tab">
-				<div class="row-form ">
+
+
+
+				<!-- STEP 5 : Images and videos  -->
+				<div class="tab" id="stepImages">
+					<div class="row-form ">
+						<p>
+							<span class="inputTitle" th:text="#{images}"></span>
+						</p>
+						<p>
+							<span class="inputIndication" th:text="#{download_cover_image}"></span>
+						</p>
+						<p>
+							<input type="file" th:field="*{mainPictureFile}" th:placeholder="#{mainPictureFile}" oninput="this.className = ''" onchange="displayImg()" />
+						<p>
+							<input id="imgDisplay" type="image" src="" value="overview" style="width: 150px; heigth: 150px;" />
+						</p>
+					</div>
+				</div>
+
+				<!-- STEP 5 : Additional informations, criteria for participation -->
+				<div class="tab" id="stepParticipationCriterias">
 					<p>
-						<span class="inputTitle" th:text="#{images}"></span>
+						<span class="inputTitle" th:text="#{participation_criteria}"></span>
 					</p>
 					<p>
 						<span class="inputIndication" th:text="#{download_cover_image}"></span>
 					</p>
-					<p>
-						<input type="file" th:field="*{mainPictureFile}" th:placeholder="#{mainPictureFile}" oninput="this.className = ''" onchange="displayImg()"/>
-					<p>
-						<input id="imgDisplay" type="image" src="" value="overview" style="width: 150px; heigth: 150px;" />
-					</p>
-				</div>
-			</div>
-			
-	<!-- STEP 5 : Additional informations, criteria for participation -->
-			<div class="tab">
-				<p>
-					<span class="inputTitle" th:text="#{participation_criteria}"></span>
-				</p>
-				<p>
-					<span class="inputIndication" th:text="#{download_cover_image}"></span>
-				</p>
-				<div class="row-form ">
-					<span th:text="#{minimum_age}"></span>
-					<div class="form-group">
-						<select class="form-control form-control-lg" th:field="*{minimumAge}">
-							<option value="0">0</option>
-							 <option value="1">1</option>
-							 <option value="2">2</option>
-							 <option value="3">3</option>
-							 <option value="4">4</option>
-							 <option value="5">5</option>
-							 <option value="6">6</option>
-							 <option value="7">7</option>
-							 <option value="8">8</option>
-							 <option value="9">9</option>
-							 <option value="10">10</option>
-							 <option value="11">11</option>
-							 <option value="12">12</option>
-							 <option value="13">13</option>
-							 <option value="14">14</option>
-							 <option value="15">15</option>
-							 <option value="16">16</option>
-							 <option value="17">17</option>
-							 <option value="18">18</option>
-						</select>
-					 </div>
+					<div class="row-form ">
+						<span th:text="#{minimum_age}"></span>
+						<div class="form-group">
+							<select class="form-control form-control-lg" th:field="*{minimumAge}">
+								<option th:value="0">0</option>
+								<option th:value="1">1</option>
+								<option th:value="2">2</option>
+								<option th:value="3">3</option>
+								<option th:value="4">4</option>
+								<option th:value="5">5</option>
+								<option th:value="6">6</option>
+								<option th:value="7">7</option>
+								<option th:value="8">8</option>
+								<option th:value="9">9</option>
+								<option th:value="10">10</option>
+								<option th:value="11">11</option>
+								<option th:value="12">12</option>
+								<option th:value="13">13</option>
+								<option th:value="14">14</option>
+								<option th:value="15">15</option>
+								<option th:value="16">16</option>
+								<option th:value="17">17</option>
+								<option th:value="18">18</option>
+							</select>
+						</div>
 					</div>
-					
+
 					<div class="row-form ">
 						<span th:text="#{required_id}"></span>
-						 <div class ="form-check">
+						<div class="form-check">
 							<input type="checkbox" class="form-check-input" th:field="*{requiredId}" />
 						</div>
 					</div>
-			</div>
-			
-			
-		<!-- STEP 6 : Price  -->
-			<div class="tab">
-			
-				<div class="row-form ">
-					<p>
-						<span class="inputTitle" th:text="#{price}"></span>
-					</p>
-					<p>
-						<span class="inputIndication" th:text="#{price_indication}"></span>
-					</p>
-					<p>
-						<select id="selectPaxType" class="form-control" onChange="switchPaxType();">
-							<option value="Global">Global</option>
-							<option value="Baby">Bebes</option>
-							<option value="Infant">Enfants</option>
-							<option value="Adult">Adultes</option>
-							<option value="Senior">Seniors</option>
-							<option value="Students">Etudiants</option>
-							<option value="Create">Créer type de client</option>
-						</select>
-					</p>
+				</div>
 				
-					<div class ="form-check">
-<!-- 						<input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" th:field="*{}" /> -->
-							
+				<!-- STEP 6 : Global price -->
+				<div class="tab" id="stepDefaultPrice">
+					<div class="row-form ">
+						<p>
+							<span class="inputTitle" th:text="#{price}"></span>
+						</p>
+						<p>
+							<span class="inputIndication" th:text="#{price_indication}"></span>
+						</p>
+
+						<div class="form-group">
+							<p>
+								<span class="inputIndication">Indiquez un prix par défaut</span>
+							</p>
+
 							<div id="global">
-								<span>Nom du pax - (défini ?)</span>
-								<input class="form-control" type="text" th:field="*{paxs[0].name}" />
-								<span>Age minimum</span>
-								<input class="form-control" type="text" th:id="paxAgeMin" th:field="*{paxs[0].ageMin}" />
-								<span>Age maximum</span>
-								<input class="form-control" type="text" th:id="paxAgeMax" th:field="*{paxs[0].ageMax}" />
+
 								<span>Prix</span>
-								<input class="form-control" type="text" th:id="paxPrice" th:field="*{paxs[0].price}" />
+								<input class="form-control" type="text" th:id="paxDefaultPrice" th:field="*{paxs[0].price}" />
+								<input type="hidden" th:id="paxDefaultName" th:field="*{paxs[0].name}" />
+								<input type="hidden" th:id="paxDefaultAgeMin" th:field="*{paxs[0].ageMin}" />
+								<input type="hidden" th:id="paxDefaultAgeMax" th:field="*{paxs[0].ageMax}" />
 							</div>
-							
-							<div id="baby">
-								<span>Nom du pax - (défini ?)</span>
-								<input class="form-control" type="text" th:field="*{paxs[1].name}" placeholder="Bébés" />
-								<span>Age minimum</span>
-								<input class="form-control" type="text" th:id="paxAgeMin" th:field="*{paxs[1].ageMin}" />
-								<span>Age maximum</span>
-								<input class="form-control" type="text" th:id="paxAgeMax" th:field="*{paxs[1].ageMax}" />
-								<span>Prix</span>
-								<input class="form-control" type="text" th:id="paxPrice" th:field="*{paxs[1].price}" />
-							</div>
-							
-							<div id="infant">
-								<span>Nom du pax - (défini ?)</span>
-								<input class="form-control" type="text" th:field="*{paxs[2].name}" placeholder="Enfants" />
-								<span>Age minimum</span>
-								<input class="form-control" type="text" th:id="paxAgeMin" th:field="*{paxs[2].ageMin}" />
-								<span>Age maximum</span>
-								<input class="form-control" type="text" th:id="paxAgeMax" th:field="*{paxs[2].ageMax}" />
-								<span>Prix</span>
-								<input class="form-control" type="text" th:id="paxPrice" th:field="*{paxs[2].price}" />
-							</div>
-							
-							<div id="adult">
-								<span>Nom du pax - (défini ?)</span>
-								<input class="form-control" type="text" th:field="*{paxs[3].name}" placeholder="Adultes" />
-								<span>Age minimum</span>
-								<input class="form-control" type="text" th:id="paxAgeMin" th:field="*{paxs[3].ageMin}" />
-								<span>Age maximum</span>
-								<input class="form-control" type="text" th:id="paxAgeMax" th:field="*{paxs[3].ageMax}" />
-								<span>Prix</span>
-								<input class="form-control" type="text" th:id="paxPrice" th:field="*{paxs[3].price}" />
-							</div>		
-							
-							<div id="senior">
-								<span>Nom du pax - (défini ?)</span>
-								<input class="form-control" type="text" th:field="*{paxs[4].name}" th:placeholder="Seniors" />
-								<span>Age minimum</span>
-								<input class="form-control" type="text" th:id="paxAgeMin" th:field="*{paxs[4].ageMin}" />
-								<span>Age maximum</span>
-								<input class="form-control" type="text" th:id="paxAgeMax" th:field="*{paxs[4].ageMax}" />
-								<span>Prix</span>
-								<input class="form-control" type="text" th:id="paxPrice" th:field="*{paxs[4].price}" />
-							</div>	
-							
+						</div>
+					</div>
+				</div>
+
+				<!-- STEP 7 : Price  -->
+				<div class="tab" id="stepPaxs">
+
+					<div class="row-form ">
+						<p>
+							<span class="inputTitle" th:text="#{price}"></span>
+						</p>
+						<p>
+							<span class="inputIndication" th:text="#{price_indication}"></span>
+						</p>
+
+						<div class="form-group">
+
+							<p>
+								<span class="inputIndication">Créez vos type de voyageur</span>
+							</p>
+
 							<div id="create">
-								<span>Nom du pax - (défini ?)</span>
-								<input class="form-control" type="text" th:field="*{paxs[5].name}" placeholder="Create you pax category" />
+								<span>Nom du pax</span>
+								<input class="form-control" type="text" th:id="paxName" placeholder="Create you pax category" />
 								<span>Age minimum</span>
-								<input class="form-control" type="text" th:id="paxAgeMin" th:field="*{paxs[5].ageMin}" />
+								<input class="form-control" type="text" th:id="paxAgeMin" />
 								<span>Age maximum</span>
-								<input class="form-control" type="text" th:id="paxAgeMax" th:field="*{paxs[5].ageMax}" />
+								<input class="form-control" type="text" th:id="paxAgeMax" />
 								<span>Prix</span>
-								<input class="form-control" type="text" th:id="paxPrice" th:field="*{paxs[5].price}" />
-							</div>																				
+								<input class="form-control" type="text" th:id="paxPrice" />
+							</div>
+						</div>
+						
+						<div>
+							<button type="button" class="btn btn-primary" onclick="createPax();">Ajouter</button>
+						</div>
+
 					</div>
 
+
 				</div>
-				
-				
-			</div>
-			
-		<!-- STEP 7 : Group Capacity  -->
-			<div class="tab">
-				<div class="row-form ">
-					<p>
-						<span class="inputTitle" th:text="#{group_capacity}"></span>
-					</p>
-					<p>
-						<span class="inputIndication" th:text="#{group_capacity_indication}"></span>
-					</p>
-					<div>
+
+				<!-- STEP 8 : Group Capacity  -->
+				<div class="tab" id="stepCapacity">
+					<div class="row-form ">
 						<p>
-						   <span th:text="#{minCapacityGroup}"></span>
-						   <b></b>
-						   <input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" th:field="*{minCapacityGroup}" autocomplete="off" />
+							<span class="inputTitle" th:text="#{group_capacity}"></span>
+						</p>
+						<p>
+							<span class="inputIndication" th:text="#{group_capacity_indication}"></span>
+						</p>
+						<div>
+							<p>
+								<span th:text="#{minCapacityGroup}"></span>
+								<b></b>
+								<input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" th:field="*{minCapacityGroup}" autocomplete="off" />
+							</p>
+						</div>
+						<div>
+							<p>
+								<span th:text="#{maxCapacityGroup}"></span>
+								<b></b>
+								<input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" th:field="*{maxCapacityGroup}" autocomplete="off" />
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- LAST STEP : Validate and submit form -->
+				<div class="tab" id="stepValidate">
+					<div class="row-form ">
+						<p>
+							<span class="inputTitle" th:text="#{validate_and_send}"></span>
+						</p>
+						<p>
+							<span class="inputIndication" th:text="#{validate_and_submit_indication}"></span>
 						</p>
 					</div>
+				</div>
+
+
+				<!-- NAVIGATION BUTTON & SUBMIT  -->
+				<div class="btnStep">
 					<div>
-						<p>
-						   <span th:text="#{maxCapacityGroup}"></span>
-						   <b></b>
-						   <input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" th:field="*{maxCapacityGroup}" autocomplete="off" />
-						</p>
+						<button type="button" id="modifyBtn" class="btn btn-lg btn-secondary" onclick="toggleButtonAndSwitchInput(false)">MODIFIER</button>
+						<button type="button" id="nextBtn" class="btn btn-lg btn-primary" onclick="nextPrev(1)">Next</button>
 					</div>
 				</div>
-			</div>
-			
-			<!-- LAST STEP : Validate and submit form -->
-			<div class="tab">
-				<div class="row-form ">
-					<p>
-						<span class="inputTitle" th:text="#{validate_and_send}"></span>
-					</p>
-					<p>
-						<span class="inputIndication" th:text="#{validate_and_submit_indication}"></span>
-					</p>
+
+				<!-- Circles which indicates the steps of the form: -->
+				<!-- We need as many circles as there are steps -->
+				<div style="text-align: center; margin-top: 40px;">
+					<span class="step"></span>
+					<span class="step"></span>
+					<span class="step"></span>
+					<span class="step"></span>
+					<span class="step"></span>
+					<span class="step"></span>
+					<span class="step"></span>
+					<span class="step"></span>
+					<span class="step"></span>
+					<span class="step"></span>
+					<span class="step"></span>
 				</div>
+
 			</div>
-	
-	
-	<!-- NAVIGATION BUTTON & SUBMIT  -->
-			<div class="btnStep">
-				<div>
-					<button type="button" id="prevBtn" class="btn btn-lg btn-secondary" onclick="nextPrev(-1)">Previous</button>
-					<button type="button" id="nextBtn" class="btn btn-lg btn-primary" onclick="nextPrev(1)">Next</button>
-				</div>
+
+			<!-- PAXS (Step 6) -->
+			<div id="paxsCreated" class="col-lg-6 pax-bloc">
 			</div>
-	
-			<!-- Circles which indicates the steps of the form: -->
-			<!-- We need as many circles as there are steps -->
-			<div style="text-align: center; margin-top: 40px;">
-				<span class="step"></span> 
-				<span class="step"></span> 
-				<span class="step"></span> 
-				<span class="step"></span>
-				<span class="step"></span>
-				<span class="step"></span>
-				<span class="step"></span>
-				<span class="step"></span>
-				<span class="step"></span>
-				<span class="step"></span>
-			</div>
-			
 		</div>
-	</div>
-</form>
-	
-	
-<script th:inline="javascript" type="text/javascript">
+	</form>
 
-	var minNumCharsDescription = 200;
-	var maxNumCharsDescription = 1000;
 
-	window.onload = function(){
-	    // Init google map
-		initMap(0, 0);
-	    // Hide google map
-	    document.getElementById("googleMap").style.display= "none";
-	    // Display the current step
-	    showTab(0); 
-	    // Populate select input
-	    populate("#beginHourT");
-	    populate("#endHourT");
-	    // Init autocomplete
-	    autocomplete("#address"); 
-		autocomplete("#city");
-		// Init desc per lang
-		jQuery('#blocDescFr').show();
-		jQuery('#blocDescEn').hide();
-		jQuery('#blocDescEs').hide();
-		// Init paxs inputs
-		jQuery('#global').show();
-		jQuery('#baby').hide();
-		jQuery('#infant').hide();
-		jQuery('#adult').hide();
-		jQuery('#senior').hide();
-		jQuery('#create').hide();
-	}
-	    
+	<script th:inline="javascript" type="text/javascript">
+		
+		// Taille min et max de la description
+	    var minNumCharsDescription = 200;
+		var maxNumCharsDescription = 1000;
+		
+		// Compteur de pax créés par l'utilisateur dans le formulaire
+		var countPaxCreation = 1;
+		
+		// Booléen passe à true lorsque l'utilisateur a créé un pax
+		var hasCreatedPax = false;
 
-	
-	jQuery(function() {
-	    $("#beginDateText").datepicker();
-	    $("#endDateText").datepicker();
-	});
-	
-	function toggleGoogleMap() {
-		var map = document.getElementById("googleMap");
-		if (map.style.display === "none") {
-			map.style.display = "block";
-		} else {
-			map.style.display = "none";
-		}
-	 }
-	
-	function switchDescLang() {
-		var descLang = jQuery('#selectDescLang').val();
-		if(descLang == 'FR') {
+		window.onload = function() {
+
+			// Hide all error messages
+			jQuery('.alert').hide();
+			// Init default price values
+			initDefaultPrice();
+			// Init google map
+			initMap(0, 0);
+			// Hide google map
+			document.getElementById("googleMap").style.display = "none";
+			// Display the current step
+			showTab(0);
+			// Init autocomplete
+			autocomplete("#address");
+			autocomplete("#city");
+			// Init desc per lang
 			jQuery('#blocDescFr').show();
 			jQuery('#blocDescEn').hide();
 			jQuery('#blocDescEs').hide();
-		} else if (descLang == 'EN') {
-			jQuery('#blocDescEn').show();
-			jQuery('#blocDescFr').hide();
-			jQuery('#blocDescEs').hide();
-		} else if (descLang == 'ES') {
-			jQuery('#blocDescEs').show();
-			jQuery('#blocDescEn').hide();
-			jQuery('#blocDescFr').hide();
-		} else {
-			jQuery('#blocDescFr').show();
-			jQuery('#blocDescEn').hide();
-			jQuery('#blocDescEs').hide();
+			// Hide modify button
+			jQuery("#modifyBtn").hide();
 		}
-	}
-	
-	function switchPaxType() {
-		var paxType = jQuery("#selectPaxType").val();
+
+		jQuery(function() {
+			jQuery("#beginDateText").datepicker();
+			jQuery("#endDateText").datepicker();
+			jQuery('.clockpicker').clockpicker();
+		});
 		
-		if(paxType =='global') {
-			
-			jQuery('#global').show();
-			jQuery('#baby').hide();
-			jQuery('#infant').hide();
-			jQuery('#adult').hide();
-			jQuery('#senior').hide();
-			jQuery('#create').hide();
-			
-		} else if(paxType == 'Baby') {
-			
-			jQuery('#baby').show();
-			jQuery('#infant').hide();
-			jQuery('#adult').hide();
-			jQuery('#senior').hide();
-			jQuery('#create').hide();
-			jQuery('#global').hide();
-			
-			jQuery("#paxs[1].name").val("Bébés");
-			
-		} else if(paxType == 'Infant') {
-			
-			jQuery('#infant').show();
-			jQuery('#baby').hide();
-			jQuery('#adult').hide();
-			jQuery('#senior').hide();
-			jQuery('#create').hide();
-			jQuery('#global').hide();
-			
-			jQuery("#paxs[2].name").val("Enfants");
 
-		} else if(paxType == 'Adult') {
-			
-			jQuery('#adult').show();
-			jQuery('#baby').hide();
-			jQuery('#infant').hide();
-			jQuery('#senior').hide();
-			jQuery('#create').hide();
-			jQuery('#global').hide();
-			
-			jQuery("#paxs[3].name").val("Adultes");
-
-		} else if(paxType == 'Senior') {
-			
-			jQuery('#senior').show();
-			jQuery('#baby').hide();
-			jQuery('#adult').hide();
-			jQuery('#infant').hide();
-			jQuery('#create').hide();
-			jQuery('#global').hide();
-			
-			jQuery("#paxs[4].name").val("Seniors");
-			
-		} else if(paxType == 'Create') {
-			
-			jQuery('#create').show();
-			jQuery('#baby').hide();
-			jQuery('#adult').hide();
-			jQuery('#senior').hide();
-			jQuery('#infant').hide();
-			jQuery('#global').hide();
-			
-			jQuery("#paxs[5].name").val("Fill the pax category name");
-			
+		function toggleGoogleMap() {
+			var map = document.getElementById("googleMap");
+			if (map.style.display === "none") {
+				map.style.display = "block";
+			} else {
+				map.style.display = "none";
+			}
 		}
-	}
 
-	
-	
-// 	function switchPaxType() {
-// 		var paxType = jQuery("#selectPaxType").val();
+		function switchDescLang() {
+			var descLang = jQuery('#selectDescLang').val();
+			if (descLang == 'FR') {
+				jQuery('#blocDescFr').show();
+				jQuery('#blocDescEn').hide();
+				jQuery('#blocDescEs').hide();
+			} else if (descLang == 'EN') {
+				jQuery('#blocDescEn').show();
+				jQuery('#blocDescFr').hide();
+				jQuery('#blocDescEs').hide();
+			} else if (descLang == 'ES') {
+				jQuery('#blocDescEs').show();
+				jQuery('#blocDescEn').hide();
+				jQuery('#blocDescFr').hide();
+			} else {
+				jQuery('#blocDescFr').show();
+				jQuery('#blocDescEn').hide();
+				jQuery('#blocDescEs').hide();
+			}
+		}
 		
-// 		console.log(paxType);
+		function initDefaultPrice() {
+			
+			jQuery('#paxDefaultPrice').val("");
+			jQuery('#paxDefaultName').val("Default Pax");
+			jQuery('#paxDefaultAgeMin').val(0);
+			jQuery('#paxDefaultAgeMax').val(99);
+		}
 		
-// 		if(paxType == 'Baby') {
-			
-// 		} else if(paxType == 'Infant') {
-			
-// 			jQuery('#paxName').attr('th:field', '*{paxs[1].name}');
-// 			jQuery('#paxAgeMin').attr('th:field', '*{paxs[1].ageMin}');
-// 			jQuery('#paxAgeMax').attr('th:field', '*{paxs[1].ageMax}');
-// 			jQuery('#paxPrice').attr('th:field', '*{paxs[1].price}');
+	</script>
 
-// 		} else if(paxType == 'Adult') {
-			
-// 			jQuery('#paxAgeMin').attr('th:field', '*{paxs[2].ageMin}');
-// 			jQuery('#paxName').attr('th:field', '*{paxs[2].name}');
-// 			jQuery('#paxAgeMax').attr('th:field', '*{paxs[2].ageMax}');
-// 			jQuery('#paxPrice').attr('th:field', '*{paxs[2].price}');
-
-// 		} else if(paxType == 'Senior') {
-			
-// 			jQuery('#paxName').attr('th:field', '*{paxs[3].name}');
-// 			jQuery('#paxAgeMin').attr('th:field', '*{paxs[3].ageMin}');
-// 			jQuery('#paxAgeMax').attr('th:field', '*{paxs[3].ageMax}');
-// 			jQuery('#paxPrice').attr('th:field', '*{paxs[3].price}');
-			
-// 		} else if(paxType == 'Create') {
-			
-// 			jQuery('#paxName').attr('th:field', '*{paxs[4].name}');
-// 			jQuery('#paxAgeMin').attr('th:field', '*{paxs[4].ageMin}');
-// 			jQuery('#paxAgeMax').attr('th:field', '*{paxs[4].ageMax}');
-// 			jQuery('#paxPrice').attr('th:field', '*{paxs[4].price}');
-			
-// 		}
-		
-// 	}
-	
-</script>
-		
 </body>
 </html>

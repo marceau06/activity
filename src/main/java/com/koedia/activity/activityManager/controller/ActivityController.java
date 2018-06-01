@@ -6,10 +6,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.sql.Date;
+import java.sql.Time;
 import java.util.Calendar;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,17 +87,34 @@ public class ActivityController {
 	/********************************** Créer une nouvelle activité *******************************************/
 
 	@PostMapping("/create")
-	public ModelAndView createActivity(final Activity activity, final BindingResult bindingResult) {
+	public ModelAndView createActivity(@ModelAttribute("activity") @Valid final Activity activity, final BindingResult bindingResult) {
 		
 		String creationInfoMessage = "L'activité a bien été créée";
 
-		saveImage(activity);
-		
 		// Redirection vers page aperçu activité
 		ModelAndView mav = new ModelAndView("activities-overview");
 		
+		if(bindingResult.hasErrors()) {
+			System.out.println("error formulaire");
+		}
+		
 		// Traitement & enregistrement en DB
 		if (activity != null) {
+			
+			// Sauvegarde des images
+			saveImage(activity);
+			
+			// Convertir heures et dates
+			
+			String beginHour = activity.getBeginHourText() + ":00";
+			String endHour = activity.getEndHourText() + ":00";
+			
+			if(StringUtil.isPresent(beginHour) && StringUtil.isPresent(endHour)) {
+				
+				activity.setBeginHour(Time.valueOf(beginHour));
+				activity.setEndHour(Time.valueOf(endHour));
+			}
+			
 			activity.setCreationDate(new Date(Calendar.getInstance().getTime().getTime()));
 			try{
 				activityService.saveActivity(activity);
@@ -229,6 +248,16 @@ public class ActivityController {
 		ModelAndView mav = new ModelAndView("account");
 		
 		return mav;
+	}
+	
+	/********************************** Page de TEST **************************************************************/
+	@GetMapping("timepickerExample")
+	private ModelAndView timepickerExample() {
+	
+	// Redirection vers page compte 
+	ModelAndView mav = new ModelAndView("timepickerExample");
+	
+	return mav;
 	}
 	
 	/********************************** Méthodes utiles **********************************************************/

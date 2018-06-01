@@ -7,7 +7,6 @@
 <head th:fragment="header">
     <meta http-equiv="Content-Type" content="text/html" />
     <link rel="stylesheet" type="text/css" href="../webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="../webjars/bootstrap/3.3.7/css/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="../webjars/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" />
     
 	<!-- jQuery -->
@@ -22,6 +21,7 @@
 	<script type="text/javascript" src="../js/form_steps_util.js"></script>
    	<script type="text/javascript" src="../js/ws_autocomplete.js"></script>
    	<script type="text/javascript" src="../js/google_map_util.js"></script>
+   	<script type="text/javascript" src="../js/clockpicker/clockpicker.js"></script>
    	
    	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAh56dM3VbhizP-55VqZzOXYHDtUQAuMAQ&callback=initMap"></script>
 
@@ -29,6 +29,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{../css/jquery-ui-1.10.2.custom.css}" />
 	<link rel="stylesheet" type="text/css" th:href="@{../css/bootstrap-custom.css}" />
 	<link rel="stylesheet" type="text/css" th:href="@{../css/normalize.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{../css/clockpicker/clockpicker.css}" />
 	
 	<!-- Google font family -->
 	<link href="http://fonts.googleapis.com/css?family=Fenix" rel="stylesheet" type="text/css">	
@@ -53,8 +54,6 @@
 					<ul class="nav navbar-nav navbar-right">
 						<li><a th:href="@{/}">Accueil</a></li>
 						<li><a th:href="@{/faq}">Faq</a></li>
-<!-- 						<li><a th:href="@{/registration}">S'inscrire</a></li> -->
-<!-- 						<li><a th:href="@{/login}">Se connecter</a></li> -->
 						<li><a th:href="@{/logout}">Déconnexion</a></li>
 					</ul>
 				</div>

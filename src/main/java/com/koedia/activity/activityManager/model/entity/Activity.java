@@ -21,6 +21,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 @Entity
@@ -69,8 +70,14 @@ public class Activity {
 	@Column(name="begin_hour")
 	private Time beginHour;
 	
+	@Transient
+	private String beginHourText;
+
 	@Column(name="end_hour")
 	private Time endHour;
+	
+	@Transient
+	private String endHourText;
 	
 	@Column(name = "creation_date")
    	private Date creationDate;
@@ -413,5 +420,21 @@ public class Activity {
 
 	public void setPaxs(List<PaxPrice> paxs) {
 		this.paxs = paxs;
+	}
+
+	public String getBeginHourText() {
+		return beginHourText;
+	}
+
+	public void setBeginHourText(String beginHourText) {
+		this.beginHourText = beginHourText;
+	}
+
+	public String getEndHourText() {
+		return endHourText;
+	}
+
+	public void setEndHourText(String endHourText) {
+		this.endHourText = endHourText;
 	}
 }

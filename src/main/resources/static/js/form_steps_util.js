@@ -1,12 +1,14 @@
 /***
  * Code from w3schools.com 
- * How TO - Form with Multiple Steps
  * source : https://www.w3schools.com/howto/howto_js_form_steps.asp
  ***/
 
 var currentTab = 0; // Current tab is set to be the first tab (0)
+var countPaxCreation = 1; // Number of created paxs, starts from 0, the first one is the default pax 
+
 
 function showTab(n) {
+	
 	// This function will display the specified tab of the form ...
 	var x = document.getElementsByClassName("tab");
 	x[n].style.display = "flex";
@@ -14,48 +16,6 @@ function showTab(n) {
 	x[n].style.justifyContent = "space-around";
 
 	// ... and fix the Previous/Next buttons:
-	if (n == 0) {
-		document.getElementById("prevBtn").style.display = "none";
-		x[n].style.flexDirection = "column";
-	} else {
-		document.getElementById("prevBtn").style.display = "inline";
-		x[n].style.flexDirection = "row";
-	}
-	if (n == (x.length - 1)) {
-		document.getElementById("nextBtn").innerHTML = "Envoyer";
-	} else {
-		document.getElementById("nextBtn").innerHTML = "Next";
-	}
-	// ... and run a function that displays the correct step indicator:
-	fixStepIndicator(n)
-}
-
-function showTabFromNavBar(n) {
-	var y = document.getElementsByClassName("tab");
-
-	// Exit the function if any field in the current tab is invalid:
-	if (n < 0) {
-		return false;
-	}
-	
-	// Hide the current tab:
-//	console.log("==> showTabFromNavBar");
-//	console.log(nextTabToHide);
-//	console.log(y);
-	
-	y[currentTab].style.display = "none";
-	currentTab = n;
-	
-	console.log(currentTab);
-	showTab(currentTab)
-	
-	// This function will display the specified tab of the form ...
-//	var x = document.getElementsByClassName("tab");
-//	x[n].style.display = "flex";
-//	x[n].style.flexDirection = "row";
-//	x[n].style.justifyContent = "space-around";
-//
-//	// ... and fix the Previous/Next buttons:
 //	if (n == 0) {
 //		document.getElementById("prevBtn").style.display = "none";
 //		x[n].style.flexDirection = "column";
@@ -63,84 +23,200 @@ function showTabFromNavBar(n) {
 //		document.getElementById("prevBtn").style.display = "inline";
 //		x[n].style.flexDirection = "row";
 //	}
-//	if (n == (x.length - 1)) {
-//		document.getElementById("nextBtn").innerHTML = "Envoyer";
-//	} else {
-//		document.getElementById("nextBtn").innerHTML = "Next";
-//	}
+	if (n == (x.length - 1)) {
+		document.getElementById("nextBtn").innerHTML = "Envoyer";
+	} else {
+		document.getElementById("nextBtn").innerHTML = "Valider";
+	}
 	// ... and run a function that displays the correct step indicator:
-//	fixStepIndicator(n)
+	fixStepIndicator(n)
 }
 
-//Efface les inputs renseignées et affiche les suivantes
-function nextPrev(n) {
-	console.log("==> nextPrev n = " + n);
-	// This function will figure out which tab to display
-	var x = document.getElementsByClassName("tab");
+
+function showTabFromNavBar(n) {
+	
+	var y = document.getElementsByClassName("tab");
+
 	// Exit the function if any field in the current tab is invalid:
-
-	if (n == 1 && !validateForm()) {
+	if (n < 0 || n > 10) {
 		return false;
-		// TODO afficher message d'erreur
+	// Cas particulier : Type de voyageurs
+	} else if (n != 8) {
+		jQuery(".pax-item").hide();
+	} else {
+		jQuery(".pax-item").show();
 	}
-	// Hide the current tab:
-	x[currentTab].style.display = "none";
-	// Increase or decrease the current tab by 1:
-	console.log("Before parse currentTab = " + currentTab);
-	currentTab = parseInt(currentTab) + parseInt(n);
-	console.log("After parse currentTab = " + currentTab);
-	// if you have reached the end of the form... :
-	if (currentTab >= x.length) {
-		//...the form gets submitted:
-//		document.getElementById("nextBtn").type = "submit";
-//		return false;
+	
+	// Hide the current tab
+	y[currentTab].style.display = "none";
+	currentTab = n;
+	
+	if(currentTab <= 10) {
+		showTab(currentTab);
 	}
-	// Otherwise, display the correct tab:
-	showTab(currentTab);
 }
 
-// Add conditions to validate activitie's attributes dynamically
-function validateForm() {
+
+function nextPrev(n) {
+	
+	var action = "";
+	
+	allTabsList = document.getElementsByClassName("tab");
+	currentTabId = allTabsList[currentTab].id;
+	
+	// Cas particulier : Etape "types de voyageurs"
+	if (currentTabId === "stepPaxs") {
+		action = "pax-creation";
+	}
+	
+	// Exit the function if any field in the current tab is invalid
+	if (n == 1 && !validateForm(action)) {
+		return false;
+	}
+	
+	// Hide the current tab
+	allTabsList[currentTab].style.display = "none";
+	
+	// Increase or decrease the current tab by 1
+	currentTab = parseInt(currentTab) + parseInt(n);
+	
+	// if you have reached the end of the form
+	if (currentTab >= allTabsList.length) {
+		//...the form gets submitted:
+		document.getElementById("nextBtn").type = "submit";
+		return false;
+	}
+	// Otherwise, display the correct tab
+	showTab(currentTab);
+	
+}
+
+
+function validateForm(action) {
+	
+	console.log("==> validateForm()");
+	
 	// This function deals with validation of the form fields
 	var x, y, z, i, valid = true;
+	var inputCounter = 0;
+	
 	x = document.getElementsByClassName("tab");
 	y = x[currentTab].getElementsByTagName("input");
 	z = x[currentTab].getElementsByTagName("textarea");
+	w = x[currentTab].getElementsByTagName("select");
 	
-	// A loop that checks every input field in the current tab:
-	for (i = 0; i < y.length; i++) {
-		// If a field is empty...
-		if (y[i].value == "" || y[i].value.length < 1) {
-			// add an "invalid" class to the field:
-			y[i].className += " invalid";
-			// and set the current valid status to false:
-			valid = false;
+	console.log("==> validateForm() ==> Nombre d'inputs : " + y);
+	console.log("==> validateForm() ==> Nombre textarea : " + z.length);
+	console.log("==> validateForm() ==> Nombre select : " + w.length);
+	
+	// Cas particulier : Etape "types de voyageurs"
+	if (action === "pax-creation") {
+		
+		// On ne teste que le nombre de paxs créés car la validation des inputs a déjà été réalisée, lors du clic sur le bouton d'ajout
+		if (countPaxCreation <= 4) {
+			valid = true;
+			// notify navbar
+			jQuery("#go-to-" + x[currentTab].id).css("background-color", "green");
+		} else {
+			valid = false
+			// notify navbar
+			jQuery("#go-to-" + x[currentTab].id).css("background-color", "");
 		}
-		if (z[i] != null) {
-			console.log(z[i]);
-			if (z[i].value == "" || z[i].value.length < 2 || z[i].value.length > 1000) {
-				// add an "invalid" class to the field:
-				z[i].className += " invalid";
-				z[i].placeholder += "Vous devez "
-				// and set the current valid status to false:
-				valid = false;
+		
+	// Autres étapes
+	} else {
+ 
+		if (y.length > 0) {
+			console.log("==> validateForm() ==> inputs");
+			// This tab is only composed by inputs 
+			// This loop checks every input field in the current tab
+			for (i = 0; i < y.length; i++) {
+				console.log("==> validateForm() ==> inputs ==> current input value : " + y[i].value);
+				// If a field is empty...
+				if (y[i].value == "" || y[i].value.length < 1) {
+					// INVALID
+					console.log("==> validateForm() ==> inputs ==> INVALIDS");
+					// add an "invalid" class to the field
+					y[i].className += " invalid";
+					// and set the current valid status to false
+					valid = false;
+					// show an error message 
+					showErrorMessage(y[i].id);
+					// notify navbar
+					jQuery("#go-to-" + x[currentTab].id).css("background-color", "");
+				} else {
+					// VALID
+					// hide error message
+					hideErrorMessage(y[i].id);
+					// notify navbar
+					jQuery("#go-to-" + x[currentTab].id).css("background-color", "green");
+					// Desactivate input
+					toggleButtonAndSwitchInput(true, y);
+
+				}
 			}
+		
+		} else if (z.length > 0) {
+			console.log("==> validateForm() ==> textarea");
+			// This tab is only composed by textarea or selects 
+			// This loop checks every field in the current tab
+			for (i = 0; i < z.length; i++) {
+				// On ne valide que la description par défaut
+				// Si on ajoute des textareas dans le formulaire, retirer la condition suivante
+				if (z[i].name === "descriptionFre") {
+					if (typeof z[i] === 'undefined' || z[i].value.length < 10 || z[i].value.length > 1500) {
+						// VALID
+						console.log("==> validateForm() ==> textarea / select ==> INVALIDS");
+						// add an "invalid" class to the field
+						z[i].className += " invalid";
+						// add a indication message in the placeholder
+						z[i].placeholder += "Message dans le placeholder ??";
+						// and set the current valid status to false
+						valid = false;
+						// show an error message
+						showErrorMessage(z[i].id);
+						// notify navbar
+						jQuery("#go-to-" + x[currentTab].id).css("background-color", "");
+					} else {
+						// INVALID
+						// Cacher message d'erreur & notifier navbar
+						hideErrorMessage(z[i].id);
+						// notify navbar
+						jQuery("#go-to-" + x[currentTab].id).css("background-color", "green");
+					}
+				}
+			}
+			
+		} else if (w.length > 0) { 
+			console.log("==> validateForm() ==> select");
+			for (i = 0; i < w.length; i++) {
+				if (typeof w[i] !== 'undefined' || w[i].value.length > 0) {
+					// VALID
+					// notify navbar
+					jQuery("#go-to-" + x[currentTab].id).css("background-color", "green");
+				}
+			}
+			
+		} else {
+			console.log("==> validateForm() ==> SUBMIT");
+			// If the valid status is true, mark the step as finished and valid:
+			if (valid) {
+				document.getElementsByClassName("step")[currentTab].className += " finish";
+			} 
 		}
 	}
-	// If the valid status is true, mark the step as finished and valid:
-	if (valid) {
-		document.getElementsByClassName("step")[currentTab].className += " finish";
-	} 
-	
 	return valid; // return the valid status
 }
 
 function fixStepIndicator(n) {
+	
 	// This function removes the "active" class of all steps...
 	var i, x = document.getElementsByClassName("step");
+	
 	for (i = 0; i < x.length; i++) {
 		x[i].className = x[i].className.replace(" active", "");
 	}
+	
 	//... and adds the "active" class to the current step:
 	x[n].className += " active";
 }
@@ -164,45 +240,27 @@ function displayImg() {
 
 // Retourne le nombre de nuits entre 2 dates
 function getNbNightsBetweenTwoDates(startDate, endDate) {
+	
 	return Math.round(Math.abs((endDate - startDate) / (24 * 60 * 60 * 1000)));
+	
 }
 
 // Change la date de retour
 function changeReturnDate() {
+	
 	var date = jQuery("#beginDateText").datepicker('getDate');
+	
 	if (date && date.getDate) {
 		date.setDate(date.getDate() + 1);
 		jQuery("#endDateText").datepicker('option', 'minDate', date);
 		jQuery("#endDateText").datepicker('setDate', date);
 	}
+	
 }
 
-//Change l'heure de retour
-function changeReturnTime() {
-	var beginHour = jQuery("#beginHour").val();
-	if (beginHour) {
-		jQuery("#endHour").val(parseInt(beginHour) + 60);
-	}
-}
-
-// Remplit un select avec des heures
-function populate(selector) {
-	var select = jQuery(selector);
-	var hours, minutes, ampm;
-	for(var i = 0; i <= 1320; i += 30){
-		hours = Math.floor(i / 60);
-		minutes = i % 60;
-		if (minutes < 10){
-			minutes = '0' + minutes; // adding leading zero
-		}
-		ampm = hours % 24 < 12 ? 'AM' : 'PM';
-		if (hours === 0 && ampm === "PM"){
-			hours = 12;
-		}
-		select.append($('<option></option>')
-				.attr('value', i)
-				.text(hours + ':' + minutes + ' ' + ampm)); 
-	}
+function onChangeTime() {
+	jQuery("#beginHour").val();
+	jQuery("#endHour").val();
 }
 
 
@@ -213,4 +271,130 @@ function onChangeDate(){
 	
 	jQuery("#beginDate").val(formattedBeginDate);
 	jQuery("#endDate").val(formattedEndDate);
+}
+
+
+function showErrorMessage(errorStep) {
+	
+	var classname = ".error-message-" + errorStep;
+	if(errorStep != null) {
+		jQuery(classname).show();
+		
+	}
+}
+
+
+function hideErrorMessage(errorStep) {
+	
+	var classname = ".error-message-" + errorStep;
+	if(errorStep != null) {
+		jQuery(classname).hide();
+		
+	}
+}
+
+
+function createPax() {
+	
+	// Retrieve pax datas
+	var name = jQuery("#paxName").val();
+	var ageMin = jQuery("#paxAgeMin").val();
+	var ageMax = jQuery("#paxAgeMax").val();
+	var price = jQuery("#paxPrice").val();
+	
+	// Button labels
+	var labelBtnModify = "Modifier";
+	var labelBtnDelete = "Supprimer";
+	
+	// Check if datas are valids
+	if (validateForm()) {
+		
+		// Create div
+		jQuery("#paxsCreated").append(
+				'<div class="pax-item" id="' + countPaxCreation + '">'
+				+'<p> <span class="pax-infos">' + name + '</span> </p>'
+				+'<input type="hidden" id="paxs[' + countPaxCreation + '].name" name="paxs[' + countPaxCreation + '].name" value="' + name + '" />'
+				+'<p> <span class="pax-infos">' + ageMin + '</span> </p>'
+				+ '<input type="hidden" id="paxs[' + countPaxCreation + '].ageMin" name="paxs[' + countPaxCreation + '].ageMin" value="' + ageMin + '" />'
+				+'<p> <span class="pax-infos">' + ageMax + '</span> </p>'
+				+ '<input type="hidden" id="paxs[' + countPaxCreation + '].ageMax" name="paxs[' + countPaxCreation + '].ageMax" value="' + ageMax + '" />'
+				+'<p> <span class="pax-infos">' + price + '</span> </p>'
+				+ '<input type="hidden" id="paxs[' + countPaxCreation + '].price" name="paxs[' + countPaxCreation + '].price" value="' + price + '" />'
+				+'<p> <button id="btnModifyPaxCreated' + countPaxCreation + '" onclick="modifyPax(' + countPaxCreation + ');">' + labelBtnModify + '</button> </p>'
+				+'<p> <button id="btnDeletePaxCreated' + countPaxCreation + '" onclick="deletePax(' + countPaxCreation + ');">' + labelBtnDelete + '</button> </p>'
+				+ '</div>');
+		
+		countPaxCreation ++;
+		hasCreatedPax = true;
+		
+		// Remove inputs values
+		jQuery("#paxName").val("");
+		jQuery("#paxAgeMin").val("");
+		jQuery("#paxAgeMax").val("");
+		jQuery("#paxPrice").val("");
+	}
+	
+}
+
+function modifyPax() {
+	// TODO
+}
+
+function deletePax(paxId) {
+
+	jQuery("#" + paxId).remove();
+	
+	if (countPaxCreation >= 0) {
+		countPaxCreation --;
+	} else {
+		countPaxCreation = 0;
+		hasCreatedPax = false;
+	}
+}
+
+
+function increaseTimeByOneHour(timeInput, inputToSet) {
+	
+	var timeStr = timeInput.value;
+    var splitedTimeStr = timeStr.split(':');
+    var hours = parseInt(splitedTimeStr[0]);
+    var minutes = splitedTimeStr[1].split(" ")[0];
+    var nextHours = (hours + 1);
+
+    jQuery("#" + inputToSet.name).val(nextHours + ":" + minutes);
+  
+}
+
+// TODO Ne marche que pour les inputs
+function toggleButtonAndSwitchInput(onValidate) {
+	
+	// Retrieve tab
+	x = document.getElementsByClassName("tab");
+	// Retrieve current tab
+	y = x[currentTab].getElementsByTagName("input");
+	
+	if(onValidate) {
+		// Hide validate button
+		jQuery("#nextBtn").hide();
+		// Show modify button
+		jQuery("#modifyBtn").show();
+		// Desactivate inputs
+		for (i = 0; i < y.length; i++) {
+			jQuery("#"+y[i].name).prop('disabled', true);
+		}
+		// notify navbar
+		jQuery("#go-to-" + x[currentTab].id).css("background-color", "green");
+				
+	} else {
+		// Hide modify button
+		jQuery("#modifyBtn").hide();
+		// Show validate button
+		jQuery("#nextBtn").show();
+		// Activate inputs
+		for (i = 0; i < y.length; i++) {
+			jQuery("#"+y[i].name).prop('disabled', false);
+		}
+		// notify navbar
+		jQuery("#go-to-" + x[currentTab].id).css("background-color", "");
+	}
 }
