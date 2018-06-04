@@ -83,7 +83,7 @@
 
 			<div class="col-lg-4 container-form">
 
-				<div class="tab form-row" id="stepTitle">
+				<div class="tab form-row" id="stepTitle" data-isvalid="false">
 					<div class="row-form inputStyle">
 						<p>
 							<span class="inputTitle" th:text="#{title}"></span>
@@ -109,7 +109,7 @@
 
 				<!-- STEP 1 : Category -->
 
-				<div class="tab" id="stepCategory">
+				<div class="tab" id="stepCategory" data-isvalid="false">
 					<div class="row-form  inputStyle">
 						<p>
 							<span class="inputTitle" th:text="#{category}"></span>
@@ -133,7 +133,7 @@
 
 				<!-- STEP 2 : description -->
 
-				<div class="tab" id="stepDescription">
+				<div class="tab" id="stepDescription" data-isvalid="false">
 					<div class="row-form  inputStyle">
 						<p>
 							<span class="inputTitle" th:text="#{description}"></span>
@@ -209,7 +209,7 @@
 				<input type="hidden" th:field="*{longitude}"></input>
 				<input type="hidden" id="zoom" name="zoom"></input>
 
-				<div class="tab" id="stepMeetingPoint">
+				<div class="tab" id="stepMeetingPoint" data-isvalid="false">
 					<div class="inputStyle">
 						<p>
 							<span class="inputTitle" th:text="#{meeting_point}"></span>
@@ -248,7 +248,7 @@
 
 				<!-- STEP 4 : schedules  -->
 
-				<div class="tab" id="stepSchedules">
+				<div class="tab" id="stepSchedules" data-isvalid="false">
 					<div class="row-form ">
 						<p>
 							<span class="inputTitle" th:text="#{schedule}"></span>
@@ -305,7 +305,7 @@
 
 
 				<!-- STEP 5 : Images and videos  -->
-				<div class="tab" id="stepImages">
+				<div class="tab" id="stepImages" data-isvalid="false">
 					<div class="row-form ">
 						<p>
 							<span class="inputTitle" th:text="#{images}"></span>
@@ -322,7 +322,7 @@
 				</div>
 
 				<!-- STEP 5 : Additional informations, criteria for participation -->
-				<div class="tab" id="stepParticipationCriterias">
+				<div class="tab" id="stepParticipationCriterias" data-isvalid="false">
 					<p>
 						<span class="inputTitle" th:text="#{participation_criteria}"></span>
 					</p>
@@ -365,7 +365,7 @@
 				</div>
 				
 				<!-- STEP 6 : Global price -->
-				<div class="tab" id="stepDefaultPrice">
+				<div class="tab" id="stepDefaultPrice" data-isvalid="false">
 					<div class="row-form ">
 						<p>
 							<span class="inputTitle" th:text="#{price}"></span>
@@ -392,7 +392,7 @@
 				</div>
 
 				<!-- STEP 7 : Price  -->
-				<div class="tab" id="stepPaxs">
+				<div class="tab" id="stepPaxs" data-isvalid="false">
 
 					<div class="row-form ">
 						<p>
@@ -421,7 +421,7 @@
 						</div>
 						
 						<div>
-							<button type="button" class="btn btn-primary" onclick="createPax();">Ajouter</button>
+							<button type="button" class="btn btn-primary" id="creationPaxBtn" onclick="createPax();">Ajouter</button>
 						</div>
 
 					</div>
@@ -430,7 +430,7 @@
 				</div>
 
 				<!-- STEP 8 : Group Capacity  -->
-				<div class="tab" id="stepCapacity">
+				<div class="tab" id="stepCapacity" data-isvalid="false">
 					<div class="row-form ">
 						<p>
 							<span class="inputTitle" th:text="#{group_capacity}"></span>

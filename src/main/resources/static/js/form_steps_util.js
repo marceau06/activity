@@ -23,6 +23,10 @@ function showTab(n) {
 //		document.getElementById("prevBtn").style.display = "inline";
 //		x[n].style.flexDirection = "row";
 //	}
+	
+	// If datas already are valids, we show modify button
+	displayRightButton(x[n].id);
+	
 	if (n == (x.length - 1)) {
 		document.getElementById("nextBtn").innerHTML = "Envoyer";
 	} else {
@@ -59,14 +63,14 @@ function showTabFromNavBar(n) {
 
 function nextPrev(n) {
 	
-	var action = "";
+	var action = "tab";
 	
 	allTabsList = document.getElementsByClassName("tab");
 	currentTabId = allTabsList[currentTab].id;
 	
 	// Cas particulier : Etape "types de voyageurs"
 	if (currentTabId === "stepPaxs") {
-		action = "pax-creation";
+		action = "pax";
 	}
 	
 	// Exit the function if any field in the current tab is invalid
@@ -98,35 +102,18 @@ function validateForm(action) {
 	
 	// This function deals with validation of the form fields
 	var x, y, z, i, valid = true;
-	var inputCounter = 0;
-	
+
 	x = document.getElementsByClassName("tab");
 	y = x[currentTab].getElementsByTagName("input");
 	z = x[currentTab].getElementsByTagName("textarea");
 	w = x[currentTab].getElementsByTagName("select");
 	
-	console.log("==> validateForm() ==> Nombre d'inputs : " + y);
+	console.log("==> validateForm() ==> Nombre d'inputs : " + y.length);
 	console.log("==> validateForm() ==> Nombre textarea : " + z.length);
 	console.log("==> validateForm() ==> Nombre select : " + w.length);
 	
-	// Cas particulier : Etape "types de voyageurs"
-	if (action === "pax-creation") {
-		
-		// On ne teste que le nombre de paxs créés car la validation des inputs a déjà été réalisée, lors du clic sur le bouton d'ajout
-		if (countPaxCreation <= 4) {
-			valid = true;
-			// notify navbar
-			jQuery("#go-to-" + x[currentTab].id).css("background-color", "green");
-		} else {
-			valid = false
-			// notify navbar
-			jQuery("#go-to-" + x[currentTab].id).css("background-color", "");
-		}
-		
-	// Autres étapes
-	} else {
- 
 		if (y.length > 0) {
+			
 			console.log("==> validateForm() ==> inputs");
 			// This tab is only composed by inputs 
 			// This loop checks every input field in the current tab
@@ -142,17 +129,69 @@ function validateForm(action) {
 					valid = false;
 					// show an error message 
 					showErrorMessage(y[i].id);
-					// notify navbar
-					jQuery("#go-to-" + x[currentTab].id).css("background-color", "");
+					// Set div custom attribute
+					jQuery("#" + x[currentTab].id).data('isvalid', 'false');
+					
+					
+					
+					if (action === "tab") {
+						// notify navbar
+						jQuery("#go-to-" + x[currentTab].id).css("background-color", "");
+						
+					// TODO - A faire aussi dans VALID	
+						
+					// Cas particuliers : création de paxs BOUTON VALIDER
+					// Ne pas tester les inputs
+					// Notify sur navabr
+					// Changement sur bouton valider
+					
+					} else if () {
+						// On ne teste que le nombre de paxs créés car la validation des inputs a déjà été réalisée, lors du clic sur le bouton d'ajout
+						if (countPaxCreation <= 4) {
+							valid = true;
+							// notify navbar
+							jQuery("#go-to-" + x[currentTab].id).css("background-color", "green");
+						} else {
+							valid = false
+							// notify navbar
+							jQuery("#go-to-" + x[currentTab].id).css("background-color", "");
+						}
+					// Cas particuliers : création de paxs BOUTON AJOUTER
+					// Ne tester que les inputs
+					// Pas de notify sur navabr
+					// Pas de changement sur bouton valider
+					// Message erreur si input vides
+					} else {
+						
+						
+					}
+					
+					
+					
 				} else {
 					// VALID
 					// hide error message
 					hideErrorMessage(y[i].id);
-					// notify navbar
-					jQuery("#go-to-" + x[currentTab].id).css("background-color", "green");
-					// Desactivate input
-					toggleButtonAndSwitchInput(true, y);
-
+					// Set div custom attribute
+					jQuery("#" + x[currentTab].id).data('isvalid', 'true');
+					
+					if (action === "tab") {
+						// notify navbar
+						jQuery("#go-to-" + x[currentTab].id).css("background-color", "green");
+						// Desactivate input
+						toggleButtonAndSwitchInput(true, y);
+					} else {
+						// On ne teste que le nombre de paxs créés car la validation des inputs a déjà été réalisée, lors du clic sur le bouton d'ajout
+						if (countPaxCreation <= 4) {
+							valid = true;
+							// notify navbar
+							jQuery("#go-to-" + x[currentTab].id).css("background-color", "green");
+						} else {
+							valid = false
+							// notify navbar
+							jQuery("#go-to-" + x[currentTab].id).css("background-color", "");
+						}
+					}
 				}
 			}
 		
@@ -177,12 +216,16 @@ function validateForm(action) {
 						showErrorMessage(z[i].id);
 						// notify navbar
 						jQuery("#go-to-" + x[currentTab].id).css("background-color", "");
+						// Set custom div attribute
+						jQuery("#" + x[currentTab].id).data('isvalid', 'true');
 					} else {
 						// INVALID
 						// Cacher message d'erreur & notifier navbar
 						hideErrorMessage(z[i].id);
 						// notify navbar
 						jQuery("#go-to-" + x[currentTab].id).css("background-color", "green");
+						// Set custom div attribute
+						jQuery("#" + x[currentTab].id).data('isvalid', 'false');
 					}
 				}
 			}
@@ -194,6 +237,14 @@ function validateForm(action) {
 					// VALID
 					// notify navbar
 					jQuery("#go-to-" + x[currentTab].id).css("background-color", "green");
+					// Set custom div attribute
+					jQuery("#" + x[currentTab].id).data('isvalid', 'true');
+				} else {
+					// INVALID
+					// notify navbar
+					jQuery("#go-to-" + x[currentTab].id).css("background-color", "");
+					// Set custom div attribute
+					jQuery("#" + x[currentTab].id).data('isvalid', 'false');
 				}
 			}
 			
@@ -204,7 +255,7 @@ function validateForm(action) {
 				document.getElementsByClassName("step")[currentTab].className += " finish";
 			} 
 		}
-	}
+//	}
 	return valid; // return the valid status
 }
 
@@ -307,8 +358,8 @@ function createPax() {
 	var labelBtnDelete = "Supprimer";
 	
 	// Check if datas are valids
-	if (validateForm()) {
-		
+	if (validateForm("tab")) {
+		console.log("PAX CREATED !!!!");
 		// Create div
 		jQuery("#paxsCreated").append(
 				'<div class="pax-item" id="' + countPaxCreation + '">'
@@ -365,6 +416,19 @@ function increaseTimeByOneHour(timeInput, inputToSet) {
   
 }
 
+function displayRightButton(currentTabId) {
+	
+	var areDatasValid = jQuery("#" + currentTabId).data('isvalid');
+	
+	if (areDatasValid) {
+		// Show modify button
+		toggleButtonAndSwitchInput(true);
+	} else {
+		// Show validate button
+		toggleButtonAndSwitchInput(false);
+	}
+}
+
 // TODO Ne marche que pour les inputs
 function toggleButtonAndSwitchInput(onValidate) {
 	
@@ -372,6 +436,9 @@ function toggleButtonAndSwitchInput(onValidate) {
 	x = document.getElementsByClassName("tab");
 	// Retrieve current tab
 	y = x[currentTab].getElementsByTagName("input");
+	
+	console.log("test");
+	console.log(y);
 	
 	if(onValidate) {
 		// Hide validate button
@@ -384,7 +451,13 @@ function toggleButtonAndSwitchInput(onValidate) {
 		}
 		// notify navbar
 		jQuery("#go-to-" + x[currentTab].id).css("background-color", "green");
-				
+		
+		// Cas particulier : création de paxs
+		// Desactivate add button of pax creation tab
+		if (x[currentTab].id === 'stepPaxs') {
+			jQuery("#creationPaxBtn").hide();
+//			prop('disabled', true);
+		}
 	} else {
 		// Hide modify button
 		jQuery("#modifyBtn").hide();
@@ -396,5 +469,12 @@ function toggleButtonAndSwitchInput(onValidate) {
 		}
 		// notify navbar
 		jQuery("#go-to-" + x[currentTab].id).css("background-color", "");
+		
+		// Cas particulier : création de paxs
+		// Activate add button of pax creation tab
+		if (x[currentTab].id === 'stepPaxs') {
+			jQuery("#creationPaxBtn").show();
+//			prop('disabled', false);
+		}
 	}
 }
