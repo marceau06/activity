@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -27,6 +28,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.koedia.activity.activityManager.model.entity.Activity;
+import com.koedia.activity.activityManager.model.entity.Schedule;
+import com.koedia.activity.activityManager.model.entity.Session;
 import com.koedia.activity.activityManager.model.entity.User;
 import com.koedia.activity.activityManager.service.ActivityService;
 import com.koedia.common.tool.StringUtil;
@@ -54,6 +57,18 @@ public class ActivityController {
 	
 	@GetMapping("/create")
 	public ModelAndView goToCreationActivity(Activity activity) {
+		
+		// Initialiser la liste des horaires en créant un horaire pour chacun des jours de la semaine
+		List<Schedule> usualSchedules = new ArrayList<Schedule>();
+		for(int i = 0; i < 7; i++) {
+			Schedule s = new Schedule(i);
+			for(int j = 0; j < 10; j++) {
+				s.addSession(new Session(j));
+			}
+			usualSchedules.add(s);
+		}
+		activity.setUsualSchedules(usualSchedules);
+		
 		ModelAndView mav = new ModelAndView("activities-creation");
 		return mav;
 	}
@@ -106,11 +121,12 @@ public class ActivityController {
 			
 			// Convertir heures et dates
 			
-			String beginHour = activity.getBeginHourText() + ":00";
-			String endHour = activity.getEndHourText() + ":00";
 			
-			if(StringUtil.isPresent(beginHour) && StringUtil.isPresent(endHour)) {
+			if(StringUtil.isPresent(activity.getBeginHourText()) && StringUtil.isPresent(activity.getEndHourText())) {
 				
+				String beginHour = activity.getBeginHourText() + ":00";
+				String endHour = activity.getEndHourText() + ":00";
+
 				activity.setBeginHour(Time.valueOf(beginHour));
 				activity.setEndHour(Time.valueOf(endHour));
 			}

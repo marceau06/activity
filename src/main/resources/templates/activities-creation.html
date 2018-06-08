@@ -9,8 +9,6 @@
 		<span th:text="#{activity_creation}"></span>
 	</h1>
 
-	<form th:action="@{/activity/create}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
-
 		<!-- One "tab" for each step in the form: -->
 
 		<div class="container-fluid">
@@ -77,6 +75,9 @@
 				</ul>
 
 			</div>
+			
+			
+			<form th:action="@{/activity/create}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
 
 
 			<!-- STEP 1 : Title -->
@@ -144,7 +145,7 @@
 						<p>
 							<span>Select the language of the description</span>
 						</p>
-						<select id="selectDescLang" class="form-control" onChange="switchDescLang();">
+						<select id="selectDescLang" class="form-control" onChange="toggleDescLang();">
 							<option>FR</option>
 							<option>EN</option>
 							<option>ES</option>
@@ -273,33 +274,61 @@
 							<input type="date" th:field="*{endDate}" />
 						</div>
 						
-						<!-- Hours  -->
-						<span th:text="#{from_time}"></span>
+						<!-- Horaires habituels -->
+						<select id="selectWeekday" class="form-control" onchange="toggleScheduleDay();">
 						
-						<div class="form-group clockpicker">
+							<option value="createScheduleBloc1">Lundi</option>
+							<option value="createScheduleBloc2">Mardi</option>
+							<option value="createScheduleBloc3">Mercredi</option>
+							<option value="createScheduleBloc4">Jeudi</option>
+							<option value="createScheduleBloc5">Vendredi</option>
+							<option value="createScheduleBloc6">Samedi</option>
+							<option value="createScheduleBloc7">Dimanche</option>
+							
+						</select>
 						
-							<input th:field="*{beginHourText}" type="text" class="form-control" onchange="onChangeTime(); increaseTimeByOneHour(this, endHourText);">
-<!-- 							<input type="time" th:field="*{beginHour}" /> -->
-							 <span class="input-group-addon">
-							 	<span class="glyphicon glyphicon-time"></span>
-							 </span>
-							 
+						<div th:each="currentSchedule : ${activity.usualSchedules}" th:id="'createScheduleBloc' + ${currentSchedule.weekdayNumber + 1}" class="createScheduleBloc"> 
+							<!-- Compteur -->
+				  			<input type="hidden" th:id="counterSessionCreated + ${currentSchedule.weekdayNumber + 1}" />
+							<div th:each="currentSession : ${currentSchedule.sessions}" >
+								
+									<div class="form-group clockpicker sessionBloc"
+												th:id="'sessionBloc' + ${currentSchedule.weekdayNumber + 1} + ${currentSession.sessionNumber + 1}" 
+												th:name="'sessionBloc' + ${currentSchedule.weekdayNumber + 1} + ${currentSession.sessionNumber + 1}">
+										
+										 <input type="time"											
+												th:value="*{usualSchedules[__${currentSchedule.weekdayNumber}__].sessions[__${currentSession.sessionNumber}__].beginHour}" 
+												class="form-control" 
+												onchange="">
+<!-- 										<span class="input-group-addon"> -->
+<!-- 											 <span class="glyphicon glyphicon-time"></span> -->
+<!-- 										</span> -->
+<!-- 									</div> -->
+<!-- 									<div class="form-group clockpicker endHourSessionBloc" -->
+<!-- 												th:id="'endHourSessionBloc' + ${currentSchedule.weekdayNumber + 1} + ${currentSession.sessionNumber + 1}"  -->
+<!-- 												th:name="'endHourSessionBloc' + ${currentSchedule.weekdayNumber + 1} + ${currentSession.sessionNumber + 1}">												 -->
+												
+										 <input type="time"
+												th:value="*{usualSchedules[__${currentSchedule.weekdayNumber}__].sessions[__${currentSession.sessionNumber}__].endHour}" 
+												class="form-control " 
+												onchange="">
+<!-- 										<span class="input-group-addon"> -->
+<!-- 											 <span class="glyphicon glyphicon-time"></span> -->
+<!-- 										</span> -->
+									</div>
+							</div>
 						</div>
 						
-						<span th:text="#{to_time}"></span>
-						
-						<div class="form-group clockpicker">
-						
-							<input th:field="*{endHourText}" type="text" class="form-control" onchange="onChangeTime();">
-<!-- 							<input type="time" th:field="*{endHour}" /> -->
-							 <span class="input-group-addon">
-							 	<span class="glyphicon glyphicon-time"></span>
-							 </span>
-							 
-						</div>
-						
+							<!-- Bouton pour ajouter des inputs -->
+							<button type="button" th:id="addExtraSessionBtn" class="btn" onclick="showExtraSession()">
+				   				<span class="glyphicon glyphicon-plus"></span>
+				  			</button>
+				  			
+				  			<!-- Bouton pour masquer des inputs -->
+							<button type="button" th:id="removeExtraSessionBtn" class="btn" onclick="hideExtraSession()">
+				   				<span class="glyphicon glyphicon-minus"></span>
+				  			</button>
 					</div>
-
 				</div>
 
 
@@ -410,13 +439,13 @@
 
 							<div id="create">
 								<span>Nom du pax</span>
-								<input class="form-control" type="text" th:id="paxName" placeholder="Create you pax category" />
+								<input class="form-control" type="text" th:id="paxName" th:name="paxName" placeholder="Create you pax category" />
 								<span>Age minimum</span>
-								<input class="form-control" type="text" th:id="paxAgeMin" />
+								<input class="form-control" type="text" th:id="paxAgeMin" th:name="paxAgeMin" />
 								<span>Age maximum</span>
-								<input class="form-control" type="text" th:id="paxAgeMax" />
+								<input class="form-control" type="text" th:id="paxAgeMax" th:name="paxAgeMax" />
 								<span>Prix</span>
-								<input class="form-control" type="text" th:id="paxPrice" />
+								<input class="form-control" type="text" th:id="paxPrice" th:name="paxPrice" />
 							</div>
 						</div>
 						
@@ -497,9 +526,10 @@
 			<!-- PAXS (Step 6) -->
 			<div id="paxsCreated" class="col-lg-6 pax-bloc">
 			</div>
-		</div>
-	</form>
+		</form>
+	</div>
 
+	
 
 	<script th:inline="javascript" type="text/javascript">
 		
@@ -512,11 +542,16 @@
 		
 		// Booléen passe à true lorsque l'utilisateur a créé un pax
 		var hasCreatedPax = false;
+		
+		// Current displayed schedule 
+		var currentDisplayedSchedule = "createScheduleBloc1";
 
 		window.onload = function() {
 
 			// Hide all error messages
 			jQuery('.alert').hide();
+			// Init schedules input
+			initSchedules();
 			// Init default price values
 			initDefaultPrice();
 			// Init google map
@@ -552,7 +587,7 @@
 			}
 		}
 
-		function switchDescLang() {
+		function toggleDescLang() {
 			var descLang = jQuery('#selectDescLang').val();
 			if (descLang == 'FR') {
 				jQuery('#blocDescFr').show();
@@ -573,6 +608,15 @@
 			}
 		}
 		
+		function toggleScheduleDay() {
+			
+			var weekday = jQuery('#selectWeekday').val();
+			jQuery("#" + currentDisplayedSchedule).hide();
+			console.log(weekday);
+			jQuery("#" + weekday).show();
+			currentDisplayedSchedule = weekday;
+		}
+		
 		function initDefaultPrice() {
 			
 			jQuery('#paxDefaultPrice').val("");
@@ -581,6 +625,64 @@
 			jQuery('#paxDefaultAgeMax').val(99);
 		}
 		
+		function initSchedules() {
+			jQuery("#removeExtraSessionBtn").hide();
+			jQuery('.createScheduleBloc').hide();
+			jQuery('.sessionBloc').hide();
+			
+			jQuery('#selectWeekday').val(currentDisplayedSchedule);
+			jQuery("#" + currentDisplayedSchedule).show();
+			
+			for(var i = 0; i < 7; i++) {
+				jQuery("#sessionBloc" + i + "1").show();
+				jQuery("#counterSessionCreated" + i).val(1);
+			}
+		}
+		
+		function showExtraSession() {
+			var weekdayDivId = jQuery("#selectWeekday").val();
+			var weekdayNumber = weekdayDivId.substr(weekdayDivId.length - 1);
+			var sessionCounterId = "counterSessionCreated" + weekdayNumber;
+			
+			// Increment session counter
+		    var newValueNumberSession = parseInt(jQuery("#" + sessionCounterId).val(), 10) + 1;
+		    jQuery("#" + sessionCounterId).val(newValueNumberSession);
+
+		    // Show add button
+		    jQuery("#addExtraSessionBtn").show();
+		    // Show remove button
+		    jQuery("#removeExtraSessionBtn").show();
+		    	
+		    console.log("#sessionBloc" + weekdayNumber + jQuery("#" + sessionCounterId).val());
+		    	
+		    // Display extra session
+			jQuery("#sessionBloc" + weekdayNumber + jQuery("#" + sessionCounterId).val()).show();
+			    
+		    if (newValueNumberSession >= 10) {
+			    // Hide add button
+			    jQuery("#addExtraSessionBtn").hide();
+		    }
+		}
+		
+		function hideExtraSession() {
+			var weekdayDivId = jQuery("#selectWeekday").val();
+			var weekdayNumber = weekdayDivId.substr(weekdayDivId.length - 1);
+			var sessionCounterId = "counterSessionCreated" + weekdayNumber;
+			var numberDisplayedSessions = parseInt(jQuery("#" + sessionCounterId).val(), 10);
+			
+		  	if (numberDisplayedSessions == 2) {
+			    // Hide remove button
+			    jQuery("#removeExtraSessionBtn").hide();
+		  	} else if (numberDisplayedSessions <= 10) {
+		  		// Show add button
+			    jQuery("#addExtraSessionBtn").show();
+		  	}
+			// Hide extra session
+			jQuery("#sessionBloc" + weekdayNumber + jQuery("#" + sessionCounterId).val()).hide();
+		  	// Decrement session counter
+		  	jQuery("#" + sessionCounterId).val(parseInt(numberDisplayedSessions - 1));
+		   	
+		}
 	</script>
 
 </body>

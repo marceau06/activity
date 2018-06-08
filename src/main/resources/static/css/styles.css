@@ -265,11 +265,16 @@ textarea.invalid {
 	font-family: tahoma, geneva, sans-serif;
 }
 
+#addExtraSessionBtn:hover, #addExtraSessionBtn:focus,
+	#addExtraSessionBtn:active {
+	border: 1px solid #0033cc;
+	text-decoration: none;
+}
+
 /***** Google map ***********/
 
  #googleMap {
    flex: 2;
-   width: 500px;
    min-height: 500px;
    background-color: grey;
    border: 1px solid green;

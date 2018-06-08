@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.koedia.activity.activityManager.model.entity.Activity;
-import com.koedia.activity.activityManager.model.entity.PaxPrice;
 import com.koedia.activity.activityManager.model.entity.User;
 import com.koedia.activity.activityManager.service.ActivityService;
 import com.koedia.activity.activityManager.service.UserService;

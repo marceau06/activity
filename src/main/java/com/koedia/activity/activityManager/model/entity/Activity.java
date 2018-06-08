@@ -21,8 +21,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.koedia.activity.activityManager.model.entity.Schedule;
 
 @Entity
 @Table(name = "activity")
@@ -112,20 +113,14 @@ public class Activity {
 	@Column(name="zip_code")
 	private String zipCode;
 	
-	@Column(name="place")
-	private String place;
-	
 	@Transient
 	private MultipartFile mainPictureFile;
-	
-	@Column(name = "minimum_age")
-	private Integer minimumAge;
-	
-	@Column(name="nb_persons")
-	private Integer nbPersons; 
 
 	@Column(name="additional_infos")
 	private String additionalInfos;
+	
+	@Column(name="minimum_age")
+	private Integer minimumAge;
 	
 	@Column(name="min_capacity_group")
 	private Integer minCapacityGroup;
@@ -139,43 +134,49 @@ public class Activity {
 	@Size(min=1, max=4)
 	private List<PaxPrice> paxs = new ArrayList<PaxPrice>();
 	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="activity_id")
+    @OrderBy("id")
+	private List<Schedule> usualSchedules = new ArrayList<Schedule>();
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="activity_id")
+    @OrderBy("id")
+	private List<Schedule> customSchedules = new ArrayList<Schedule>();
+	
 	public Activity() {
 		super();
 	}
 
-	public Activity(int id, int userId, String title, String descriptionFre, 
-			String descriptionEng, String descriptionEsp, 
-			String category, String address, Date beginDate, Date endDate,
-			String planification, Integer minimumAge,
-			String mainPicture, String secondPicture, boolean active, 
-			int nbPersons, String city, String country, String place, String zipCode,
-			String additionalInfos, int minCapacityGroup, int maxCapacityGroup) {
-		
-		super();
-		
-		this.id = id;
-		this.userId = userId;
-		this.title = title;
-		this.descriptionFre = descriptionFre;
-		this.descriptionEng = descriptionEng;
-		this.descriptionEsp = descriptionEsp;
-		this.category = category;
-		this.address = address;
-		this.beginDate = beginDate;
-		this.endDate = endDate;
-		this.minimumAge = minimumAge;
-		this.mainPicture = mainPicture;
-		this.secondPicture = secondPicture;
-		this.active = active;
-		this.nbPersons = nbPersons;
-		this.city = city;
-		this.country = country;
-		this.place = place;
-		this.additionalInfos = additionalInfos;
-		this.zipCode = zipCode;
-		this.minCapacityGroup = minCapacityGroup;
-		this.maxCapacityGroup = maxCapacityGroup;
-	}
+//	public Activity(int id, int userId, String title, String descriptionFre, 
+//			String descriptionEng, String descriptionEsp, 
+//			String category, String address, Date beginDate, Date endDate,
+//			String mainPicture, String secondPicture, boolean active, 
+//			String city, String country, String zipCode,
+//			String additionalInfos, int minCapacityGroup, int maxCapacityGroup) {
+//		
+//		super();
+//		
+//		this.id = id;
+//		this.userId = userId;
+//		this.title = title;
+//		this.descriptionFre = descriptionFre;
+//		this.descriptionEng = descriptionEng;
+//		this.descriptionEsp = descriptionEsp;
+//		this.category = category;
+//		this.address = address;
+//		this.beginDate = beginDate;
+//		this.endDate = endDate;
+//		this.mainPicture = mainPicture;
+//		this.secondPicture = secondPicture;
+//		this.active = active;
+//		this.city = city;
+//		this.country = country;
+//		this.additionalInfos = additionalInfos;
+//		this.zipCode = zipCode;
+//		this.minCapacityGroup = minCapacityGroup;
+//		this.maxCapacityGroup = maxCapacityGroup;
+//	}
 
 
 	public Integer getId() {
@@ -254,14 +255,6 @@ public class Activity {
 		this.endDate = endDate;
 	}
 
-	public Integer getMinimumAge() {
-		return minimumAge;
-	}
-
-	public void setMinimumAge(Integer minimumAge) {
-		this.minimumAge = minimumAge;
-	}
-
 	public Double getLatitude() {
 		return latitude;
 	}
@@ -292,14 +285,6 @@ public class Activity {
 
 	public void setMeetingPoint(String meetingPoint) {
 		this.meetingPoint = meetingPoint;
-	}
-
-	public Integer getNbPersons() {
-		return nbPersons;
-	}
-
-	public void setNbPersons(Integer nbPersons) {
-		this.nbPersons = nbPersons;
 	}
 
 	public String getCity() {
@@ -356,14 +341,6 @@ public class Activity {
 
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
-	}
-
-	public String getPlace() {
-		return place;
-	}
-
-	public void setPlace(String place) {
-		this.place = place;
 	}
 
 	public String getAdditionalInfos() {
@@ -436,5 +413,29 @@ public class Activity {
 
 	public void setEndHourText(String endHourText) {
 		this.endHourText = endHourText;
+	}
+
+	public Integer getMinimumAge() {
+		return minimumAge;
+	}
+
+	public void setMinimumAge(Integer minimumAge) {
+		this.minimumAge = minimumAge;
+	}
+
+	public List<Schedule> getUsualSchedules() {
+		return usualSchedules;
+	}
+
+	public void setUsualSchedules(List<Schedule> usualSchedules) {
+		this.usualSchedules = usualSchedules;
+	}
+
+	public List<Schedule> getCustomSchedules() {
+		return customSchedules;
+	}
+
+	public void setCustomSchedules(List<Schedule> customSchedules) {
+		this.customSchedules = customSchedules;
 	}
 }
