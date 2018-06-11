@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="fragments/header :: header">
+</head>
+
+
+<body>
+	<div>
+		<form th:action="@{/activity/testTitle}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+
+			<section>
+				
+				    <input th:field="*{title}" />
+										
+										
+					<div>
+						<button type="button" id="titleBtn" type="submit" class="btn btn-lg btn-primary">Envoyer</button>
+					</div>
+			</section>
+		
+		</form>
+		
+		<form th:action="@{/activity/testCategory}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+
+			<section>
+				
+				    <input th:field="*{category}" />
+										
+										
+					<div>
+						<button type="button" id="categoryBtn" type="submit" class="btn btn-lg btn-primary">Envoyer</button>
+					</div>
+			</section>
+		
+		</form>
+	</div>
+
+</body>
+
+</html>

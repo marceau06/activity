@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="fragments/header :: header">
+</head>
+<body>
+
+
+	<h1>
+		<span th:text="#{activity_creation}"></span>
+	</h1>
+
+		<!-- One "tab" for each step in the form: -->
+
+		<div class="container-fluid">
+
+			<!-- Barre latérale de progression -->
+			<div class="col-lg-2 progbar">
+
+			</div>
+			
+			
+			<form name="activityCreationForm" th:action="@{/activity/create}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+
+
+			<!-- STEP 1 : Title -->
+
+			<div class="col-lg-4 container-form">
+
+				<div class="tab form-row" id="stepTitle" data-isvalid="false">
+					<div class="row-form inputStyle">
+						<p>
+							<span class="inputTitle" th:text="#{title}"></span>
+						</p>
+						<p>
+							<span class="inputIndication" th:text="#{title_indication}"></span>
+						</p>
+					</div>
+
+					<div class="form-group" th:class="${#fields.hasErrors('title')}? has-error">
+
+						<input type="text" th:field="*{title}" class="form-control form-control-lg" id="title" name="title" autocomplete="off" />
+						<!-- <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" th:errorclass="fieldError">Title Error</span> -->
+
+						<div class="alert alert-danger error-message-title" role="alert">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span class="sr-only">Error:</span>
+							Enter a valid title
+						</div>
+					</div>
+				</div>
+
+
+				<!-- STEP 1 : Category -->
+
+				<div class="tab" id="stepCategory" data-isvalid="false">
+					<div class="row-form  inputStyle">
+						<p>
+							<span class="inputTitle" th:text="#{category}"></span>
+						</p>
+						<p>
+							<span class="inputIndication" th:text="#{title_indication}"></span>
+						</p>
+					</div>
+					<div class="form-group" th:class="${#fields.hasErrors('category')}? has-error">
+						<select class="form-control form-control-lg" th:field="*{category}">
+							<option th:value="#{cat_art}" th:text="#{cat_art}"></option>
+							<option th:value="#{cat_sport}" th:text="#{cat_sport}"></option>
+							<option th:value="#{cat_nature}" th:text="#{cat_nature}"></option>
+							<option th:value="#{cat_food}" th:text="#{cat_food}"></option>
+							<option th:value="#{cat_entertainment}" th:text="#{cat_entertainment}"></option>
+							<option th:value="#{cat_nightlife}" th:text="#{cat_nightlife}"></option>
+							<option th:value="#{cat_discovery}" th:text="#{cat_discovery}"></option>
+						</select>
+					</div>
+				</div>
+
+				<!-- STEP 2 : description -->
+
+				<div class="tab" id="stepDescription" data-isvalid="false">
+					<div class="row-form  inputStyle">
+						<p>
+							<span class="inputTitle" th:text="#{description}"></span>
+						</p>
+						<p>
+							<span class="inputIndication" th:text="#{title_indication}"></span>
+						</p>
+						<p>
+							<span>Select the language of the description</span>
+						</p>
+						<select id="selectDescLang" class="form-control" onChange="toggleDescLang();">
+							<option>FR</option>
+							<option>EN</option>
+							<option>ES</option>
+						</select>
+
+						<br />
+
+						<div id="blocDescFr">
+							<div class="form-group" th:class="${#fields.hasErrors('descriptionFre')}? has-error">
+								<textarea th:field="*{descriptionFre}" class="form-control form-control-lg form-desc" oninput="this.className = 'form-control'" th:placeholder="#{desc_indication}"></textarea>
+								<span th:if="${#fields.hasErrors('descriptionFre')}" th:errors="*{descriptionFre}" th:errorclass="fieldError">Description Error</span>
+
+								<div class="alert alert-danger error-message-descriptionFre" role="alert">
+									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+									<span class="sr-only">Error:</span>
+									Message erreur description
+								</div>
+
+							</div>
+						</div>
+
+						<div id="blocDescEn">
+							<div class="form-group" th:class="${#fields.hasErrors('descriptionEng')}? has-error">
+								<textarea th:field="*{descriptionEng}" class="form-control form-control-lg form-desc" oninput="this.className = 'form-control'" th:placeholder="#{desc_indication}"></textarea>
+								<span th:if="${#fields.hasErrors('descriptionEng')}" th:errors="*{descriptionEng}" th:errorclass="fieldError">Description Error</span>
+
+								<div class="alert alert-danger error-message-descriptionEng" role="alert">
+									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+									<span class="sr-only">Error:</span>
+									Message erreur description
+								</div>
+							</div>
+						</div>
+
+						<div id="blocDescEs">
+							<div class="form-group" th:class="${#fields.hasErrors('descriptionEsp')}? has-error">
+								<textarea th:field="*{descriptionEsp}" class="form-control form-control-lg form-desc" oninput="this.className = 'form-control'" th:placeholder="#{desc_indication}"></textarea>
+								<span th:if="${#fields.hasErrors('descriptionEsp')}" th:errors="*{descriptionEsp}" th:errorclass="fieldError">Description Error</span>
+
+								<div class="alert alert-danger error-message-descriptionEsp" role="alert">
+									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+									<span class="sr-only">Error:</span>
+									Message erreur description
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<!-- LAST STEP : Validate and submit form -->
+				<div class="tab" id="stepValidate">
+					<div class="row-form ">
+						<p>
+							<span class="inputTitle" th:text="#{validate_and_send}"></span>
+						</p>
+						<p>
+							<span class="inputIndication" th:text="#{validate_and_submit_indication}"></span>
+						</p>
+					</div>
+				</div>
+
+
+				<!-- NAVIGATION BUTTON & SUBMIT  -->
+				<div class="btnStep">
+					<div>
+						<button type="button" id="modifyBtn" class="btn btn-lg btn-secondary" onclick="toggleButtonAndSwitchInput(false)">MODIFIER</button>
+						<button type="button" id="nextBtn" class="btn btn-lg btn-primary" onclick="nextPrev(1)">Next</button>
+					</div>
+				</div>
+
+				<!-- Circles which indicates the steps of the form: -->
+				<!-- We need as many circles as there are steps -->
+				<div style="text-align: center; margin-top: 40px;">
+					<span class="step"></span>
+					<span class="step"></span>
+					<span class="step"></span>
+					<span class="step"></span>
+				</div>
+
+			</div>
+		</form>
+	</div>
+
+	
+
+	<script th:inline="javascript" type="text/javascript">
+		
+		// Taille min et max de la description
+	    var minNumCharsDescription = 200;
+		var maxNumCharsDescription = 1000;
+		
+		// Compteur de pax créés par l'utilisateur dans le formulaire
+		var countPaxCreation = 1;
+		
+		// Booléen passe à true lorsque l'utilisateur a créé un pax
+		var hasCreatedPax = false;
+		
+		// Current displayed schedule 
+		var currentDisplayedSchedule = "createScheduleBloc1";
+
+		window.onload = function() {
+
+			// Hide all error messages
+			jQuery('.alert').hide();
+			// Display the current step
+			showTab(0);
+			// Init desc per lang
+			jQuery('#blocDescFr').show();
+			jQuery('#blocDescEn').hide();
+			jQuery('#blocDescEs').hide();
+			// Hide modify button
+			jQuery("#modifyBtn").hide();
+		}
+
+		function toggleDescLang() {
+			var descLang = jQuery('#selectDescLang').val();
+			if (descLang == 'FR') {
+				jQuery('#blocDescFr').show();
+				jQuery('#blocDescEn').hide();
+				jQuery('#blocDescEs').hide();
+			} else if (descLang == 'EN') {
+				jQuery('#blocDescEn').show();
+				jQuery('#blocDescFr').hide();
+				jQuery('#blocDescEs').hide();
+			} else if (descLang == 'ES') {
+				jQuery('#blocDescEs').show();
+				jQuery('#blocDescEn').hide();
+				jQuery('#blocDescFr').hide();
+			} else {
+				jQuery('#blocDescFr').show();
+				jQuery('#blocDescEn').hide();
+				jQuery('#blocDescEs').hide();
+			}
+		}
+
+	</script>
+
+</body>
+</html>

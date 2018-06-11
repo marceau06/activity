@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -40,6 +41,7 @@ public class Activity {
  
 	@NotNull
     @Size(min=2, max=60)
+	@Valid
 	@Column(name = "title")
    	private String title;
  

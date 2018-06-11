@@ -15,15 +15,6 @@ function showTab(n) {
 	x[n].style.flexDirection = "row";
 	x[n].style.justifyContent = "space-around";
 
-	// ... and fix the Previous/Next buttons:
-//	if (n == 0) {
-//		document.getElementById("prevBtn").style.display = "none";
-//		x[n].style.flexDirection = "column";
-//	} else {
-//		document.getElementById("prevBtn").style.display = "inline";
-//		x[n].style.flexDirection = "row";
-//	}
-	
 	// If datas already are valids, we show modify button
 	displayRightButton(x[n].id);
 	
@@ -46,9 +37,9 @@ function showTabFromNavBar(n) {
 		return false;
 	// Cas particulier : Type de voyageurs
 	} else if (n != 8) {
-		jQuery(".pax-item").hide();
+		jQuery("#paxsCreated").hide();
 	} else {
-		jQuery(".pax-item").show();
+		jQuery("#paxsCreated").show();
 	}
 	
 	// Hide the current tab
@@ -292,9 +283,6 @@ function changeReturnDate() {
 
 function onChangeTime() {
 	
-//	console.log(jQuery("#beginHour").val());
-//	console.log(jQuery("#endHour").val());
-//
 //	jQuery("#beginHour").val(jQuery("#beginHour").val() + ":00");
 //	jQuery("#endHour").val(jQuery("#endHour").val() + ":00");
 }
@@ -375,6 +363,54 @@ function createPax() {
 	// TODO
 //}
 
+function createSchedule() {
+	if(validateSchedules()) {
+		console.log("ok");
+	} else {
+		console.log("ko");
+	}
+	
+}
+
+function validateSchedules() {
+	
+	var schedulesBloc, schedulesInputs, schedulesBlocCreation;
+	var isSet = false;
+	schedulesBloc = document.getElementById("stepSchedules");
+	schedulesBlocCreation = schedulesBloc.getElementsByClassName("sessionBloc");
+	
+	if (schedulesBlocCreation.length > 0) {
+		
+		for(var i = 0; i < schedulesBlocCreation.length; i++) {
+			
+			// Retrieve sessions input
+			schedulesInputs = schedulesBlocCreation[i].getElementsByTagName("input");
+			
+			for (var j = 0; j <= schedulesInputs.length; j++) {
+			
+				// Check if there is at least one imput which have been setted
+				if(schedulesInputs[j] != null) {
+					if(schedulesInputs[j].type == "time") {
+						
+						if (schedulesInputs[j].value) {
+							if (schedulesInputs[j].getAttribute("data-settable")  === true) {
+								isSet = true;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		if (!isSet) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	return isSet;
+}
+
 function deletePax(paxId) {
 
 	jQuery("#" + paxId).remove();
@@ -413,7 +449,6 @@ function displayRightButton(currentTabId) {
 	}
 }
 
-// TODO Changer disable ar readonly
 // TODO Ne marche que pour les inputs
 function toggleButtonAndSwitchInput(onValidate) {
 	

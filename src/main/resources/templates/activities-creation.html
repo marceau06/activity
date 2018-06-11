@@ -299,22 +299,14 @@
 										 <input type="time"											
 												th:value="*{usualSchedules[__${currentSchedule.weekdayNumber}__].sessions[__${currentSession.sessionNumber}__].beginHour}" 
 												class="form-control" 
+												data-settable="false"
 												onchange="">
-<!-- 										<span class="input-group-addon"> -->
-<!-- 											 <span class="glyphicon glyphicon-time"></span> -->
-<!-- 										</span> -->
-<!-- 									</div> -->
-<!-- 									<div class="form-group clockpicker endHourSessionBloc" -->
-<!-- 												th:id="'endHourSessionBloc' + ${currentSchedule.weekdayNumber + 1} + ${currentSession.sessionNumber + 1}"  -->
-<!-- 												th:name="'endHourSessionBloc' + ${currentSchedule.weekdayNumber + 1} + ${currentSession.sessionNumber + 1}">												 -->
 												
 										 <input type="time"
 												th:value="*{usualSchedules[__${currentSchedule.weekdayNumber}__].sessions[__${currentSession.sessionNumber}__].endHour}" 
-												class="form-control " 
+												class="form-control"
+												data-settable="false" 
 												onchange="">
-<!-- 										<span class="input-group-addon"> -->
-<!-- 											 <span class="glyphicon glyphicon-time"></span> -->
-<!-- 										</span> -->
 									</div>
 							</div>
 						</div>
@@ -328,6 +320,13 @@
 							<button type="button" th:id="removeExtraSessionBtn" class="btn" onclick="hideExtraSession()">
 				   				<span class="glyphicon glyphicon-minus"></span>
 				  			</button>
+				  			
+				  			
+				  			<div>
+				  				<p>
+									<button type="button" class="btn btn-primary" id="creationScheduleBtn" onclick="createSchedule();">Ajouter</button>
+								</p>
+							</div>
 					</div>
 				</div>
 
@@ -523,9 +522,39 @@
 
 			</div>
 
-			<!-- PAXS (Step 6) -->
+			<!-- Display PAXS -->
 			<div id="paxsCreated" class="col-lg-6 pax-bloc">
 			</div>
+			
+			<!-- Display SCHEDULES -->
+<!-- 			<div id="schedulesCreated" class="col-lg-6 pax-bloc"> -->
+<!-- 				<table>  -->
+<!-- 					<tr>  -->
+<!-- 						<td style="border:1px solid black">JOURS</td>  -->
+<!-- 						<td style="border:1px solid black" colspan="2">HORAIRES</td>  -->
+<!-- 					</tr>  -->
+		
+<!-- 					<tr>  -->
+<!-- 						<td style="border:1px solid black">LUNDI</td>  -->
+<!-- 						<td colspan="2" rowspan="2" style="border:1px solid black">  -->
+<!-- 							<table>  -->
+<!-- 								<tr>  -->
+<!-- 									<td align="center">8h30</td>  -->
+<!-- 									<td align="center">9h30</td>  -->
+<!-- 								</tr>  -->
+<!-- 								<tr>  -->
+<!-- 									<td align="center">16h30</td>  -->
+<!-- 									<td align="center">17h30</td>  -->
+<!-- 								</tr>  -->
+<!-- 							</table>  -->
+<!-- 						</td>  -->
+<!-- 					</tr>  -->
+<!-- 					<tr>  -->
+<!-- 						<td style="border:1px solid black">JEUDI</td>  -->
+<!-- 					</tr>  -->
+<!-- 				</table> -->
+<!-- 			</div> -->
+		
 		</form>
 	</div>
 
@@ -611,10 +640,37 @@
 		function toggleScheduleDay() {
 			
 			var weekday = jQuery('#selectWeekday').val();
+			var schedulesBloc, schedulesInputs;
+
 			jQuery("#" + currentDisplayedSchedule).hide();
-			console.log(weekday);
 			jQuery("#" + weekday).show();
+			
+			toggleSettableInputs(currentDisplayedSchedule, weekday);
+			
 			currentDisplayedSchedule = weekday;
+		}
+		
+		function toggleSettableInputs(scheduleToHide, scheduleToShow){
+			
+			schedulesBlocToHide = document.getElementById(scheduleToHide);
+			schedulesInputsToHide = schedulesBlocToHide.getElementsByTagName("input");
+			
+			schedulesBlocToShow = document.getElementById(scheduleToShow);
+			schedulesInputsToShow = schedulesBlocToShow.getElementsByTagName("input");
+			
+			if(schedulesInputsToHide.length > 0) {
+				for (var i = 0; i <= schedulesInputsToHide.length; i++) {
+					if(schedulesInputsToHide[i].type == "time") {
+						schedulesInputsToHide[i].setAttribute('settable', 'false');
+					}
+				}
+				for (var i = 0; i <= schedulesInputsToShow.length; i++) {
+					if(schedulesInputsToShow[i].type == "time") {
+						schedulesInputsToShow[i].setAttribute('settable', 'ture');
+					}
+				}
+			}
+			
 		}
 		
 		function initDefaultPrice() {
@@ -633,7 +689,10 @@
 			jQuery('#selectWeekday').val(currentDisplayedSchedule);
 			jQuery("#" + currentDisplayedSchedule).show();
 			
-			for(var i = 0; i < 7; i++) {
+			// Activate the first input displayed
+			toggleInputsHour(11, true);
+			
+			for (var i = 1; i <= 7; i++) {
 				jQuery("#sessionBloc" + i + "1").show();
 				jQuery("#counterSessionCreated" + i).val(1);
 			}
@@ -653,10 +712,11 @@
 		    // Show remove button
 		    jQuery("#removeExtraSessionBtn").show();
 		    	
-		    console.log("#sessionBloc" + weekdayNumber + jQuery("#" + sessionCounterId).val());
-		    	
 		    // Display extra session
 			jQuery("#sessionBloc" + weekdayNumber + jQuery("#" + sessionCounterId).val()).show();
+		    
+		    // Activate inputs
+		   toggleInputsHour(weekdayNumber + jQuery("#" + sessionCounterId).val(), true);
 			    
 		    if (newValueNumberSession >= 10) {
 			    // Hide add button
@@ -679,10 +739,28 @@
 		  	}
 			// Hide extra session
 			jQuery("#sessionBloc" + weekdayNumber + jQuery("#" + sessionCounterId).val()).hide();
+			
+		    // Desactivate input
+			toggleInputsHour(weekdayNumber + jQuery("#" + sessionCounterId).val(), false);
+			
 		  	// Decrement session counter
 		  	jQuery("#" + sessionCounterId).val(parseInt(numberDisplayedSessions - 1));
 		   	
 		}
+		
+		
+		function toggleInputsHour(sessionBlocId, isValidable) {
+			var inputsToActivate = document.getElementById("sessionBloc" + sessionBlocId).getElementsByTagName("input");
+			for (var j = 0; j < inputsToActivate.length; j++) {
+				 if(inputsToActivate[j]) {
+					 inputsToActivate[j].setAttribute("data-settable", isValidable);
+					 if(!isValidable) {
+						 inputsToActivate[j].val('');
+					 }
+				 }
+			}
+		}
+		
 	</script>
 
 </body>

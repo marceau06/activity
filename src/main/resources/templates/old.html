@@ -1,0 +1,253 @@
+// 	function switchPaxType() {
+// 		var paxType = jQuery("#selectPaxType").val();
+		
+// 		console.log(paxType);
+		
+// 		if(paxType == 'Baby') {
+			
+// 		} else if(paxType == 'Infant') {
+			
+// 			jQuery('#paxName').attr('th:field', '*{paxs[1].name}');
+// 			jQuery('#paxAgeMin').attr('th:field', '*{paxs[1].ageMin}');
+// 			jQuery('#paxAgeMax').attr('th:field', '*{paxs[1].ageMax}');
+// 			jQuery('#paxPrice').attr('th:field', '*{paxs[1].price}');
+
+// 		} else if(paxType == 'Adult') {
+			
+// 			jQuery('#paxAgeMin').attr('th:field', '*{paxs[2].ageMin}');
+// 			jQuery('#paxName').attr('th:field', '*{paxs[2].name}');
+// 			jQuery('#paxAgeMax').attr('th:field', '*{paxs[2].ageMax}');
+// 			jQuery('#paxPrice').attr('th:field', '*{paxs[2].price}');
+
+// 		} else if(paxType == 'Senior') {
+			
+// 			jQuery('#paxName').attr('th:field', '*{paxs[3].name}');
+// 			jQuery('#paxAgeMin').attr('th:field', '*{paxs[3].ageMin}');
+// 			jQuery('#paxAgeMax').attr('th:field', '*{paxs[3].ageMax}');
+// 			jQuery('#paxPrice').attr('th:field', '*{paxs[3].price}');
+			
+// 		} else if(paxType == 'Create') {
+			
+// 			jQuery('#paxName').attr('th:field', '*{paxs[4].name}');
+// 			jQuery('#paxAgeMin').attr('th:field', '*{paxs[4].ageMin}');
+// 			jQuery('#paxAgeMax').attr('th:field', '*{paxs[4].ageMax}');
+// 			jQuery('#paxPrice').attr('th:field', '*{paxs[4].price}');
+			
+// 		}
+		
+// 	}
+
+
+				<!-- 							<div id="baby"> -->
+							<!-- 								<span>Nom du pax</span> -->
+							<!-- 								<input class="form-control" type="text" th:field="*{paxs[1].name}" placeholder="Bébés" /> -->
+							<!-- 								<span>Age minimum</span> -->
+							<!-- 								<input class="form-control" type="text" th:id="paxAgeMin" th:field="*{paxs[1].ageMin}" /> -->
+							<!-- 								<span>Age maximum</span> -->
+							<!-- 								<input class="form-control" type="text" th:id="paxAgeMax" th:field="*{paxs[1].ageMax}" /> -->
+							<!-- 								<span>Prix</span> -->
+							<!-- 								<input class="form-control" type="text" th:id="paxPrice" th:field="*{paxs[1].price}" /> -->
+							<!-- 							</div> -->
+
+							<!-- 							<div id="infant"> -->
+							<!-- 								<span>Nom du pax</span> -->
+							<!-- 								<input class="form-control" type="text" th:field="*{paxs[2].name}" placeholder="Enfants" /> -->
+							<!-- 								<span>Age minimum</span> -->
+							<!-- 								<input class="form-control" type="text" th:id="paxAgeMin" th:field="*{paxs[2].ageMin}" /> -->
+							<!-- 								<span>Age maximum</span> -->
+							<!-- 								<input class="form-control" type="text" th:id="paxAgeMax" th:field="*{paxs[2].ageMax}" /> -->
+							<!-- 								<span>Prix</span> -->
+							<!-- 								<input class="form-control" type="text" th:id="paxPrice" th:field="*{paxs[2].price}" /> -->
+							<!-- 							</div> -->
+
+							<!-- 							<div id="adult"> -->
+							<!-- 								<span>Nom du pax</span> -->
+							<!-- 								<input class="form-control" type="text" th:field="*{paxs[3].name}" placeholder="Adultes" /> -->
+							<!-- 								<span>Age minimum</span> -->
+							<!-- 								<input class="form-control" type="text" th:id="paxAgeMin" th:field="*{paxs[3].ageMin}" /> -->
+							<!-- 								<span>Age maximum</span> -->
+							<!-- 								<input class="form-control" type="text" th:id="paxAgeMax" th:field="*{paxs[3].ageMax}" /> -->
+							<!-- 								<span>Prix</span> -->
+							<!-- 								<input class="form-control" type="text" th:id="paxPrice" th:field="*{paxs[3].price}" /> -->
+							<!-- 							</div> -->
+
+							<!-- 							<div id="senior"> -->
+							<!-- 								<span>Nom du pax - (défini ?)</span> -->
+							<!-- 								<input class="form-control" type="text" th:field="*{paxs[4].name}" th:placeholder="Seniors" /> -->
+							<!-- 								<span>Age minimum</span> -->
+							<!-- 								<input class="form-control" type="text" th:id="paxAgeMin" th:field="*{paxs[4].ageMin}" /> -->
+							<!-- 								<span>Age maximum</span> -->
+							<!-- 								<input class="form-control" type="text" th:id="paxAgeMax" th:field="*{paxs[4].ageMax}" /> -->
+							<!-- 								<span>Prix</span> -->
+							<!-- 								<input class="form-control" type="text" th:id="paxPrice" th:field="*{paxs[4].price}" /> -->
+							<!-- 							</div> -->
+
+
+
+		function switchPaxType() {
+			var paxType = jQuery("#selectPaxType").val();
+
+			if (paxType == 'Global') {
+				console.log("AAAAAAAAAAAA");
+				jQuery('#global').show();
+				jQuery('#baby').hide();
+				jQuery('#infant').hide();
+				jQuery('#adult').hide();
+				jQuery('#senior').hide();
+				jQuery('#create').hide();
+
+			} else if (paxType == 'Baby') {
+
+				jQuery('#baby').show();
+				jQuery('#infant').hide();
+				jQuery('#adult').hide();
+				jQuery('#senior').hide();
+				jQuery('#create').hide();
+				jQuery('#global').hide();
+
+				jQuery("#paxs[1].name").val("Bébés");
+
+			} else if (paxType == 'Infant') {
+
+				jQuery('#infant').show();
+				jQuery('#baby').hide();
+				jQuery('#adult').hide();
+				jQuery('#senior').hide();
+				jQuery('#create').hide();
+				jQuery('#global').hide();
+
+				jQuery("#paxs[2].name").val("Enfants");
+
+			} else if (paxType == 'Adult') {
+				console.log("BBBBBBBBBBBBBBBB");
+				jQuery('#adult').show();
+				jQuery('#baby').hide();
+				jQuery('#infant').hide();
+				jQuery('#senior').hide();
+				jQuery('#create').hide();
+				jQuery('#global').hide();
+
+				jQuery("#paxs[3].name").val("Adultes");
+
+			} else if (paxType == 'Senior') {
+
+				jQuery('#senior').show();
+				jQuery('#baby').hide();
+				jQuery('#adult').hide();
+				jQuery('#infant').hide();
+				jQuery('#create').hide();
+				jQuery('#global').hide();
+
+				jQuery("#paxs[4].name").val("Seniors");
+
+			} else if (paxType == 'Create') {
+
+				jQuery('#create').show();
+				jQuery('#baby').hide();
+				jQuery('#adult').hide();
+				jQuery('#senior').hide();
+				jQuery('#infant').hide();
+				jQuery('#global').hide();
+
+				jQuery("#paxs[5].name").val("Fill the pax category name");
+
+			}
+		}
+		
+		
+		
+		<!-- 						<p> -->
+<!-- 							<select id="selectPaxType" class="form-control" onChange="switchPaxType();"> -->
+<!-- 								<option value="Global">Global</option> -->
+<!-- 								<option value="Baby">Bebes</option> -->
+<!-- 								<option value="Infant">Enfants</option> -->
+<!-- 								<option value="Adult">Adultes</option> -->
+<!-- 								<option value="Senior">Seniors</option> -->
+<!-- 								<option value="Students">Etudiants</option> -->
+<!-- 								<option value="Create">Créer type de client</option> -->
+<!-- 							</select> -->
+<!-- 						</p> -->
+
+
+<!-- 	'<div class="pax-item" id="' + countPaxCreation + '">' -->
+<!-- 				+'<p> <span class="pax-infos">' + name + '</span> </p>' -->
+<!-- 				+'<input type="hidden" th:field="*{paxs[' + countPaxCreation + '].name}"/>' -->
+<!-- 				+'<p> <span class="pax-infos">' + ageMin + '</span> </p>' -->
+<!-- 				+ '<input type="hidden" th:field="*{paxs[' + countPaxCreation + '].ageMin}"/>' -->
+<!-- 				+'<p> <span class="pax-infos">' + ageMax + '</span> </p>' -->
+<!-- 				+ '<input type="hidden" th:field="*{paxs[' + countPaxCreation + '].ageMax}"/>' -->
+<!-- 				+'<p> <span class="pax-infos">' + price + '</span> </p>' -->
+<!-- 				+ '<input type="hidden" th:field="*{paxs[' + countPaxCreation + '].price}"/>' -->
+<!-- 				+'<p> <button id="btnModifyPaxCreated' + countPaxCreation + '" onclick="modifyPax(' + countPaxCreation + ');">' + labelBtnModify + '</button> </p>' -->
+<!-- 				+'<p> <button id="btnDeletePaxCreated' + countPaxCreation + '" onclick="deletePax(' + countPaxCreation + ');">' + labelBtnDelete + '</button> </p>' -->
+<!-- 				+ '</div>'); -->
+
+
+
+	/********************************** Méthode de tests **********************************************************/
+	@GetMapping("/testSaveActivityWithPaxPrice")
+	public ModelAndView testSaveActivityWithPaxPrice() {	
+		Activity a = new Activity();
+		a.setTitle("aaaaaaaaaaaa");
+		a.setDescriptionFre("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+		
+		PaxPrice p = new PaxPrice();
+		p.setName("test pax price");
+		p.setPrice(30);
+		a.getPaxs().add(p);
+		
+		try{
+			activityService.saveActivity(a);
+		} catch(Exception ex) {
+			logger.debug("ERREUR Lors de l'enregistrement de l'activité : \n" +ex.getMessage());
+		}
+		
+		System.out.println(p);
+		int testMapping = p.getActivityId();
+		System.out.println(testMapping);
+		
+		return new ModelAndView("/account");
+	}
+	
+	@GetMapping("/testRetrieveActivityWithPaxPrice")
+	public ModelAndView testRetrieveActivityFromDb() {
+		
+		// Retrieve user
+		User user = (User)httpSession.getAttribute("user");
+		
+		List<Activity> actList = activityService.findAllByUserId(user.getId());
+		
+		for(int i=0; i < actList.size(); i++) {
+			System.out.println(actList);
+		}
+		
+		return new ModelAndView("/account");
+	}
+	
+	
+	
+	// Remplit un select avec des heures
+//function populate(selector) {
+//	
+//	var select = jQuery(selector);
+//	var hours, minutes, ampm;
+//	
+//	for(var i = 0; i <= 1320; i += 30) {
+//		
+//		hours = Math.floor(i / 60);
+//		minutes = i % 60;
+//		
+//		if (minutes < 10){
+//			minutes = '0' + minutes; // adding leading zero
+//		}
+//		ampm = hours % 24 < 12 ? 'AM' : 'PM';
+//		
+//		if (hours === 0 && ampm === "PM"){
+//			hours = 12;
+//		}
+//		
+//		select.append($('<option></option>')
+//				.attr('th:value', i)
+//				.text(hours + ':' + minutes + ' ' + ampm)); 
+//	}
+//}

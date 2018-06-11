@@ -62,7 +62,7 @@ public class ActivityController {
 		List<Schedule> usualSchedules = new ArrayList<Schedule>();
 		for(int i = 0; i < 7; i++) {
 			Schedule s = new Schedule(i);
-			for(int j = 0; j < 10; j++) {
+			for(int j = 0; j < 9; j++) {
 				s.addSession(new Session(j));
 			}
 			usualSchedules.add(s);
@@ -267,14 +267,57 @@ public class ActivityController {
 	}
 	
 	/********************************** Page de TEST **************************************************************/
-	@GetMapping("timepickerExample")
-	private ModelAndView timepickerExample() {
+	@GetMapping("test")
+	private ModelAndView timepickerExample(Activity activity) {
 	
-	// Redirection vers page compte 
-	ModelAndView mav = new ModelAndView("timepickerExample");
-	
-	return mav;
+		// Initialiser la liste des horaires en créant un horaire pour chacun des jours de la semaine
+		List<Schedule> usualSchedules = new ArrayList<Schedule>();
+		for(int i = 0; i < 7; i++) {
+			Schedule s = new Schedule(i);
+			for(int j = 0; j < 9; j++) {
+				s.addSession(new Session(j));
+			}
+			usualSchedules.add(s);
+		}
+		activity.setUsualSchedules(usualSchedules);
+		
+		ModelAndView mav = new ModelAndView("test");
+		return mav;
 	}
+	
+	@PostMapping("/testTitle")
+	public ModelAndView testTitle(@ModelAttribute("title") @Valid final String title, final BindingResult bindingResult) {
+		
+		String t = title;
+		System.out.println(title);
+		
+		// Redirection vers page aperçu activité
+		ModelAndView mav = new ModelAndView("account");
+		
+		if(bindingResult.hasErrors()) {
+			System.out.println("error formulaire");
+		}
+		
+		return mav;
+	}
+	
+	@PostMapping("/testCategory")
+	public ModelAndView testCategory(@ModelAttribute("category") @Valid final String category, final BindingResult bindingResult) {
+		
+		String t = category;
+		System.out.println(category);
+		
+		// Redirection vers page aperçu activité
+		ModelAndView mav = new ModelAndView("account");
+		
+		if(bindingResult.hasErrors()) {
+			System.out.println("error formulaire");
+		}
+		
+		return mav;
+	}
+	
+	
 	
 	/********************************** Méthodes utiles **********************************************************/
 
