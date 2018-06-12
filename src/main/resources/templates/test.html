@@ -5,36 +5,196 @@
 
 
 <body>
-	<div>
-		<form th:action="@{/activity/testTitle}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
-
-			<section>
-				
-				    <input th:field="*{title}" />
-										
-										
-					<div>
-						<button type="button" id="titleBtn" type="submit" class="btn btn-lg btn-primary">Envoyer</button>
-					</div>
-			</section>
-		
-		</form>
-		
-		<form th:action="@{/activity/testCategory}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
-
-			<section>
-				
-				    <input th:field="*{category}" />
-										
-										
-					<div>
-						<button type="button" id="categoryBtn" type="submit" class="btn btn-lg btn-primary">Envoyer</button>
-					</div>
-			</section>
-		
-		</form>
+	<h1>
+		<span th:text="#{activity_creation}"></span>
+	</h1>
+	
+	<!-- BEGIN Progression bar -->
+	<div class="col-lg-2">
+	
+		<ul class="nav">
+			<li class="nav-item step" onclick="showTabFromNavBar('0');">
+				<div id="go-to-stepTitle">
+					<span class="indication" th:text="#{title}"></span>
+					<p>
+						<span class="glyphicon glyphicon-ok"></span> 
+					</p>
+				</div>
+			</li>
+			<li class="nav-item step" onclick="showTabFromNavBar('1');">
+				<div id="go-to-stepCategory">
+					<span class="indication" th:text="#{category}"></span>
+					<p>
+						<span class="glyphicon glyphicon-ok"></span> 
+					</p>
+				</div>
+			</li>
+			<li class="nav-item step"  onclick="showTabFromNavBar('2');">
+				<div id="go-to-stepDescription">
+					<span class="indication" th:text="#{description}"></span>
+					<p>
+						<span class="glyphicon glyphicon-ok"></span> 
+					</p>
+				</div>
+			</li>
+			<li class="nav-item step"  onclick="showTabFromNavBar('3');">
+				<div id="go-to-stepMeetingPoint">
+					<span class="indication" th:text="#{meeting_point}"></span>
+					<p>
+						<span class="glyphicon glyphicon-ok"></span> 
+					</p>
+				</div>
+			</li>
+			<li class="nav-item step"  onclick="showTabFromNavBar('4');">
+				<div id="go-to-stepSchedules">
+					<span class="indication" th:text="#{schedule}"></span>
+					<p>
+						<span class="glyphicon glyphicon-ok"></span> 
+					</p>
+				</div>
+			</li>
+			<li class="nav-item step" onclick="showTabFromNavBar('5');">
+				<div id="go-to-stepImages">
+					<span class="indication" th:text="#{images}"></span>
+					<p>
+						<span class="glyphicon glyphicon-ok"></span> 
+					</p>
+				</div>
+			</li>
+			<li class="nav-item step" onclick="showTabFromNavBar('6');">
+				<div id="go-to-stepParticipationCriterias">
+					<span class="indication" th:text="#{participation_criterias}"></span>
+					<p>
+						<span class="glyphicon glyphicon-ok"></span> 
+					</p>
+				</div>
+			</li>
+			<li class="nav-item step" onclick="showTabFromNavBar('7');">
+				<div id="go-to-stepDefaultPrice">
+					<span class="indication" th:text="#{price}"></span>
+					<p>
+						<span class="glyphicon glyphicon-ok"></span> 
+					</p>
+				</div>
+			</li>
+			<li class="nav-item step" onclick="showTabFromNavBar('8');">
+				<div id="go-to-stepPaxs">
+					<span class="indication" th:text="#{pax_type}"></span>
+					<p>
+						<span class="glyphicon glyphicon-ok"></span> 
+					</p>
+				</div>
+			</li>
+			<li class="nav-item step" onclick="showTabFromNavBar('9');">
+				<div id="go-to-stepCapacity">
+					<span class="indication" th:text="#{group_capacity}"></span>
+					<p>
+						<span class="glyphicon glyphicon-ok"></span> 
+					</p>
+				</div>
+			</li>
+			<li class="nav-item step" onclick="showTabFromNavBar('10');">
+				<div id="go-to-stepValidate">
+					<span class="indication" th:text="#{validate_and_send}"></span>
+				</div>
+			</li>
+		</ul>	
+	
 	</div>
+	<!-- END Progression bar -->
+	
+	<!-- BEGIN Creation form -->
+	<div class="col-lg-5">
+	
+		<!-- STEP 1 : Title -->
+		<div id="stepTitle" class="tab" data-isvalid="false">
+			<span class="title" th:text="#{title_step_name}"></span>
+			<br>
+			<span class="indication" th:text="#{title_step_indication}"></span>
+		</div>
+		
+		<!-- STEP 2 : Category -->
+		<div id="stepCategory" class="tab" data-isvalid="false">
+			<span class="title" th:text="#{category_step_name}"></span>
+			<span class="indication" th:text="#{category_step_indication}"></span>
+		</div>
+		
+		<!-- STEP 3 : Description -->
+		<div id="stepDescription" class="tab" data-isvalid="false">
+			<span class="title" th:text="#{description_step_name}"></span>
+			<span class="indication" th:text="#{description_step_indication}"></span>
+		</div>
+		
+		<!-- STEP 4 : MeetingPoint -->
+		<div class="tab" id="stepMeetingPoint" data-isvalid="false">
+			<span class="title" th:text="#{meetingpoint_step_name}"></span>
+			<span class="indication" th:text="#{meetingpoint_step_indication}"></span>
+		</div>
+		
+		<!-- STEP 5 : Schedules -->
+		<div class="tab" id="stepSchedules" data-isvalid="false">
+			<span class="title" th:text="#{schedules_step_name}"></span>
+			<span class="indication" th:text="#{schedules_step_indication}"></span>
+		</div>
+		
+		<!-- STEP 6 : Images -->
+		<div class="tab" id="stepImages" data-isvalid="false">
+			<span class="title" th:text="#{images_step_name}"></span>
+			<span class="indication" th:text="#{images_step_indication}"></span>
+		</div>
+		
+		<!-- STEP 7 : participation criterias -->
+		<div class="tab" id="stepParticipationCriterias" data-isvalid="false">
+			<span class="title" th:text="#{criterias_step_name}"></span>
+			<span class="indication" th:text="#{criterias_step_indication}"></span>
+		</div>
+		
+		<!-- STEP 8 : Default price -->
+		<div class="tab" id="stepDefaultPrice" data-isvalid="false">
+			<span class="title" th:text="#{defaultprice_step_name}"></span>
+			<span class="indication" th:text="#{defaultprice_step_indication}"></span>
+		</div>
+		
+		<!-- STEP 9 : Paxs -->
+		<div class="tab" id="stepPaxs" data-isvalid="false">
+			<span class="title" th:text="#{paxs_step_name}"></span>
+			<span class="indication" th:text="#{paxs_step_indication}"></span>
+		</div>
+		
+		<!-- STEP 10 : Capacity group -->
+		<div class="tab" id="stepCapacity" data-isvalid="false">
+			<span class="title" th:text="#{capacitygroup_step_name}"></span>
+			<span class="indication" th:text="#{capacitygroup_step_indication}"></span>
+		</div>
+		
+		<!-- STEP 11 : Validation and submit -->
+		<div class="tab" id="stepValidate" data-isvalid="false">
+			<span class="title" th:text="#{validateandsubmit_step_name}"></span>
+		</div>
+		
+		<!-- Navigation and submit buttons -->
+		<div class="btnStep">
+			<div>
+				<button type="button" id="modifyBtn" class="btn btn-lg btn-secondary" onclick="">Modifier</button>
+				<button type="button" id="validateBtn" class="btn btn-lg btn-primary" onclick="validateCurrentTab()">Valider</button>
+			</div>
+		</div>
+		
+	</div>
+	<!-- END Creation form -->
+	
+	<!-- BEGIN Informations bloc -->
+	<div class="col-lg-7 pax-bloc">
 
+	</div>
+	<!-- END Informations bloc -->
 </body>
+
+<script type="text/javascript">
+	window.onload = function() {
+		// Display the first step
+		showTab(0);
+	}
+</script>
 
 </html>

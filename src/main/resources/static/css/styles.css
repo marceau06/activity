@@ -11,21 +11,25 @@ html, body {
 	padding-top: 50px;
 }
 
-h1 {
-	margin-top: 150px;
-	font-size: 50px;
-	font-weight: 700;
-}
-
-h2, h3, h4, H5, H6 {
-	font-family: 'Raleway', sans-serif;
-	font-weight: 700;
-}
-
 
 span {
   font-family: 'Raleway', sans-serif;
   clear: both;
+}
+
+span.title {
+	font-size: 50px;
+	text-align: left;
+	display: inline-block;
+}
+
+span.indication {
+	padding-top: 25px;
+	padding-bottom: 25px;
+	font-size: 25px;
+	line-height: 45px;
+	text-align: left;
+	display: inline-block;
 }
 
 img {
@@ -107,24 +111,33 @@ a:hover, a:focus {
 	border-color: transparent;
 }
 
-/************ Style form progression bar ************/
+/************ Style form progression bar + TODO ************/
 .nav-item {
 	cursor: pointer;
-}
-
-.nav-item>.active {
-	background-color: #003a9e;
+	border-top: solid 0.1px grey;
+	width: 300px;
+	height: 100px;
+	opacity: 0.8;
 	text-align: center;
 }
 
-.progbar {
-/* 	border: solid 1px black; */
+.nav-item.selected {
+	opacity: 0.8;
+ 	background-color: #B0E0E6;
 }
 
-.progbar-item {
-/* 	border: solid 1px black; */
-	width: 260px;
-	height: 50px;
+.glyphicon-ok {
+	font-size: 35px;
+	color: green;
+	display: none;
+}
+
+#modifyBtn{
+	display: none;
+}
+
+.formContainer {
+
 }
 
 /************ Style Home ************/
@@ -182,40 +195,11 @@ textarea.invalid {
 }
 
 .tab {
-/*   border: 1px solid black; */
   dispay: flex;
   flex-wrap: wrap;
   display: none;
-/*   padding-top: 1%; */
   padding-bottom: 5%;
-}
-
-.step {
-  flex: 1;
-  height: 20px;
-  width: 20px;
-  margin: 0 2px;
-  background-color: #bbbbbb;
-  border: none; 
-  border-radius: 50%;
-  opacity: 0.5;
-}
-
-.step.active {
-  opacity: 1;
-}
-
-.step.finish {
-  background-color: #4CAF50;
-}
-
-.formContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  min-height: 80%;
-  padding-left: 10%;
-  border: 1px solid red;
+  border: solid 0.2px black;
 }
 
 .inputStyle {
@@ -223,14 +207,6 @@ textarea.invalid {
 	text-align: justify;
 	margin-left: 0px;
     padding-left: 0px;
-}
-
-.inputTitle {
-	font-size: 50px;
-}
-
-.inputIndication {
-	font-size:25px;
 }
 
 .small-title {

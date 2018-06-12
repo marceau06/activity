@@ -37,10 +37,6 @@ body {
 	text-indent: 20em;
 }
 
-.container-form {
-	height: 700px;
-}
-
 .input-place {
 	min-width: 400px;
 }
@@ -122,13 +118,6 @@ body {
 
 .form-desc {
 	min-height: 200px; 
-}
-
-/**************************** Vertical navigation bar ***************************/
-.vertical-nav-bar {
-	list-style-type: none;
-    margin: 0;
-    padding: 0;
 }
 
 /**************************** MEDIAS ***************************/
