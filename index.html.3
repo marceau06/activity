@@ -1,0 +1,890 @@
+
+
+
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>Home</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>
+
+	<link rel="icon" type="image/png" href="/images/havas/favicon.jpg">
+	<!--[if IE]><link rel="shortcut icon" type="image/x-icon" href="/images/havas/favicon.ico" /><![endif]-->
+	
+	
+
+
+
+
+
+
+
+	<!-- debut scripts ajax -->
+	<script type='text/javascript' src='/dwr/interface/GlobalGeoServiceFacade.js;jsessionid=089E95CEB3FB5D64CFA487085E7B4F9C.tomcatJ'></script>
+	<script type='text/javascript' src='/dwr/engine.js;jsessionid=089E95CEB3FB5D64CFA487085E7B4F9C.tomcatJ'></script>
+	<script type='text/javascript' src='/dwr/util.js;jsessionid=089E95CEB3FB5D64CFA487085E7B4F9C.tomcatJ'></script>
+	<script type='text/javascript' src='/dwr/interface/GlobalGeoService.js;jsessionid=089E95CEB3FB5D64CFA487085E7B4F9C.tomcatJ'></script>
+	<script type='text/javascript' src='/dwr/interface/GlobalGeoServiceAuto.js;jsessionid=089E95CEB3FB5D64CFA487085E7B4F9C.tomcatJ'></script>
+	<script type='text/javascript' src='/dwr/interface/GlobalGeoServiceFacade.js;jsessionid=089E95CEB3FB5D64CFA487085E7B4F9C.tomcatJ'></script>
+	<script type="text/javascript" src="/script/prototype/prototype-16.js"></script> <!-- TODO check compatibility -->
+	<script type="text/javascript" src="/script/script.aculo.us/effects.js"></script>
+	<script type="text/javascript" src="/script/script.aculo.us/controls.js"></script>
+	<script type="text/javascript" src="/script/autocomplete.js"></script>
+	
+	<!--<script type="text/javascript" src="/script/jquery/jquery-1.7.2.min.js"></script>-->
+	<script type="text/javascript" src="/script/jquery/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="/script/jquery/jquery-ui-1.10.0.custom.min.js"></script>
+	<script type="text/javascript">
+	jQuery.noConflict()
+	</script>
+    <!-- fin scripts ajax -->
+ 
+  	<script type="text/javascript" src="/script/dateUtil.js"></script>
+    <script type="text/javascript" src="/script/stringUtil.js"></script>
+  	<script type='text/javascript' src='/script/destinationSearchCriterias.js'></script>
+	<script type="text/javascript" src="/script/dateCriterias.js"></script>
+	<script type="text/javascript" src="/script/carsSearchUtils.js"></script>
+	<script type="text/javascript" src="/script/siteCommon.js"></script>
+	
+<!-- 	<link href="/css/havas/init.css" type="text/css" rel="stylesheet" media="screen"/> -->
+	<link href="/css/havas/style.css" type="text/css" rel="stylesheet" media="screen"/>
+	<link href="/css/havas/timer.css" type="text/css" rel="stylesheet" media="screen"/>
+	<link href="/css/havas/jquery-ui-1.8.20.custom.css" type="text/css" rel="stylesheet" media="screen"/>
+	
+  	<link href="/css/havas/autocomplete.css" type="text/css" rel="stylesheet"/>
+  	
+<script type="text/javascript" src="/script/shadowbox/shadowbox.js"></script>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyAY2reGGogsByU9KKEHycu2JmdD1uqmV9I"></script>
+<link href="/css/havas/styles-calendar.css" type="text/css" rel="stylesheet" />
+<link href="/css/havas/loading.css" type="text/css" rel="stylesheet" />
+<!-- 		<script type="text/javascript" src="/script/affiche_calendrier3.js"></script> -->
+<!-- 	<script type="text/javascript" src="script/affiche_dates.js"></script> -->
+<script type="text/javascript" src="/script/jours_feries.js"></script>
+<script type="text/javascript" src="/script/timer.js"></script>
+<script type="text/javascript" src="/script/google_auto_complete.js"></script>
+<script type="text/javascript" src="/script/carsSearchUtils.js"></script>
+<script type="text/javascript" src="/script/datepicker.js"></script>
+<link href="/css/havas/shadowbox.css" type="text/css" rel="stylesheet" />
+
+<!--
+	replaced by geoservice
+	<script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script> 
+-->
+<script type="text/javascript" language="JavaScript">
+	var arrayOfData = new Array();
+
+	function geoCoding() {
+		jQuery("#criterias\\.pointInfo\\[0\\]\\.name").googleAutoComplete("criterias\\.pointInfo\\[0\\]")
+		jQuery("#criterias\\.pointInfo\\[1\\]\\.name").googleAutoComplete("criterias\\.pointInfo\\[1\\]")
+
+	}
+	function init() {
+		updateInDateOrOutDate('outDate');
+		updateInDateOrOutDate('inDate');
+		geoCoding()
+
+		jQuery("#submit-search").click(function(event) {
+			sendSearchForm();
+			event.preventDefault();
+		})
+
+		jQuery("#show_on_map_0").click(function() {
+			jQuery("#criterias\\.pointInfo\\[0\\]\\.name").focus()
+		})
+		jQuery("#show_on_map_1").click(function() {
+			jQuery("#criterias\\.pointInfo\\[1\\]\\.name").focus()
+		})
+	}
+
+	jQuery(document).ready(function() {
+		init()
+		initDatePicker("#criterias\\.byDayBeginDate", "#criterias\\.byDayEndDate", "havas", "3");
+	})
+
+	function initialize() {
+		initAutocomplete(0);
+		initAutocomplete(1);
+	}
+
+	function initAutocomplete(inputId) {
+		var input = document.getElementById('criterias.pointInfo[' + inputId + '].name');
+		var autocomplete = new google.maps.places.Autocomplete(input);
+
+		autocomplete.setTypes([ 'geocode' ]);
+
+		/*Evènement permettant de récupérer la ville sélectionnée au clavier ou à la souris...!!*/
+		google.maps.event.addListener(autocomplete, 'place_changed', function() {
+			var place = autocomplete.getPlace();
+			var latitude = place.geometry.location.lat();
+			var inputLatitude = document.getElementById('criterias.pointInfo[' + inputId + '].latitude');
+			inputLatitude.value = latitude;
+			var longitude = place.geometry.location.lng();
+			var inputLongitude = document.getElementById('criterias.pointInfo[' + inputId + '].longitude');
+			inputLongitude.value = longitude;
+			var inputType = document.getElementById('criterias.pointInfo[' + inputId + '].type');
+			inputType.value = "GEO";
+			if (inputId == 0 && document.getElementById('criterias.pointInfo[1].name').value == "") {
+				/* Si la ville d'arrivée est vide et qu'on fait une recherche sur le champs de départ alors ville départ = ville arrivée */
+				document.getElementById('criterias.pointInfo[1].name').value = document.getElementById('criterias.pointInfo[0].name').value;
+				document.getElementById('criterias.pointInfo[1].latitude').value = inputLatitude.value;
+				document.getElementById('criterias.pointInfo[1].longitude').value = inputLongitude.value;
+				document.getElementById('criterias.pointInfo[1].type').value = inputType.value;
+			}
+		});
+	}
+
+	//google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+
+
+</head>
+
+<body>
+	<div id="lightboxbg-search" style="display: none; visibility: hidden;"></div>
+	
+
+
+
+
+
+
+
+<div id="wait-anim" style="display:none;visibility:hidden;">
+	<div id="timerZone" style="display:none;visibility:hidden;">
+		
+		<div id="attente"> 
+			<div class="entete">VOTRE RECHERCHE</div>
+			<div class="corps">
+				<table  width="350px" id="searchwaittable">	
+					<tr>
+						<td >
+							Prise à <span class="wait_in_color" id="waitSearchWherePickUp"></span> le <span class="wait_in_color" id="waitSearchBeginDate"></span> à <span class="wait_in_color" id="waitSearchTimeBeginDate">
+						</td>
+					</tr>
+					<tr>
+						<td >
+						   	Depose à <span class="wait_in_color" id="waitSearchWhereDropOff"></span> le <span class="wait_in_color" id="waitSearchEndDate"></span> à <span class="wait_in_color" id="waitSearchTimeEndDate">
+						</td>
+					</tr>	
+					<tr>
+						<td>
+						   	Age du Conducteur : <span class="wait_in_color" id="waitSearchDriverAge"></span>
+						</td>
+					</tr>
+					<tr>
+						<td >
+						    Vehicule : <span class="wait_in_color" id="waitSearchVehicule"></span>
+						</td>
+					</tr>
+				</table>
+	    
+				<div class="timer">Il reste moins de <input type="text" size="3" id="timerValue"/> secondes de recherche.</div>
+				<div>Nous recherchons votre location parmi des milliers de combinaisons</div>
+<!-- 		            <object width="320" height="209" align="middle" type="application/x-shockwave-flash" data="/images/havas/wait.swf" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"> -->
+<!-- 	                    <param value="/images/havas/wait.swf" name="movie"> -->
+<!-- 	                    <param value="high" name="quality"> -->
+<!-- 	                    <param value="transparent" name="wmode"> -->
+<!-- 	                    <embed width="320" height="209" align="middle" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" wmode="transparent" quality="high" src="/images/havas/wait.swf"> -->
+<!-- 		            </object> -->
+
+				<script lang =JavaScript1.1>
+				<!--
+					var MM_contentVersion = 6;
+					var plugin = (navigator.mimeTypes && navigator.mimeTypes["application/x-shockwave-flash"]) ? navigator.mimeTypes["application/x-shockwave-flash"].enabledPlugin : 0;
+					if ( plugin ) {
+						var words = navigator.plugins["Shockwave Flash"].description.split(" ");
+	    				for (var i = 0; i < words.length; ++i){
+	    					if (isNaN(parseInt(words[i]))) continue;
+	    					var MM_PluginVersion = words[i];
+	    				}
+	    				var MM_FlashCanPlay = MM_PluginVersion >= MM_contentVersion;
+	    			}else if (navigator.userAgent && navigator.userAgent.indexOf("MSIE")>=0 && (navigator.appVersion.indexOf("Win") != -1)) {
+	    				document.write('<SCR' + 'IPT LANGUAGE=VBScript\> \n'); //FS hide this from IE4.5 Mac by splitting the tag
+						document.write('on error resume next \n');
+						document.write('MM_FlashCanPlay = ( IsObject(CreateObject("ShockwaveFlash.ShockwaveFlash." & MM_contentVersion)))\n');
+						document.write('</SCR' + 'IPT\> \n');
+					}
+					if ( MM_FlashCanPlay ) {
+						document.write('<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"');
+						document.write(' codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0" ');
+						document.write(' width="300" height="200" type="application/x-shockwave-flash">');
+						document.write(' <param name="movie" value="/images/havas/wait-voitures.swf"> <param name=quality value=high> <param name="wmode" value="opaque">  '); 
+						document.write(' <embed src="/images/havas/wait-voitures.swf" quality=high ');
+						document.write(' width="300" height="200" name="movie" align=""');
+						document.write(' type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">');
+						document.write(' </embed>');
+						document.write(' </object>');
+					}else{
+						document.write('<img src="/images/havas/wait-voiture.jpg" width="300" height="200" usemap="#script" border=0>');
+					}
+				//-->
+			</script>
+			<noscript><img SRC="/images/havas/wait-voiture.jpg" width="300" height="200" usemap="#script" border=0></noscript>
+			</div>
+		</div>
+	</div>
+</div>
+
+	<div id="container">
+		<div id="header">
+			
+
+
+
+
+
+
+
+
+	
+
+
+	﻿<link rel="stylesheet" type="text/css" href="https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/css/layout_export.css" /><link href="https://fonts.googleapis.com/css?family=Oswald:400,700,300" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/css/header.css" /><script type="text/javascript">var no_unveil = true;var domaine_cookie = ".havas-voyages.fr";</script><script type="text/javascript" src="https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/js/global.js"></script><style type="text/css">        /* layout absolute */        body.element_exp, .element_exp div, .element_exp dl, .element_exp dt, .element_exp dd, .element_exp ul, .element_exp ol, .element_exp li, .element_exp h1, .element_exp h2, .element_exp h3, .element_exp h4, .element_exp h5, .element_exp h6, .element_exp pre, .element_exp form, .element_exp input, .element_exp textarea, .element_exp p, .element_exp blockquote, .element_exp th, .element_exp td {                margin:0;                padding:0;        }        .element_exp table {                border-collapse:collapse;                border-spacing:0;        }        .element_exp tbody{            border-top : none;        }        .element_exp img {                border:0;        }        .element_exp address,.element_exp caption,.element_exp cite,code,.element_exp dfn,.element_exp th,.element_exp var { /* em est cens� etre italique */                font-style:normal;                font-weight:normal;        }        .element_exp ol,.element_exp ul {                list-style:none;        }        .element_exp caption,.element_exp th {                text-align:left;        }        .element_exp q:before,.element_exp q:after {                content:'';        }        .element_exp abbr,.element_exp acronym { border:0;        }        .element_exp a {            text-decoration: none;        }        @font-face {            font-family: 'open_sans';            src: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Regular-webfont.eot');            src: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Regular-webfont.woff') format('woff'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Regular-webfont.ttf') format('truetype'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Regular-webfont.svg#open_sans') format('svg');            font-weight: normal;            font-style: normal;        }        @font-face {            font-family: 'open_sans';            src: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Italic-webfont.eot');            src: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Italic-webfont.eot?#iefix') format('embedded-opentype'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Italic-webfont.woff') format('woff'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Italic-webfont.ttf') format('truetype'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Italic-webfont.svg#open_sans') format('svg');            font-weight: normal;            font-style: italic;        }        @font-face {            font-family: 'open_sans';            src: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Semibold-webfont.eot');            src: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Semibold-webfont.eot?#iefix') format('embedded-opentype'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Semibold-webfont.woff') format('woff'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Semibold-webfont.ttf') format('truetype'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Semibold-webfont.svg#open_sans') format('svg');            font-weight: 500;            font-style: normal;        }        @font-face {            font-family: 'open_sans';            src: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Bold-webfont.eot');            src: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Bold-webfont.eot?#iefix') format('embedded-opentype'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Bold-webfont.woff') format('woff'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Bold-webfont.ttf') format('truetype'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Bold-webfont.svg#open_sans') format('svg');            font-weight: bold;            font-style: normal;        }        @font-face {            font-family: 'open_sans';            src: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-BoldItalic-webfont.eot');            src: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-BoldItalic-webfont.eot?#iefix') format('embedded-opentype'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-BoldItalic-webfont.woff') format('woff'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-BoldItalic-webfont.ttf') format('truetype'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-BoldItalic-webfont.svg#open_sans') format('svg');            font-weight: bold;            font-style: italic;        }        @font-face {          font-family: 'havas-icons';          src:url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/havas-icons.eot?-s4jupn');          src:url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/havas-icons.eot?#iefix-s4jupn') format('embedded-opentype'),            url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/havas-icons.woff?-s4jupn') format('woff'),            url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/havas-icons.ttf?-s4jupn') format('truetype'),            url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/havas-icons.svg?-s4jupn#havas-icons') format('svg');          font-weight: normal;          font-style: normal;        }        /* header absolute */    .element_exp ul.secondary-nav a.user {        background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/header/user.png') no-repeat left center;    }    .element_exp ul.secondary-nav a.heart {        background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/header/heart.png') no-repeat left center;    }    .element_exp ul.secondary-nav a.clock-back {        background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/header/clock-back.png') no-repeat left center;    }    .element_exp ul.secondary-nav a.map-location {        background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/header/map-location.png') no-repeat left center;    }    .element_exp ul#menuHaut li span.menu_categorie_titre span.dropdown-arrow {        background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -14px -169px;    }    .element_exp ul#menuHaut li span.menu_categorie_titre .fleche_active {        background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -1px -169px;    }    </style><div class="element_exp" style="text-align: left;">    <div class="export_container" id="header_export_container" style="width:100%">        <script type="text/javascript" src="https://havas.ssl.travel/sites/havas-voyages.fr/files/js_utilities/tag_commander/tc_havasvoyagesfr_20.js"></script>    <div id="container_header" class="header cf" xtcz="Header">        <div id="content_header" class="cf">            <ul class="secondary-nav">                <li>                    <a class="user" href="http://www.havas-voyages.fr/mon-compte">                        Mon compte                    </a>                </li>                <li>                    <a class="heart" href="http://www.havas-voyages.fr/favoris">                        Favoris                    </a>                </li>                                <li>                    <a href="http://www.havas-voyages.fr/voyages-affaires">Voyages d&#039;affaires</a>                </li>                <li>                    <a class="map-location" href="https://agences.havas-voyages.fr/">                        Trouver une agence                    </a>                </li>            </ul>            <div id="headerHVS" xtcz="Header">                <a href="http://www.havas-voyages.fr/" title="Havas Voyages" rel="home" id="logo_havas" xtclib="Banniere_header">                    <img src="http://www.havas-voyages.fr/sites/havas-voyages.fr/files/havas-voyages.png" alt="Havas Voyages" class="logo" />                </a>            </div>            <ul id="menuHaut" xtcz="Menu_principal">                                    <li class="liMenuHaut ">                                                    <span class="menu_categorie_titre">                                Voyage<span class="dropdown-arrow"></span>                                <span class="fleche_active"></span>                            </span>                                                        <div class="menu_categorie_contenu_container ">                                <ul class="menu_categorie_contenu">                                                                                                                                                                                                                                            <li class="menu_categorie_lien">                                                <a href="http://www.havas-voyages.fr/sejour">Séjour</a>                                            </li>                                                                                                                                                                                                        <li class="menu_categorie_lien">                                                <a href="http://www.havas-voyages.fr/circuit">Circuit</a>                                            </li>                                                                                                                                                                                                        <li class="menu_categorie_lien">                                                <a href="http://www.havas-voyages.fr/location">Location</a>                                            </li>                                                                                                                                                                                                                                                <li class="menu_categorie_lien">                                                <a href="http://location.havas-voyages.fr/serp.html?separator=%2C&junction=false&mFlexi=7&type=loc&theme=camping">Camping</a>                                            </li>                                                                                                                                                                                                        <li class="menu_categorie_lien">                                                <a href="http://www.havas-voyages.fr/croisiere">Croisière</a>                                            </li>                                                                                                                                                                                                        <li class="menu_categorie_lien">                                                <a href="http://www.havas-voyages.fr/forfait">Vol + Hôtel</a>                                            </li>                                                                                                                                                                                                        <li class="menu_categorie_lien">                                                <a href="http://sejour.havas-voyages.fr/serp.html?mFlexi=7&customCrit=them2--club-med-prod&type=sej&price=102%2C12239">Club Med</a>                                            </li>                                                                                                                                                    </ul>                            </div>                                            </li>                                    <li class="liMenuHaut ">                                                    <span class="menu_categorie_titre">                                Vol<span class="dropdown-arrow"></span>                                <span class="fleche_active"></span>                            </span>                                                        <div class="menu_categorie_contenu_container ">                                <ul class="menu_categorie_contenu">                                                                                                                                                                                                    <li class="menu_categorie_lien">                                                <a href="http://www.havas-voyages.fr/vol">Vol / Train</a>                                            </li>                                                                                                                                                                                                        <li class="menu_categorie_lien">                                                <a href="http://www.havas-voyages.fr/vol">Vol</a>                                            </li>                                                                                                                                                    </ul>                            </div>                                            </li>                                    <li class="liMenuHaut ">                                                    <span class="menu_categorie_titre">                                Hébergement<span class="dropdown-arrow"></span>                                <span class="fleche_active"></span>                            </span>                                                        <div class="menu_categorie_contenu_container ">                                <ul class="menu_categorie_contenu">                                                                                                                                                                                                    <li class="menu_categorie_lien">                                                <a href="http://www.havas-voyages.fr/hotel">Hôtel</a>                                            </li>                                                                                                                                                                                                        <li class="menu_categorie_lien">                                                <a href="http://www.havas-voyages.fr/location">Location</a>                                            </li>                                                                                                                                                                                                                                                <li class="menu_categorie_lien">                                                <a href="http://location.havas-voyages.fr/serp.html?separator=%2C&junction=false&mFlexi=7&type=loc&theme=camping">Camping</a>                                            </li>                                                                                                                                                                                                        <li class="menu_categorie_lien">                                                <a href="http://www.havas-voyages.fr/forfait">Vol + Hôtel</a>                                            </li>                                                                                                                                                                                                        <li class="menu_categorie_lien">                                                <a href="http://www.havas-voyages.fr/forfait">Courts Séjours</a>                                            </li>                                                                                                                                                                                                        <li class="menu_categorie_lien">                                                <a href="http://sejour.havas-voyages.fr/serp.html?mFlexi=7&customCrit=them2--club-med-prod&type=sej&price=102%2C12239">Club Med</a>                                            </li>                                                                                                            </ul>                            </div>                                            </li>                                    <li class="liMenuHaut ">                                                    <span class="menu_categorie_titre">                                Thématiques<span class="dropdown-arrow"></span>                                <span class="fleche_active"></span>                            </span>                                                        <div class="menu_categorie_contenu_container ">                                <ul class="menu_categorie_contenu">                                                                                                                                                                                                    <li class="menu_categorie_lien">                                                <a href="http://www.havas-voyages.fr/idees-voyages">Toutes nos Thématiques</a>                                            </li>                                                                                                                                                                                                        <li class="menu_categorie_lien">                                                <a href="http://location.havas-voyages.fr/serp.html?separator=,&minExpertMark=0&maxExpertMark=5&minPublicMark=0&maxPublicMark=5&customCrit=them2--thalasso">Bien-être & Thalasso</a>                                            </li>                                                                                                                                                                                                                                                                                        <li class="menu_categorie_lien">                                                <a href="http://location.havas-voyages.fr/serp.html?separator=%2C&junction=false&mFlexi=7&type=loc&theme=camping">Camping </a>                                            </li>                                                                                                                                                                                                                                                <li class="menu_categorie_lien">                                                <a href="http://location.havas-voyages.fr/serp.html?separator=,&mFlexi=7&type=loc&price=21,3000&flexi=7&minExpertMark=0&maxExpertMark=5&minPublicMark=0&maxPublicMark=5&theme=parcs">Parcs d'attractions</a>                                            </li>                                                                                                                                                                                                        <li class="menu_categorie_lien">                                                <a href="http://www.havas-voyages.fr/sejour/voyamar-naya-club">Naya Club</a>                                            </li>                                                                                                                                                                                                                                                <li class="menu_categorie_lien">                                                <a href="http://sejour.havas-voyages.fr/serp.html?mFlexi=7&customCrit=them2--club-med-prod&type=sej&price=102%2C12239">Club Med</a>                                            </li>                                                                                                                                                                                                                                                                                                                                                                        <li class="menu_categorie_lien">                                                <a href="http://www.havas-voyages.fr/sejour/voyages-preferes">Nos Voyages préférés</a>                                            </li>                                                                                                                                                                                                        <li class="menu_categorie_lien">                                                <a href="http://www.havas-voyages.fr/destinations">Nos destinations</a>                                            </li>                                                                                                            </ul>                            </div>                                            </li>                                    <li class="liMenuHaut ">                                                    <a href="http://www.havas-voyages.fr/sur-mesure" >Sur Mesure</a>                                                                        </li>                                    <li class="liMenuHaut ">                                                    <a href="http://www.havas-voyages.fr/promo" >Promos</a>                                                                        </li>                                  <li class="liMenuHaut">                  <a class="highlight" href="http://www.havas-voyages.fr/conseil">Travel Planners</a>                  </li>            </ul>        </div>        <div id="login-modal">    <div class="close-container">        <span class="close-link">[Fermer]</span>    </div>    <p>Créez votre compte pour retrouver vos voyages favoris et partagez les avec votre Travel Planner dans l'agence de voyage de votre choix.</p>    <div class="row">        <div class="login-column">            <h2 class="title-lvl3">Déjà inscrit ?</h2>            <form method="POST" autocomplete="off" action="http://www.havas-voyages.fr/connexion">                <input type="hidden" name="url_redirection" class="url-redirection">                <div class="email-container field-container font-size-default">                    <input type="email" name="email" placeholder="Adresse email*">                </div>                <div class="password-container field-container font-size-default">                    <input autocomplete="off" name="password" type="password" placeholder="Mot de passe*">                </div>                <p>                    <a class="forgotten-password" href="#">> Mot de passe oublié ?</a>                </p>                <div class="login-button-container field-container font-size-default">                    <button class="button primary" type="submit">Valider</button>                </div>            </form>        </div>        <div class="margin-column"></div>        <div class="sign-in-column">            <h2 class="title-lvl3">Pas encore inscrit ?</h2>            <p>Créez votre compte en quelques secondes.</p>            <form method="POST" autocomplete="off" action="http://www.havas-voyages.fr/creer-compte">                <input type="hidden" name="url_redirection" class="url-redirection">                <input type="hidden" name="from_popin" value="true">                <div class="email-container field-container font-size-default">                    <input type="email" name="email" placeholder="Adresse email*">                </div>                <div class="sign-in-button-container">                    <button class="sign-in-button button primary" type="submit">Je crée mon compte</button>                    <button class="close-button button secondary" type="button">Pas maintenant</button>                </div>            </form>        </div>    </div></div>    </div>        </div></div>
+
+		</div>
+		<div id="mainContentCenter">
+			<div class="sideBar">
+
+	
+	
+
+
+
+
+
+
+
+<div id="search-form">
+	<form id="searchForm" name="searchForm" method="post" action="/">
+		<input type="hidden" id="actionRequested" name="actionRequested"/>
+		<input type="hidden" id="displayMode" name="displayMode" value="filterView"/>
+		<input type="hidden" id="searchType" name="searchType" value="SEARCH_ACCOMS_WITH_CODES"/>
+		<input type="hidden" id="nightsNumber" name="nightsNumber" value="3"/>
+		<input type="hidden" id="minDay" name="minDay" value="3"/>
+		<input type="hidden" id="error_redirect" value=""/>
+	
+		<img title="Modifiez votre recherche" alt="Modifiez votre recherche" src="/images/havas/searchTitle.png" />
+		
+		<div id="calendrier" class="calendar"></div>
+		
+		
+		
+       	<div class="left" title="A&eacute;roport, Gares, Ville, Adresse, Point d'int&eacute;r&ecirc;t etc ...">
+       		<label>Station de départ</label>
+			<div class="input-float-container">
+				<input id="criterias.pointInfo[0].name" name="criterias.pointInfo[0].name" class="textInput" onclick="changeDestinationCityWithId(0);" type="text" value=""/>
+			</div>
+			<div id="show_on_map_0" class="show-on-map"></div>
+			<div class="reset"></div>
+			<span id="error_city_start"></span>
+			<!-- <a href="#" id="near-station-start" class="redirect">>> Trouver une station sur la carte</a> -->
+		</div>
+		<input id="criterias.pointInfo[0].radius" name="criterias.pointInfo[0].radius" type="hidden" value="10.0"/>
+		<input id="criterias.pointInfo[0].type" name="criterias.pointInfo[0].type" type="hidden" value="SERVICE"/>
+		<input id="criterias.pointInfo[0].code" name="criterias.pointInfo[0].code" type="hidden" value=""/>
+		<input id="criterias.pointInfo[0].cityCode" name="criterias.pointInfo[0].cityCode" type="hidden" value=""/>
+		<input id="criterias.pointInfo[0].latitude" name="criterias.pointInfo[0].latitude" type="hidden" value=""/>
+		<input id="criterias.pointInfo[0].longitude" name="criterias.pointInfo[0].longitude" type="hidden" value=""/>
+		
+		
+		<p>
+	       	<label>Date de départ</label>
+			<input id="criterias.byDayBeginDate" name="criterias.byDayBeginDate" class="dateInput" onchange="javascript:updateInDateOrOutDate('inDate')" type="text" value="01/06/2018"/>
+<!-- 			<a href="#"><img title="Calendar" alt="Calendar" src="/images/havas/calendar.png" onClick="javascript:affiche_calendrier('criterias.byDayBeginDate', 'depart');"/></a> -->
+			
+		</p>
+			 
+		<p>
+	       	<label>Heure de départ</label>
+			<select id="criterias.inTimeHour" name="criterias.inTimeHour" class="hour" onchange="javascript:checkHours('inTimeHour')">
+				
+					
+						
+							<option value="00">00</option>
+						
+						
+					
+				
+					
+						
+							<option value="01">01</option>
+						
+						
+					
+				
+					
+						
+							<option value="02">02</option>
+						
+						
+					
+				
+					
+						
+							<option value="03">03</option>
+						
+						
+					
+				
+					
+						
+							<option value="04">04</option>
+						
+						
+					
+				
+					
+						
+							<option value="05">05</option>
+						
+						
+					
+				
+					
+						
+							<option value="06">06</option>
+						
+						
+					
+				
+					
+						
+							<option value="07">07</option>
+						
+						
+					
+				
+					
+						
+							<option value="08">08</option>
+						
+						
+					
+				
+					
+						
+							<option value="09">09</option>
+						
+						
+					
+				
+					
+						
+						<option value="10" selected="selected">10</option>
+					
+				
+					
+						
+						<option value="11">11</option>
+					
+				
+					
+						
+						<option value="12">12</option>
+					
+				
+					
+						
+						<option value="13">13</option>
+					
+				
+					
+						
+						<option value="14">14</option>
+					
+				
+					
+						
+						<option value="15">15</option>
+					
+				
+					
+						
+						<option value="16">16</option>
+					
+				
+					
+						
+						<option value="17">17</option>
+					
+				
+					
+						
+						<option value="18">18</option>
+					
+				
+					
+						
+						<option value="19">19</option>
+					
+				
+					
+						
+						<option value="20">20</option>
+					
+				
+					
+						
+						<option value="21">21</option>
+					
+				
+					
+						
+						<option value="22">22</option>
+					
+				
+					
+						
+						<option value="23">23</option>
+					
+				
+			</select>
+			H
+			<select id="criterias.inTimeMin" name="criterias.inTimeMin" class="hour" onchange="javascript:checkHours('inTimeMin')">
+				
+					
+						
+							<option value="00" selected="selected">00</option>
+						
+						
+					
+				
+					
+						
+						<option value="30">30</option>
+					
+				
+			</select>
+			<br/>
+			
+		</p>
+		
+		
+		<div class="left">
+			<label>Station de retour</label>
+			<div class="input-float-container">
+				<input id="criterias.pointInfo[1].name" name="criterias.pointInfo[1].name" class="textInput" title="A&eacute;roport, Gares, Ville, Adresse, Point d'int&eacute;r&ecirc;t etc ..." onclick="changeDestinationCityWithId(1);" type="text" value=""/>
+			</div>
+			<div id="show_on_map_1" class="show-on-map"></div><div class="reset"></div>
+			<span id="error_city_arrive"></span>
+			<!-- <a href="#" id="near-station-arrive" class="redirect">>> Trouver une station sur la carte</a> -->
+		</div>
+		<input id="criterias.pointInfo[1].radius" name="criterias.pointInfo[1].radius" type="hidden" value="10.0"/>
+		<input id="criterias.pointInfo[1].type" name="criterias.pointInfo[1].type" type="hidden" value="SERVICE"/>
+		<input id="criterias.pointInfo[1].code" name="criterias.pointInfo[1].code" type="hidden" value=""/>
+		<input id="criterias.pointInfo[1].cityCode" name="criterias.pointInfo[1].cityCode" type="hidden" value=""/>
+		<input id="criterias.pointInfo[1].latitude" name="criterias.pointInfo[1].latitude" type="hidden" value=""/>
+		<input id="criterias.pointInfo[1].longitude" name="criterias.pointInfo[1].longitude" type="hidden" value=""/>
+					
+		
+		<p>
+	       	<label>Date de retour</label>
+			<input id="criterias.byDayEndDate" name="criterias.byDayEndDate" class="dateInput" onchange="javascript:updateInDateOrOutDate('outDate')" type="text" value="04/06/2018"/>
+<!-- 			<a href="#"><img title="Calendar" alt="Calendar" src="/images/havas/calendar.png" onClick="javascript:affiche_calendrier('criterias.byDayEndDate', 'retour');"/></a> -->
+			
+		</p>
+					
+		<p>
+	       	<label>Heure de retour</label>
+			<select id="criterias.outTimeHour" name="criterias.outTimeHour" class="hour" onchange="javascript:checkHours('outTimeHour')">
+				
+					
+						
+							<option value="00">00</option>
+						
+						
+					
+				
+					
+						
+							<option value="01">01</option>
+						
+						
+					
+				
+					
+						
+							<option value="02">02</option>
+						
+						
+					
+				
+					
+						
+							<option value="03">03</option>
+						
+						
+					
+				
+					
+						
+							<option value="04">04</option>
+						
+						
+					
+				
+					
+						
+							<option value="05">05</option>
+						
+						
+					
+				
+					
+						
+							<option value="06">06</option>
+						
+						
+					
+				
+					
+						
+							<option value="07">07</option>
+						
+						
+					
+				
+					
+						
+							<option value="08">08</option>
+						
+						
+					
+				
+					
+						
+							<option value="09">09</option>
+						
+						
+					
+				
+					
+						
+						<option value="10" selected="selected">10</option>
+					
+				
+					
+						
+						<option value="11">11</option>
+					
+				
+					
+						
+						<option value="12">12</option>
+					
+				
+					
+						
+						<option value="13">13</option>
+					
+				
+					
+						
+						<option value="14">14</option>
+					
+				
+					
+						
+						<option value="15">15</option>
+					
+				
+					
+						
+						<option value="16">16</option>
+					
+				
+					
+						
+						<option value="17">17</option>
+					
+				
+					
+						
+						<option value="18">18</option>
+					
+				
+					
+						
+						<option value="19">19</option>
+					
+				
+					
+						
+						<option value="20">20</option>
+					
+				
+					
+						
+						<option value="21">21</option>
+					
+				
+					
+						
+						<option value="22">22</option>
+					
+				
+					
+						
+						<option value="23">23</option>
+					
+				
+			</select>
+			H
+			<select id="criterias.outTimeMin" name="criterias.outTimeMin" class="hour" onchange="javascript:checkHours('outTimeMin')">
+				 
+					
+						
+							<option value="00" selected="selected">00</option>
+						
+						
+					
+				 
+					
+						
+						<option value="30">30</option>
+					
+				
+			</select>
+			<br/>
+			
+		</p>
+					
+		
+		<p>
+	       	<label>Catégorie du véhicule</label>
+			<select id="criterias.vehicleCategory" name="criterias.vehicleCategory">
+				<option value="-1" selected="selected">Tous</option>
+				
+					<option value="C">Compacte</option>
+				
+					<option value="E">Economique</option>
+				
+					<option value="O">Espace</option>
+				
+					<option value="I">Intermediaire</option>
+				
+					<option value="L">Luxueuse</option>
+				
+					<option value="M">Mini</option>
+				
+					<option value="F">Monospace</option>
+				
+					<option value="P">Premium</option>
+				
+					<option value="X">Special</option>
+				
+					<option value="S">Standard</option>
+				
+			</select>
+		</p>
+		
+		<p>
+	       	<label class="label-short">Age du<br/>conducteur</label>
+			<select id="criterias.driverAge" name="criterias.driverAge" class="select-short">
+				
+					<option value="21">21</option>
+				
+					<option value="22">22</option>
+				
+					<option value="23">23</option>
+				
+					<option value="24">24</option>
+				
+					<option value="25" selected="selected">25</option>
+				
+					<option value="26">26</option>
+				
+					<option value="27">27</option>
+				
+					<option value="28">28</option>
+				
+					<option value="29">29</option>
+				
+					<option value="30">30</option>
+				
+					<option value="31">31</option>
+				
+					<option value="32">32</option>
+				
+					<option value="33">33</option>
+				
+					<option value="34">34</option>
+				
+					<option value="35">35</option>
+				
+					<option value="36">36</option>
+				
+					<option value="37">37</option>
+				
+					<option value="38">38</option>
+				
+					<option value="39">39</option>
+				
+					<option value="40">40</option>
+				
+					<option value="41">41</option>
+				
+					<option value="42">42</option>
+				
+					<option value="43">43</option>
+				
+					<option value="44">44</option>
+				
+					<option value="45">45</option>
+				
+					<option value="46">46</option>
+				
+					<option value="47">47</option>
+				
+					<option value="48">48</option>
+				
+					<option value="49">49</option>
+				
+					<option value="50">50</option>
+				
+					<option value="51">51</option>
+				
+					<option value="52">52</option>
+				
+					<option value="53">53</option>
+				
+					<option value="54">54</option>
+				
+					<option value="55">55</option>
+				
+					<option value="56">56</option>
+				
+					<option value="57">57</option>
+				
+					<option value="58">58</option>
+				
+					<option value="59">59</option>
+				
+					<option value="60">60</option>
+				
+					<option value="61">61</option>
+				
+					<option value="62">62</option>
+				
+					<option value="63">63</option>
+				
+					<option value="64">64</option>
+				
+					<option value="65">65</option>
+				
+					<option value="66">66</option>
+				
+					<option value="67">67</option>
+				
+					<option value="68">68</option>
+				
+					<option value="69">69</option>
+				
+					<option value="70">70</option>
+				
+					<option value="71">71</option>
+				
+					<option value="72">72</option>
+				
+					<option value="73">73</option>
+				
+					<option value="74">74</option>
+				
+					<option value="75">75</option>
+				
+					<option value="76">76</option>
+				
+					<option value="77">77</option>
+				
+					<option value="78">78</option>
+				
+					<option value="79">79</option>
+				
+					<option value="80">80</option>
+				
+					<option value="81">81</option>
+				
+					<option value="82">82</option>
+				
+					<option value="83">83</option>
+				
+					<option value="84">84</option>
+				
+					<option value="85">85</option>
+				
+					<option value="86">86</option>
+				
+					<option value="87">87</option>
+				
+					<option value="88">88</option>
+				
+					<option value="89">89</option>
+				
+					<option value="90">90</option>
+				
+					<option value="91">91</option>
+				
+					<option value="92">92</option>
+				
+					<option value="93">93</option>
+				
+					<option value="94">94</option>
+				
+					<option value="95">95</option>
+				
+					<option value="96">96</option>
+				
+					<option value="97">97</option>
+				
+					<option value="98">98</option>
+				
+					<option value="99">99</option>
+				
+			</select>
+		</p>
+		
+		
+		<a href="#" class="submit" id="submit-search">
+			Rechercher&nbsp;&nbsp;
+			<img title="OK" alt="OK" src="/images/havas/ok.gif">
+		</a>
+	</form>
+</div>
+
+</div>
+
+			<!-- 			<div id="loading-dialog" style="display:none"> -->
+			<!-- 				<p class="waitMessage">Recherche en cours, veuillez patienter</p> -->
+			<!-- 				<p class="waitImage"><img src="/images/havas/loading.gif" /></p> -->
+			<!-- 			</div> -->
+		</div>
+		<div id="imported_footer">
+			
+
+
+
+
+
+
+
+<div class="footer">
+
+	
+
+
+	﻿<link rel="stylesheet" type="text/css" href="https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/css/layout_export.css" /><link rel="stylesheet" type="text/css" href="https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/css/footer.css" /><style type="text/css">        /* layout absolute */        body.element_exp, .element_exp div, .element_exp dl, .element_exp dt, .element_exp dd, .element_exp ul, .element_exp ol, .element_exp li, .element_exp h1, .element_exp h2, .element_exp h3, .element_exp h4, .element_exp h5, .element_exp h6, .element_exp pre, .element_exp form, .element_exp input, .element_exp textarea, .element_exp p, .element_exp blockquote, .element_exp th, .element_exp td {                margin:0;                padding:0;        }        .element_exp table {                border-collapse:collapse;                border-spacing:0;        }        .element_exp tbody{            border-top : none;        }        .element_exp img {                border:0;        }        .element_exp address,.element_exp caption,.element_exp cite,code,.element_exp dfn,.element_exp th,.element_exp var { /* em est cens� etre italique */                font-style:normal;                font-weight:normal;        }        .element_exp ol,.element_exp ul {                list-style:none;        }        .element_exp caption,.element_exp th {                text-align:left;        }        .element_exp q:before,.element_exp q:after {                content:'';        }        .element_exp abbr,.element_exp acronym { border:0;        }        .element_exp a {            text-decoration: none;        }        @font-face {            font-family: 'open_sans';            src: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Regular-webfont.eot');            src: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Regular-webfont.woff') format('woff'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Regular-webfont.ttf') format('truetype'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Regular-webfont.svg#open_sans') format('svg');            font-weight: normal;            font-style: normal;        }        @font-face {            font-family: 'open_sans';            src: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Italic-webfont.eot');            src: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Italic-webfont.eot?#iefix') format('embedded-opentype'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Italic-webfont.woff') format('woff'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Italic-webfont.ttf') format('truetype'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Italic-webfont.svg#open_sans') format('svg');            font-weight: normal;            font-style: italic;        }        @font-face {            font-family: 'open_sans';            src: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Semibold-webfont.eot');            src: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Semibold-webfont.eot?#iefix') format('embedded-opentype'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Semibold-webfont.woff') format('woff'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Semibold-webfont.ttf') format('truetype'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Semibold-webfont.svg#open_sans') format('svg');            font-weight: 500;            font-style: normal;        }        @font-face {            font-family: 'open_sans';            src: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Bold-webfont.eot');            src: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Bold-webfont.eot?#iefix') format('embedded-opentype'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Bold-webfont.woff') format('woff'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Bold-webfont.ttf') format('truetype'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-Bold-webfont.svg#open_sans') format('svg');            font-weight: bold;            font-style: normal;        }        @font-face {            font-family: 'open_sans';            src: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-BoldItalic-webfont.eot');            src: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-BoldItalic-webfont.eot?#iefix') format('embedded-opentype'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-BoldItalic-webfont.woff') format('woff'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-BoldItalic-webfont.ttf') format('truetype'),                 url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/OpenSans-BoldItalic-webfont.svg#open_sans') format('svg');            font-weight: bold;            font-style: italic;        }        @font-face {          font-family: 'havas-icons';          src:url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/havas-icons.eot?-s4jupn');          src:url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/havas-icons.eot?#iefix-s4jupn') format('embedded-opentype'),            url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/havas-icons.woff?-s4jupn') format('woff'),            url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/havas-icons.ttf?-s4jupn') format('truetype'),            url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/fonts/havas-icons.svg?-s4jupn#havas-icons') format('svg');          font-weight: normal;          font-style: normal;        }            /* footer absolute */        #footer div.menu-links div.newsletter input[type="text"] {            background: #fff url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/icons.png') no-repeat 8px center;        }        #footer div.menu-links div.social-networks a.facebook {            background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -1px -3px;        }        #footer div.menu-links div.social-networks a.pinterest {            background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -59px -1px;        }        #footer div.menu-links div.social-networks a.twitter {            background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -90px -1px;        }        #footer div.menu-links div.social-networks a.youtube {            background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -121px -3px;        }        #footer div.menu-links div.social-networks a.google-plus {            background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -30px -3px;        }        #footer div.menu-links div.social-networks a.instagram {            background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -150px -3px;        }        .element_exp div.footer div.havas-numbers div.havas-numbers-container a span.agencies {            background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -1px -98px;        }        .element_exp div.footer div.havas-numbers div.havas-numbers-container a span.travel-planners {            background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -24px -98px;        }        .element_exp div.footer div.havas-numbers div.havas-numbers-container a span.locations {            background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -71px -98px;        }        .element_exp div.footer div.havas-numbers div.havas-numbers-container a span.hotels {            background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -97px -98px;        }        .element_exp div.footer div.havas-numbers div.havas-numbers-container a span.companies {            background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -134px -98px;        }        .element_exp ul#menuBas_contenu li.menuBas_contenu_categorie#menuBas_contenu_categorie_grace ul li span.recompenses {            background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -1px -133px;        }        .element_exp div.footer div.security span.apst {            background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -1px -73px;        }        .element_exp div.footer div.security span.snav {            background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -49px -74px;        }        .element_exp div.footer div.security span.ssl {            background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -157px -74px;        }        .element_exp div.footer div.security span.ingenico {            background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -255px -72px;        }        .element_exp div.footer div.payment span.mastercard {            background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -99px -35px;        }        .element_exp div.footer div.payment span.american-express {            background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -1px -35px;        }        .element_exp div.footer div.payment span.carte-bleue {            background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -50px -35px;        }        .element_exp div.footer div.payment span.visa {            background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -148px -35px;        }        .element_exp div.footer div.payment span.cheque-vacances {            background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -198px -34px;        }                .element_exp #footer div.menu-links a.contact h2 span.arrow-right {            background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -16px -184px;        }        .element_exp div.footer .travel-d-or {            background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat -176px -98px;        }        .element_exp div.footer .capital-hv {            background: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/layout-2.png') no-repeat 0 -203px;        }				.element_exp #footer div.search-agency select {            background-image: url('https://havas.ssl.travel/sites/havas-voyages.fr/themes/havas/images/icon-select-02.png');        }    </style><div class="element_exp" style="text-align: left;">    <div class="export_container" id="footer_export_container" style="width:100%">        <div id="footer" class="footer-top">                <div class="menu-links">            <div class="content font-size-zero">                <!-- <div class="newsletter-contact col-s-12 col-m-6 font-size-zero"> -->                                <!-- </div> -->                <div class="contact-informations col-s-12 col-m-6 font-size-default">                    <a class="contact col-s-6" id="frt_aide" href="http://www.havas-voyages.fr/contactez-nos-services">                        <h2>Une question ?<br />Contactez-nous <span class="contact-arrow"></span></h2>                    </a>                    <div id="footer_rs" class="social-networks">                        <!-- <h2>Suivez-nous aussi sur :</h2> -->                        <a class="facebook" href="https://www.facebook.com/havas.voyages" title="Visitez notre page Facebook"></a>                        <a class="pinterest" href="http://www.pinterest.com/havasvoyages/" title="Visitez notre page Pinterest"></a>                        <a class="twitter" href="https://twitter.com/HavasVoyages" title="Suivez-vous sur Twitter"></a>                        <a class="youtube" href="http://www.youtube.com/user/havasvoyagesfr" title="Visitez notre chaîne Youtube"></a>                        <a class="instagram" href="https://www.instagram.com/havas_voyages/" title="Visitez notre page Instagram"></a>                    </div>                </div>            </div>        </div>    </div>    <div class="footer">        <div class="content">            <div id="menuBas" xtcz="Footer">                <div class="havas-numbers">                    <div class="havas-logo">                        <img src="http://www.havas-voyages.fr/sites/havas-voyages.fr/themes/havas/images/footer/havas-voyages-footer.png" alt="Havas Voyages" />                    </div>                    <div class="havas-numbers-container">                        <a href="https://agences.havas-voyages.fr">                            <span class="image agencies"></span>                            <span>350</span><br />                            Agences                        </a>                        <a href="https://agences.havas-voyages.fr/">                            <span class="image travel-planners"></span>                            <span>1200</span><br />                            Travel planners                        </a>                        <a href="http://www.havas-voyages.fr/sejour">                            <span class="image locations"></span>                            <span>8000</span><br />                            Séjours, circuits & location                        </a>                        <a href="http://www.havas-voyages.fr/hotel">                            <span class="image hotels"></span>                            <span>300 000</span><br />                            hôtels                        </a>                        <a href="http://www.havas-voyages.fr/vol">                            <span class="image companies"></span>                            <span>200</span><br />                            compagnies aériennes                        </a>                    </div>                </div>                                                <ul id="menuBas_contenu" class="font-size-zero cf">                                                                                            <li class="menuBas_contenu_categorie col-s-6 col-m-3 font-size-default">                                                            <span class="title menuBas_categorie_titre">Havas Voyages</span>                                <ul class="menuBas_categorie_contenu">                                                                            <li class="menuBas_categorie_lien">                                            <a href="http://www.havas-voyages.fr/qui-sommes-nous" class="">Qui sommes nous</a>                                        </li>                                                                            <li class="menuBas_categorie_lien">                                            <a href="https://agences.havas-voyages.fr/" class="">Nos agences</a>                                        </li>                                                                            <li class="menuBas_categorie_lien">                                            <a href="http://www.havas-voyages.fr/travel-planners" class="">Travel Planners</a>                                        </li>                                                                            <li class="menuBas_categorie_lien">                                            <a href="http://www.havas-voyages.fr/faq" class="">FAQ</a>                                        </li>                                                                            <li class="menuBas_categorie_lien">                                            <a href="http://www.havas-voyages.fr/recrutement" class="">Nous rejoindre</a>                                        </li>                                                                    </ul>                                                    </li>                                                                    <li class="menuBas_contenu_categorie col-s-6 col-m-3 font-size-default">                                                            <span class="title menuBas_categorie_titre">Nos services</span>                                <ul class="menuBas_categorie_contenu">                                                                            <li class="menuBas_categorie_lien">                                            <a href="http://www.havas-voyages.fr/voyages" class="">Guide Voyages</a>                                        </li>                                                                            <li class="menuBas_categorie_lien">                                            <a href="http://www.havas-voyages.fr/faq" class="">Assurance</a>                                        </li>                                                                            <li class="menuBas_categorie_lien">                                            <a href="http://havas-voyages.fr/voyages-affaires" class="">Voyages d&#039;affaires</a>                                        </li>                                                                            <li class="menuBas_categorie_lien">                                            <a href="http://www.havas-voyages.fr/service-groupe" class="">Services Groupes</a>                                        </li>                                                                    </ul>                                                    </li>                                                                    <li class="menuBas_contenu_categorie col-s-6 col-m-3 font-size-default">                                                            <span class="title menuBas_categorie_titre">Informations pratiques</span>                                <ul class="menuBas_categorie_contenu">                                                                            <li class="menuBas_categorie_lien">                                            <a href="http://www.havas-voyages.fr/conditions-generales-vente" class="">Conditions de vente</a>                                        </li>                                                                            <li class="menuBas_categorie_lien">                                            <a href="http://www.havas-voyages.fr/infos-legales" class="">Informations légales</a>                                        </li>                                                                            <li class="menuBas_categorie_lien">                                            <a href="http://www.havas-voyages.fr/conditions-generales-vente" class="">Protection des données</a>                                        </li>                                                                            <li class="menuBas_categorie_lien">                                            <a href="http://www.havas-voyages.fr/cookies" class="">Charte de cookie</a>                                        </li>                                                                            <li class="menuBas_categorie_lien">                                            <a href="http://www.havas-voyages.fr/plan-du-site" class="">Plan du site</a>                                        </li>                                                                            <li class="menuBas_categorie_lien">                                            <a href="http://www.havas-voyages.fr/havas-voyages-presse" class="">Presse</a>                                        </li>                                                                    </ul>                                                    </li>                                        <li id="menuBas_contenu_categorie_grace"  class="menuBas_contenu_categorie col-s-6 col-m-3 font-size-default">                        <span class="title menuBas_categorie_titre">Grâce à vous</span>                        <div>                            <div class="col-s-6 col-m-6 font-size-default">                                <a href="http://www.havas-voyages.fr/travel-or">                                    <div class="travel-d-or"></div>                                </a>                                <a href="http://www.avis-verifies.com/avis-clients/havas-voyages.fr" target="_blank">                                    <meta class="netreviewsWidget" id="netreviewsWidgetNum5428" data-jsurl="https://cl.avis-verifies.com/fr/cache/3/5/8/358bc390-5d29-e234-1548-0ede2108f7c6/widget4/widget03-5428_script.js"/><script src="https://cl.avis-verifies.com/fr/widget4/widget03.js"></script>                                </a>                            </div>                            <div class="col-s-6 col-m-6 font-size-default">                                <a href="http://www.havas-voyages.fr/capital">                                    <div class="capital-hv"></div>                                </a>                            </div>                        </div>                    </li>                </ul>            </div>            <div class="row font-size-zero">                <div class="security col-s-12 col-m-6 font-size-default">                    <div class="title">Sécurité & confidentialité</div>                    <ul>                        <li>                            <span class="apst"></span>                        </li>                        <li>                            <span class="snav"></span>                        </li>                        <li>                            <span class="ssl"></span>                        </li>                        <li>                            <span class="ingenico"></span>                        </li>                    </ul>                </div>                <div class="payment col-s-12 col-m-6 font-size-default">                    <div class="title">Modes de paiement acceptés</div>                    <ul>                        <li>                            <span class="mastercard"></span>                        </li>                        <li>                            <span class="american-express"></span>                        </li>                        <li>                            <span class="carte-bleue"></span>                        </li>                        <li>                            <span class="visa"></span>                        </li>                        <li>                            <span class="cheque-vacances"></span>                        </li>                    </ul>                    <p>                        <strong>En agences :</strong> espèces, cartes bancaires, chèques, chèques vacances et chèques cadeaux<br />                        <strong>En ligne :</strong> cartes bancaires<br />                        <strong>Par téléphone :</strong> cartes bancaires et chèques vacances                    </p>                </div>            </div>                        <div id="pageFoter" xtcz="Footer" class="conditions">                                                <div id="mentionsLeg">                                    </div>                                <div id="seoHavas">                    <div style="text-align: left;"><div style="text-align: justify;"><div>* Séjours, circuits, week-ends : Prix TTC, à partir de, sous réserve de disponibilité, base chambre double. Vols : Prix TTC  à partir de, sous réserve de disponibilité, vol Aller/ Retour ou Aller simple selon demande. Ces tarifs n’incluent pas les frais de dossier. Locations : prix par location pour la durée totale du séjour. Ces tarifs n’incluent pas les frais de dossier. Hôtels : Prix TTC à partir de, par nuit, base chambre double.</div><div>Havas Voyages - Société par actions simplifiée au capital de 2 624 127,80 € - Siège social 40 avenue Pierre Lefaucheux 92100 BOULOGNE BILLANCOURT - 377 533 294 RCS NANTERRE – Immatriculation N° IM075100385  - RCP Hiscox France - 19 rue Louis le Grand 75002 PARIS - GARANT : APST 15, av Carnot - Paris 17e <br />Contactez-nous <a href="http://www.havas-voyages.fr/contactez-nos-services">en ligne</a> ou par téléphone du lundi au samedi de 9h à 19h au 0 826 081 020 : 0,15 Euros/ min</div><div>Alerte phishing : attention aux communications frauduleuses. Si vous recevez un appel vous indiquant que vous avez été tiré au sort et que vous avez gagné un voyage, nous vous invitons à ne pas rappeler, actuellement Havas Voyages ne fait aucune campagne de ce type. </div><div class="gris_mini"><div>L’agence de voyages Havas Voyages vous accompagne pour tous vos types de voyages.</div><div>Retrouvez nos offres de vol et de week-end parmi nos milliers de tarifs négociés. Vous disposez d’un choix de plus de 300 000 <a href="http://hotel.havas-voyages.fr/liste-hotels-disponibles.htm">hôtels disponibles</a> qui s’adapte à vos envies : voir notre <a href="http://hotel.havas-voyages.fr/plan-de-site.htm">plan de site hôtel</a>. Bénéficiez de nos meilleurs prix pour vos vacances en séjours, circuits, et locations sur notre site internet, par téléphone et dans l’agence de voyages Havas Voyages la plus proche de chez vous. </div></div><div><p> </p></div></div></div><div style="text-align: justify;"> </div>                </div>                                <div id="seoSpecifiquePage">                                    </div>            </div>        </div>     </div>         </div></div>
+
+</div>
+		</div>
+		<link href="/css/havas/styles-surcharge.css" type="text/css" rel="stylesheet" media="screen" />
+
+	</div>
+</body>
+
+</html>
