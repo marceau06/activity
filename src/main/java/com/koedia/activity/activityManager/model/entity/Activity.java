@@ -40,7 +40,7 @@ public class Activity {
 	private Integer userId;
  
 	@NotNull
-    @Size(min=2, max=60)
+    @Size(min=10, max=60)
 	@Valid
 	@Column(name = "title")
    	private String title;
@@ -145,6 +145,9 @@ public class Activity {
 	@JoinColumn(name="activity_id")
     @OrderBy("id")
 	private List<Schedule> customSchedules = new ArrayList<Schedule>();
+	
+	@Transient
+	private String fieldToValidate;
 	
 	public Activity() {
 		super();
@@ -439,5 +442,13 @@ public class Activity {
 
 	public void setCustomSchedules(List<Schedule> customSchedules) {
 		this.customSchedules = customSchedules;
+	}
+
+	public String getFieldToValidate() {
+		return fieldToValidate;
+	}
+
+	public void setFieldToValidate(String fieldToValidate) {
+		this.fieldToValidate = fieldToValidate;
 	}
 }

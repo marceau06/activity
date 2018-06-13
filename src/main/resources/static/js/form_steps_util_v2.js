@@ -5,9 +5,6 @@ var tabs = document.getElementsByClassName("tab"); // List of all tabs of creati
 // Go to the next tab 
 function showTab(tabToShow) {
 	
-	console.log(tabToShow);
-	console.log((tabs.length) - 1);
-	
 	// This function will display the specified tab of the form ...
 	tabs[tabToShow].style.display = "flex";
 	tabs[tabToShow].style.flexDirection = "row";
@@ -49,9 +46,9 @@ function showTabFromNavBar(tabToShow) {
 function validateCurrentTab() {
 	
 	// Exit the function if any field in the current tab is invalid
-	if (n == 1 && !validateForm(action)) {
-		return false;
-	}
+//	if (n == 1 && !validateForm(action)) {
+//		return false;
+//	}
 	
 	// Hide the current tab
 	tabs[currentTab].style.display = "none";
@@ -60,13 +57,13 @@ function validateCurrentTab() {
 	currentTab = parseInt(currentTab + 1);
 	
 	// If reached the end of the form
-	if (currentTab >= tabs.length) {
+//	if (currentTab >= tabs.length) {
 		// Submit all form
 		document.getElementById("validateBtn").type = "submit";
-	} else {
+//	} else {
 		// Otherwise, display the correct tab
-		showTab(currentTab);
-	}
+//		showTab(currentTab);
+//	}
 	
 }
 

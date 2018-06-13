@@ -5,12 +5,15 @@
 
 
 <body>
+		
+	<input id="stepNumber" type="hidden" th:value="${stepNumber}">
+
 	<h1>
 		<span th:text="#{activity_creation}"></span>
 	</h1>
 	
 	<!-- BEGIN Progression bar -->
-	<div class="col-lg-2">
+	<div class="col-lg-3">
 	
 		<ul class="nav">
 			<li class="nav-item step" onclick="showTabFromNavBar('0');">
@@ -104,19 +107,38 @@
 	<!-- END Progression bar -->
 	
 	<!-- BEGIN Creation form -->
+	<form th:id="form-activity-creation" th:action="@{/activity/create}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+	
 	<div class="col-lg-5">
+	
+	<!-- Input setted with submitted input id -->
+	<input th:id="fieldToValidate" type="hidden" th:field="*{fieldToValidate}">
+	
 	
 		<!-- STEP 1 : Title -->
 		<div id="stepTitle" class="tab" data-isvalid="false">
+			<!-- Title and indications -->
 			<span class="title" th:text="#{title_step_name}"></span>
-			<br>
 			<span class="indication" th:text="#{title_step_indication}"></span>
+			<!-- Input -->
+			<div th:class="${#fields.hasErrors('title') ? 'form-group has-error' : 'form-group'}">
+				<input type="text" class="form-control form-control-lg" th:field="*{title}" id="title" name="title" autocomplete="off" onclick="changeInputTitle();"/>
+			</div>
+			<!--  Error message bloc -->
+			<div th:if="${#fields.hasErrors('title')}" class="alert alert-danger error-message-title" role="alert">
+				<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+				<span th:errors="*{title}"></span>
+			</div>
+			
 		</div>
 		
 		<!-- STEP 2 : Category -->
 		<div id="stepCategory" class="tab" data-isvalid="false">
 			<span class="title" th:text="#{category_step_name}"></span>
 			<span class="indication" th:text="#{category_step_indication}"></span>
+<!-- 			<div class="form-group" th:class="${#fields.hasErrors('title')}? has-error"> -->
+			
+<!-- 			</div> -->
 		</div>
 		
 		<!-- STEP 3 : Description -->
@@ -181,10 +203,12 @@
 		</div>
 		
 	</div>
+	
+	</form>
 	<!-- END Creation form -->
 	
 	<!-- BEGIN Informations bloc -->
-	<div class="col-lg-7 pax-bloc">
+	<div class="col-lg-5 pax-bloc">
 
 	</div>
 	<!-- END Informations bloc -->
@@ -192,9 +216,26 @@
 
 <script type="text/javascript">
 	window.onload = function() {
+		console.log("ONLOAD !");
+		
+		console.log(jQuery("#stepNumber").val());
+		console.log(jQuery("#stepNumber").value);
+		
+		currentTab = jQuery("#stepNumber").val();
+		
 		// Display the first step
-		showTab(0);
+		if (jQuery("#stepNumber").val() >= 0) {
+			showTab(jQuery("#stepNumber").val());
+		} else {
+			showTab(0);
+		}
 	}
+	// TODO 
+	// IMPORTANT
+	function changeInputTitle() {
+		jQuery("#fieldToValidate").val("title");
+	}
+	
 </script>
 
 </html>
