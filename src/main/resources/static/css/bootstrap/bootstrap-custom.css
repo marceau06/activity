@@ -117,7 +117,8 @@ body {
 }
 
 .form-desc {
-	min-height: 200px; 
+	height: 200px; 
+	width: 400px;
 }
 
 /**************************** MEDIAS ***************************/

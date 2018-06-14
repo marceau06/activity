@@ -37,35 +37,13 @@ function showTabFromNavBar(tabToShow) {
 	// Set the current tab value
 	currentTab = tabToShow;
 	
+	changeStepToValidate();
+	
 	if(currentTab <= 10) {
 		showTab(currentTab);
 	}
 }
 
-// Go to the next tab
-function validateCurrentTab() {
-	
-	// Exit the function if any field in the current tab is invalid
-//	if (n == 1 && !validateForm(action)) {
-//		return false;
-//	}
-	
-	// Hide the current tab
-	tabs[currentTab].style.display = "none";
-	
-	// Increase or decrease the current tab by 1
-	currentTab = parseInt(currentTab + 1);
-	
-	// If reached the end of the form
-//	if (currentTab >= tabs.length) {
-		// Submit all form
-		document.getElementById("validateBtn").type = "submit";
-//	} else {
-		// Otherwise, display the correct tab
-//		showTab(currentTab);
-//	}
-	
-}
 
 // Removes the "active" class of all steps
 function fixStepIndicator(tabToShow) {
@@ -76,6 +54,26 @@ function fixStepIndicator(tabToShow) {
 	}
 	// Adds the "active" class to the current step:
 	steps[tabToShow].className += " selected";
+}
+
+
+function onChangeDate(inputDate) {	
+	console.log(inputDate);
+	
+}
+
+//Change la date de retour
+function changeReturnDate() {
+	var date = jQuery("#beginDate").datepicker('getDate');
+	if (date && date.getDate) {
+		date.setDate(date.getDate() + 1);
+		jQuery("#endDate").datepicker('option', 'minDate', date);
+		jQuery("#endDate").datepicker('setDate', date);
+	}
+	
+}
+
+function onChangeTime() {
 }
 
 

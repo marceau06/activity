@@ -202,6 +202,13 @@ textarea.invalid {
   border: solid 0.2px black;
 }
 
+.form-input {
+	min-width: 500px;
+	max-width: 600px;
+	margin-top: 10px;
+/* 	margin-bottom: 10px; */
+}
+
 .inputStyle {
 	margin-bottom: 5%;
 	text-align: justify;

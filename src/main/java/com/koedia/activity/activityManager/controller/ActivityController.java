@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.sql.Date;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -53,6 +52,7 @@ public class ActivityController {
 	private static String UPLOAD_FOLDER_RELATIVE= "../img/stored/";
 	
 	private final static Map<String, Integer> inputStepNumber = new HashMap<String, Integer>();
+	private static ArrayList<Integer> validatedSteps = new ArrayList<Integer>();
 
 	
 	@Autowired
@@ -67,16 +67,20 @@ public class ActivityController {
 	/********************************** Init method ******************************/
 	@PostConstruct
 	private static void init() {
+       validatedSteps.clear();
 	   inputStepNumber.put("title", 0);
 	   inputStepNumber.put("category", 1);
-	   inputStepNumber.put("description", 2);
-	   inputStepNumber.put("meeting_point", 3);
-	   inputStepNumber.put("schedule", 4);
-	   inputStepNumber.put("images", 5);
-	   inputStepNumber.put("participation_criterias", 6);
-	   inputStepNumber.put("price", 7);
-	   inputStepNumber.put("pax_type", 8);
-	   inputStepNumber.put("group_capacity", 9);
+	   inputStepNumber.put("descriptionFre", 2);
+	   inputStepNumber.put("descriptionEng", 2);
+	   inputStepNumber.put("descriptionEsp", 2);
+	   inputStepNumber.put("meetingPoint", 3);
+	   inputStepNumber.put("beginDate", 4);
+	   inputStepNumber.put("endDate", 5);
+	   inputStepNumber.put("images", 6);
+	   inputStepNumber.put("participationCriterias", 7);
+	   inputStepNumber.put("price", 8);
+	   inputStepNumber.put("paxType", 9);
+	   inputStepNumber.put("groupCapacity", 10);
 	}
 	
 	/********************************** Redirection to activity creation form ******************************/
@@ -128,79 +132,113 @@ public class ActivityController {
 	
 	/********************************** Créer une nouvelle activité *******************************************/
 
-	@PostMapping("/create")
-	public ModelAndView createActivity(@ModelAttribute("activity") @Valid Activity activity, BindingResult bindingResult) {
-		
-		// Redirection vers page aperçu activité
-		ModelAndView mav = new ModelAndView();
-				
-		// 
-		int nextTabToShowNumber = 0;
-		
-		String creationInfoMessage = "L'activité a bien été créée";
-		
-		// If we are validating inputs one by one
-		if (StringUtil.isPresent(activity.getFieldToValidate())) {
-			
-			// Redirect to form creation page
-			// TODO change it to activities-creation
-			mav.setViewName("test");
-			
-			// Instanciate validator interface
-			ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-			Validator validator = factory.getValidator();
-			
-			// constraintViolations contains all binding errors for property's name in fiedlToValidate
-			Set<ConstraintViolation<Activity>> constraintViolations = validator.validateProperty(activity, activity.getFieldToValidate());
-			
-			if (constraintViolations.size() > 0) {
-				System.out.println("Impossible de valider les donnees du bean");
-				// Go to the next form step
-				nextTabToShowNumber = inputStepNumber.get(activity.getFieldToValidate());
-				System.out.println("nextTab invalid = " + nextTabToShowNumber);
-			} else {
-				System.out.println("Les donnees du bean sont validees");
-				// Go to the current form step
-				nextTabToShowNumber = inputStepNumber.get(activity.getFieldToValidate()) + 1;
-				System.out.println("nextTab valid = " + nextTabToShowNumber);
-			}
-		// We validate the entire bean with all properties
-		} else { 
-				// Redirect to description page
-				mav.setViewName("activities-overview");
-				
-				// Sauvegarde des images
-				saveImage(activity);
-							
-				// Convert date and hours in the right format (java.sql.Time)
-				if (StringUtil.isPresent(activity.getBeginHourText()) && StringUtil.isPresent(activity.getEndHourText())) {
-					String beginHour = activity.getBeginHourText() + ":00";
-					String endHour = activity.getEndHourText() + ":00";
-					activity.setBeginHour(Time.valueOf(beginHour));
-					activity.setEndHour(Time.valueOf(endHour));
-				}
-				activity.setCreationDate(new Date(Calendar.getInstance().getTime().getTime()));
-				
-				try{
-					activityService.saveActivity(activity);
-				} catch(Exception ex) {
-					creationInfoMessage = "Erreur lors de la création de l'activité";
-					logger.debug("ERREUR Lors de la mise à jour des informations de l'utilisateur : \n" +ex.getMessage());
-				}
-			}
-		
-		
-//		if (bindingResult.hasErrors()) {
-//			System.out.println("error formulaire");
-//		}
-
-		mav.addObject("creationInfoMessage", creationInfoMessage);
-		mav.addObject("activity", activity);
-		mav.addObject("stepNumber", nextTabToShowNumber);
-		return mav;
+//	@PostMapping("/create")
+//	public ModelAndView createActivity(@ModelAttribute("activity") @Valid Activity activity, BindingResult bindingResult) {
+//		
+//		// Redirection vers page aperçu activité
+//		ModelAndView mav = new ModelAndView();
+//				
+//		// 
+//		int nextTabToShowNumber = 0;
+//		String stepToValidate = activity.getFieldToValidate();
+//		String creationInfoMessage = "L'activité a bien été créée";
+//		
+//		// Current tab have only one input
+//		if (StringUtil.isPresent(stepToValidate)) {
+//			
+//			// Redirect to form creation page
+//			mav.setViewName("test");
+//			
+//			// Instanciate validator interface
+//			ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+//			Validator validator = factory.getValidator();
+//			
+//			// ConstraintViolations contains all binding errors for property's name in fiedlToValidate
+//			Set<ConstraintViolation<Activity>> constraintViolations = validator.validateProperty(activity, stepToValidate);
+//			
+//			// If invalid
+//			if (constraintViolations.size() > 0) {
+//				//
+//				if (validatedSteps.contains(inputStepNumber.get(stepToValidate))) {
+//						validatedSteps.remove(inputStepNumber.get(stepToValidate));
+//				}
+//				
+//				System.out.println("Impossible de valider les donnees du bean");
+//				// Go to the next form step
+//				nextTabToShowNumber = inputStepNumber.get(stepToValidate);
+//				System.out.println("nextTab invalid = " + nextTabToShowNumber);
+//			
+//			// If valid
+//			} else {
+//				//
+//				validatedSteps.add(inputStepNumber.get(stepToValidate));
+//				System.out.println("Les donnees du bean sont validees");
+//				// Go to the current form step
+//				nextTabToShowNumber = inputStepNumber.get(stepToValidate) + 1;
+//				System.out.println("nextTab valid = " + nextTabToShowNumber);
+//			}
+//		// Current tab have several inputs
+//		} else {
+//			
+//			 switch (inputStepNumber.get(stepToValidate)) {
+//				 // Meeting point
+//				 case 3 :
+//					 
+//				 // Schedules
+//				 case 4 :
+//					 
+//				 //	Participation criterias 
+//				 case 6 :
+//					 
+//				 // Paxs
+//				 case 8 :
+//					 
+//				 // Group capacity
+//				 case 9 :
+//			 }
+////				// Redirect to description page
+////				mav.setViewName("activities-overview");
+////				
+////				// Sauvegarde des images
+////				saveImage(activity);
+////							
+////				// Convert date and hours in the right format (java.sql.Time)
+////				if (StringUtil.isPresent(activity.getBeginHourText()) && StringUtil.isPresent(activity.getEndHourText())) {
+////					String beginHour = activity.getBeginHourText() + ":00";
+////					String endHour = activity.getEndHourText() + ":00";
+////					activity.setBeginHour(Time.valueOf(beginHour));
+////					activity.setEndHour(Time.valueOf(endHour));
+////				}
+////				activity.setCreationDate(new Date(Calendar.getInstance().getTime().getTime()));
+////				
+////				try{
+////					activityService.saveActivity(activity);
+////				} catch(Exception ex) {
+////					creationInfoMessage = "Erreur lors de la création de l'activité";
+////					logger.debug("ERREUR Lors de la mise à jour des informations de l'utilisateur : \n" +ex.getMessage());
+////				}
+//			}
+//		
+//		
+////		if (bindingResult.hasErrors()) {
+////			System.out.println("error formulaire");
+////		}
+//
+//		mav.addObject("creationInfoMessage", creationInfoMessage);
+//		mav.addObject("activity", activity);
+//		mav.addObject("stepNumber", nextTabToShowNumber);
+//		mav.addObject("validatedSteps", validatedSteps);
+//		return mav;
+//	}
+	
+	public void saveActivity(Activity activity) {
+		activity.setCreationDate(new Date(Calendar.getInstance().getTime().getTime()));
+		try{
+			activityService.saveActivity(activity);
+		} catch(Exception ex) {
+		}
 	}
 
-	
 	/********************************** Mettre à jour une activité ***********************************************/
 
 	@PostMapping("update")
@@ -435,5 +473,180 @@ public class ActivityController {
 
 	}
 	
+	@PostMapping("/create")
+	public ModelAndView createActivity(@ModelAttribute("activity") @Valid Activity activity, BindingResult bindingResult) {
+		 
+		// Redirection vers page aperçu activité
+		ModelAndView mav = new ModelAndView();
+					
+		int nextTabToShowNumber = 0;
+		int numberStepToValidate = 0;
+		String nameStepToValidate = activity.getStepToValidate();
+		String creationInfoMessage = "L'activité a bien été créée";	
+		boolean valid = false;
+		
+		if(inputStepNumber.containsKey(nameStepToValidate)) {
+			numberStepToValidate = inputStepNumber.get(nameStepToValidate);
+		}
+		
+		// Redirect to form creation page
+		mav.setViewName("test");
+			
+		switch (numberStepToValidate) {
+			
+			// Current tab have only one input
+			default : 
+				// ConstraintViolations contains all binding errors for property's name in fiedlToValidate
+				if (isValidInputValue(activity, nameStepToValidate)) {
+					valid = true;
+				}
+			
+			// Meeting point
+			case 3 :
+				if (isValidInputValue(activity, "meetingPoint") && isValidInputValue(activity, "address") && isValidInputValue(activity, "city") && isValidInputValue(activity, "country")) {
+					valid = true;
+				}
+				
+			// Schedules
+			case 4 :
+				 
+			//	Participation criterias 
+			case 7 :
+				 
+			// Paxs
+			case 9 :
+				 
+			// Group capacity
+			case 10 :
+				
+		}
+		
+		if (valid) {
+			// Valid
+			validatedSteps.add(numberStepToValidate);
+			System.out.println("Les donnees du bean sont validees");
+			// Go to the current form step
+			nextTabToShowNumber = numberStepToValidate + 1;
+		} else {
+			// Invalid
+			if (validatedSteps.contains(numberStepToValidate)) {
+				validatedSteps.remove(numberStepToValidate);
+			}
+			System.out.println("Impossible de valider les donnees du bean");
+			// Go to the next form step
+			nextTabToShowNumber = numberStepToValidate;
+		}
+		
+		mav.addObject("creationInfoMessage", creationInfoMessage);
+		mav.addObject("activity", activity);
+		mav.addObject("stepNumber", nextTabToShowNumber);
+		mav.addObject("validatedSteps", validatedSteps);
+		
+		return mav;
+	}
+	
+	public boolean isValidInputValue(Activity activity, String nameInputToValidate) {
+		//Instanciate validator interface
+		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+		Validator validator = factory.getValidator();
+							
+		// ConstraintViolations contains all binding errors for property's name in fiedlToValidate
+		Set<ConstraintViolation<Activity>> constraintViolations = validator.validateProperty(activity, nameInputToValidate);
+		
+		if(constraintViolations.size() > 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 }
+
+	
+//	@PostMapping("/create")
+//	public ModelAndView createActivity(@ModelAttribute("activity") @Valid Activity activity, BindingResult bindingResult) {
+//		
+//
+//		
+//		// Current tab have only one input
+//		if (StringUtil.isPresent(stepToValidate)) {
+//			
+//			// Redirect to form creation page
+//			mav.setViewName("test");
+//			
+//			// Instanciate validator interface
+//			ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+//			Validator validator = factory.getValidator();
+//			
+//			// ConstraintViolations contains all binding errors for property's name in fiedlToValidate
+//			Set<ConstraintViolation<Activity>> constraintViolations = validator.validateProperty(activity, stepToValidate);
+//			
+//			// If invalid
+//			if (constraintViolations.size() > 0) {
+//				//
+//				if (validatedSteps.contains(inputStepNumber.get(stepToValidate))) {
+//						validatedSteps.remove(inputStepNumber.get(stepToValidate));
+//				}
+//				
+//				System.out.println("Impossible de valider les donnees du bean");
+//				// Go to the next form step
+//				nextTabToShowNumber = inputStepNumber.get(stepToValidate);
+//				System.out.println("nextTab invalid = " + nextTabToShowNumber);
+//			
+//			// If valid
+//			} else {
+//				//
+//				validatedSteps.add(inputStepNumber.get(stepToValidate));
+//				System.out.println("Les donnees du bean sont validees");
+//				// Go to the current form step
+//				nextTabToShowNumber = inputStepNumber.get(stepToValidate) + 1;
+//				System.out.println("nextTab valid = " + nextTabToShowNumber);
+//			}
+//		// Current tab have several inputs
+//		} else {
+//			
+//			
+////				// Redirect to description page
+////				mav.setViewName("activities-overview");
+////				
+////				// Sauvegarde des images
+////				saveImage(activity);
+////							
+////				// Convert date and hours in the right format (java.sql.Time)
+////				if (StringUtil.isPresent(activity.getBeginHourText()) && StringUtil.isPresent(activity.getEndHourText())) {
+////					String beginHour = activity.getBeginHourText() + ":00";
+////					String endHour = activity.getEndHourText() + ":00";
+////					activity.setBeginHour(Time.valueOf(beginHour));
+////					activity.setEndHour(Time.valueOf(endHour));
+////				}
+////				activity.setCreationDate(new Date(Calendar.getInstance().getTime().getTime()));
+////				
+////				try{
+////					activityService.saveActivity(activity);
+////				} catch(Exception ex) {
+////					creationInfoMessage = "Erreur lors de la création de l'activité";
+////					logger.debug("ERREUR Lors de la mise à jour des informations de l'utilisateur : \n" +ex.getMessage());
+////				}
+//			}
+//		
+//		
+////		if (bindingResult.hasErrors()) {
+////			System.out.println("error formulaire");
+////		}
+//
+//		mav.addObject("creationInfoMessage", creationInfoMessage);
+//		mav.addObject("activity", activity);
+//		mav.addObject("stepNumber", nextTabToShowNumber);
+//		mav.addObject("validatedSteps", validatedSteps);
+//		return mav;
+//	}
+	
+//	public void saveActivity(Activity activity) {
+//		activity.setCreationDate(new Date(Calendar.getInstance().getTime().getTime()));
+//		try{
+//			activityService.saveActivity(activity);
+//		} catch(Exception ex) {
+//		}
+//	}
+	
 

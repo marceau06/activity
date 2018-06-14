@@ -122,16 +122,10 @@ function hydrateItem(nameId, codeId, catId, latId, lngId, zoomId, radiusId, rese
 	};
 }
 
-function changeDestinationCityWithId(id){
-	//vide les champs code et name
-	document.getElementById(id).value = "";
-}
 
 
 //Reinitialise les donnees de la ville
 function resetItem(nameId, codeId, catId, latId, lngId, zoomId, radiusId) {
-	// TODO 
-
 	reset(nameId);
 	reset(codeId);
 	reset(catId);

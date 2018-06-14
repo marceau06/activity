@@ -147,7 +147,7 @@ public class Activity {
 	private List<Schedule> customSchedules = new ArrayList<Schedule>();
 	
 	@Transient
-	private String fieldToValidate;
+	private String stepToValidate;
 	
 	public Activity() {
 		super();
@@ -444,11 +444,11 @@ public class Activity {
 		this.customSchedules = customSchedules;
 	}
 
-	public String getFieldToValidate() {
-		return fieldToValidate;
+	public String getStepToValidate() {
+		return stepToValidate;
 	}
 
-	public void setFieldToValidate(String fieldToValidate) {
-		this.fieldToValidate = fieldToValidate;
+	public void setStepToValidate(String stepToValidate) {
+		this.stepToValidate = stepToValidate;
 	}
 }
