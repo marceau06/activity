@@ -198,7 +198,7 @@ textarea.invalid {
   dispay: flex;
   flex-wrap: wrap;
   display: none;
-  padding-bottom: 5%;
+  padding: 10% 5% 5% 10%;
   border: solid 0.2px black;
 }
 
@@ -206,7 +206,7 @@ textarea.invalid {
 	min-width: 500px;
 	max-width: 600px;
 	margin-top: 10px;
-/* 	margin-bottom: 10px; */
+	margin-bottom: 10px;
 }
 
 .inputStyle {
@@ -237,7 +237,14 @@ textarea.invalid {
 /* 	min-height : 400px; */
 }
 
-.pax-bloc {
+.display-pax-bloc {
+	border: solid 1px black;
+	display: flex;
+	flex-direction: column;
+	max-width: 400px;
+}
+
+.display-schedules-bloc {
 	border: solid 1px black;
 	display: flex;
 	flex-direction: column;
@@ -254,6 +261,17 @@ textarea.invalid {
 	text-decoration: none;
 }
 
+.createScheduleBloc {
+	margin-top: 20px;
+	border: solid 1px blue;
+	width: 90%;
+	display: flex;
+	flex-direction: column;
+}
+
+.sessionBloc {
+	border: solid 1px green;
+}
 /***** Google map ***********/
 
  #googleMap {

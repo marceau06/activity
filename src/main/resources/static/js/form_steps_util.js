@@ -372,44 +372,44 @@ function createSchedule() {
 	
 }
 
-function validateSchedules() {
-	
-	var schedulesBloc, schedulesInputs, schedulesBlocCreation;
-	var isSet = false;
-	schedulesBloc = document.getElementById("stepSchedules");
-	schedulesBlocCreation = schedulesBloc.getElementsByClassName("sessionBloc");
-	
-	if (schedulesBlocCreation.length > 0) {
-		
-		for(var i = 0; i < schedulesBlocCreation.length; i++) {
-			
-			// Retrieve sessions input
-			schedulesInputs = schedulesBlocCreation[i].getElementsByTagName("input");
-			
-			for (var j = 0; j <= schedulesInputs.length; j++) {
-			
-				// Check if there is at least one imput which have been setted
-				if(schedulesInputs[j] != null) {
-					if(schedulesInputs[j].type == "time") {
-						
-						if (schedulesInputs[j].value) {
-							if (schedulesInputs[j].getAttribute("data-settable")  === true) {
-								isSet = true;
-							}
-						}
-					}
-				}
-			}
-		}
-		
-		if (!isSet) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-	return isSet;
-}
+//function validateSchedules() {
+//	
+//	var schedulesBloc, schedulesInputs, schedulesBlocCreation;
+//	var isSet = false;
+//	schedulesBloc = document.getElementById("stepSchedules");
+//	schedulesBlocCreation = schedulesBloc.getElementsByClassName("sessionBloc");
+//	
+//	if (schedulesBlocCreation.length > 0) {
+//		
+//		for(var i = 0; i < schedulesBlocCreation.length; i++) {
+//			
+//			// Retrieve sessions input
+//			schedulesInputs = schedulesBlocCreation[i].getElementsByTagName("input");
+//			
+//			for (var j = 0; j <= schedulesInputs.length; j++) {
+//			
+//				// Check if there is at least one imput which have been setted
+//				if(schedulesInputs[j] != null) {
+//					if(schedulesInputs[j].type == "time") {
+//						
+//						if (schedulesInputs[j].value) {
+//							if (schedulesInputs[j].getAttribute("data-settable")  === true) {
+//								isSet = true;
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
+//		
+//		if (!isSet) {
+//			return false;
+//		} else {
+//			return true;
+//		}
+//	}
+//	return isSet;
+//}
 
 function deletePax(paxId) {
 

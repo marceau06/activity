@@ -12,7 +12,9 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.joda.time.LocalDateTime;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
 
 	
 @Entity
@@ -27,14 +29,20 @@ public class Session {
 		
 	@NotNull
 	@Column(name = "begin_hour")
-	private Time beginHour;
+	@DateTimeFormat(pattern = "HH:mm")
+	private LocalDateTime beginHour;
 	 
 	@NotNull
 	@Column(name = "end_hour")
-	private Time endHour;
+	@DateTimeFormat(pattern = "HH:mm")
+	private LocalDateTime endHour;
 	
 	@Transient
 	private Integer sessionNumber;
+	
+	public Session() {
+		
+	}
 	
 	public Session(Integer sessionNumber) {
 		this.sessionNumber = sessionNumber;
@@ -48,19 +56,19 @@ public class Session {
 		this.id = id;
 	}
 
-	public Time getBeginHour() {
+	public LocalDateTime getBeginHour() {
 		return beginHour;
 	}
 
-	public void setBeginHour(Time beginHour) {
+	public void setBeginHour(LocalDateTime beginHour) {
 		this.beginHour = beginHour;
 	}
 
-	public Time getEndHour() {
+	public LocalDateTime getEndHour() {
 		return endHour;
 	}
 
-	public void setEndHour(Time endHour) {
+	public void setEndHour(LocalDateTime endHour) {
 		this.endHour = endHour;
 	}
 

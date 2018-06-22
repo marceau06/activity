@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -33,10 +35,12 @@ public class Schedule {
 	@Column(name = "activity_id")
 	private Integer activityId;
  
-	@Column(name = "weekday_name")
+//	@Column(name = "weekday_name")
+	@Transient
    	private String weekdayName;
 	
-	@Column(name = "weekday_number")
+//	@Column(name = "weekday_number")
+	@Transient
 	private Integer weekdayNumber;
  
 	@Column(name = "date")
@@ -45,7 +49,12 @@ public class Schedule {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="schedule_id")
 	@Size(min=1, max=10)
+	@Valid
 	private List<Session> sessions = new ArrayList<Session>();
+	
+	public Schedule(){
+		
+	}
 	
 	public Schedule(Integer weekdayNumber) {
 		super();

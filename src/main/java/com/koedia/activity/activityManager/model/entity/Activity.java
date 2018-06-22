@@ -1,8 +1,7 @@
 package com.koedia.activity.activityManager.model.entity;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -16,18 +15,24 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.Valid;
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.koedia.activity.activityManager.model.entity.Schedule;
+import com.koedia.activity.activityManager.validation.EndDateAfterBeginDate;
 
 @Entity
 @Table(name = "activity")
+@EndDateAfterBeginDate
 @EntityListeners(AuditingEntityListener.class)
 public class Activity {
 
@@ -38,58 +43,55 @@ public class Activity {
 	
 	@Column(name = "user_id")
 	private Integer userId;
- 
-	@NotNull
-    @Size(min=10, max=60)
-	@Valid
+	
+	// Step title
+	@NotEmpty(groups = {StepTitle.class})
+	@NotBlank
+	@Size(min = 5, max = 100, message = "{Size.activity.title}")
 	@Column(name = "title")
    	private String title;
+	
+	// Step Category
+	@NotEmpty(groups = {StepCategory.class})
+	@Column(name = "category")
+   	private String category;
+	
  
-	@NotNull
-    @Size(max=1500)
+	// Step Description
+	@NotEmpty(groups = {StepDescription.class})
+	@Size(min = 20, max = 1000, message = "{Size.activity.description}")
 	@Column(name = "description_fre")
    	private String descriptionFre;
 	
-    @Size(max=1500)
+	@Size(min = 20, max = 1000, groups = {StepDescription.class}, message = "{Size.activity.description}")
 	@Column(name = "description_eng")
    	private String descriptionEng;
 	
-    @Size(max=1500)
+	@Size(min = 20, max = 1000, groups = {StepDescription.class}, message = "{Size.activity.description}")
 	@Column(name = "description_esp")
    	private String descriptionEsp;
+	
  
-	@Column(name = "category")
-   	private String category;
-   	
+	// Step MeetingPoint
+	@NotEmpty(groups = {StepMeetingPoint.class})
+	@Column(name = "meeting_point")
+	private String meetingPoint;
+	
+	@NotEmpty(groups = {StepMeetingPoint.class})
 	@Column(name = "address")
    	private String address;
-   	
-	@Column(name = "begin_date")
-   	private Date beginDate;
-
-	@Column(name = "end_date")
-   	private Date endDate;
 	
-	@Column(name="begin_hour")
-	private Time beginHour;
+//	@NotEmpty(groups = {StepMeetingPoint.class})
+	@Column(name = "city")
+	private String city;
 	
-	@Transient
-	private String beginHourText;
-
-	@Column(name="end_hour")
-	private Time endHour;
+//	@NotEmpty(groups = {StepMeetingPoint.class})
+	@Column(name="country")
+	private String country; 
 	
-	@Transient
-	private String endHourText;
-	
-	@Column(name = "creation_date")
-   	private Date creationDate;
-   	
-	@Column(name = "main_picture")
-	private String mainPicture;
-
-	@Column(name = "second_picture")
-	private String secondPicture;
+//	@NotEmpty(groups = {StepMeetingPoint.class})	
+	@Column(name="zip_code")
+	private String zipCode;
 	
 	@Column(name = "latitude")
 	private Double latitude;
@@ -97,58 +99,93 @@ public class Activity {
 	@Column(name = "longitude")
 	private Double longitude;
 	
-	@Column(name = "meeting_point")
-	private String meetingPoint;
+
+   	// Step Schedules
+	@NotNull(groups = {StepPeriod.class})
+	@Future
+	@Temporal(TemporalType.DATE)
+	@Column(name = "begin_date")
+   	private Date beginDate;
+
+	@NotNull(groups = {StepPeriod.class})
+	@Future
+	@Temporal(TemporalType.DATE)
+	@Column(name = "end_date")
+	private Date endDate;
 	
-	@Column(name = "active")
-	private boolean active;
+	@NotEmpty(groups = {StepSchedules.class})
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="activity_id")
+    @OrderBy("id")
+	@Valid
+	private List<Schedule> usualSchedules = new ArrayList<Schedule>();
 	
+//	@NotEmpty(groups = {StepSchedules.class})
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="activity_id")
+    @OrderBy("id")
+	@Valid
+	private List<Schedule> customSchedules = new ArrayList<Schedule>();
+	
+
+	// Step Images
+	@NotEmpty(groups = {StepImages.class})
+	@Column(name = "main_picture")
+	private String mainPicture;
+
+	@NotEmpty(groups = {StepImages.class})
+	@Column(name = "second_picture")
+	private String secondPicture;
+	
+	
+	// Step Participation criterieas
+	@NotEmpty(groups = {StepParticipationCriterias.class})
 	@Column(name="required_id")
 	private boolean requiredId;
 
-	@Column(name = "city")
-	private String city;
-	
-	@Column(name="country")
-	private String country; 
-	
-	@Column(name="zip_code")
-	private String zipCode;
-	
-	@Transient
-	private MultipartFile mainPictureFile;
-
+	@NotEmpty(groups = {StepParticipationCriterias.class})
 	@Column(name="additional_infos")
 	private String additionalInfos;
 	
+	@NotEmpty(groups = {StepParticipationCriterias.class})
 	@Column(name="minimum_age")
 	private Integer minimumAge;
 	
-	@Column(name="min_capacity_group")
-	private Integer minCapacityGroup;
 	
-	@Column(name="max_capacity_group")
-	private Integer maxCapacityGroup;
-	
+	// Step paxs
+	@NotEmpty(groups = {StepPaxs.class})
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="activity_id")
     @OrderBy("price")
 	@Size(min=1, max=4)
+	@Valid
 	private List<PaxPrice> paxs = new ArrayList<PaxPrice>();
+
+	// Step group capacity
+	@NotEmpty(groups = {StepGroupCapacity.class})
+	@Column(name="min_capacity_group")
+	private Integer minCapacityGroup;
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name="activity_id")
-    @OrderBy("id")
-	private List<Schedule> usualSchedules = new ArrayList<Schedule>();
+	@NotEmpty(groups = {StepGroupCapacity.class})
+	@Column(name="max_capacity_group")
+	private Integer maxCapacityGroup;
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name="activity_id")
-    @OrderBy("id")
-	private List<Schedule> customSchedules = new ArrayList<Schedule>();
+	
+	// Transient and not validated properties
+	@Column(name = "creation_date")
+	private Date creationDate;
+	
+	@Column(name = "active")
+	private boolean active;
+	
+	@Transient
+	private MultipartFile mainPictureFile;
 	
 	@Transient
 	private String stepToValidate;
 	
+	
+
 	public Activity() {
 		super();
 	}
@@ -184,6 +221,8 @@ public class Activity {
 //	}
 
 
+	/********** Getters and setters *************/
+	
 	public Integer getId() {
 		return id;
 	}
@@ -356,22 +395,6 @@ public class Activity {
 		this.additionalInfos = additional_infos;
 	}
 
-	public Time getBeginHour() {
-		return beginHour;
-	}
-
-	public void setBeginHour(Time beginHour) {
-		this.beginHour = beginHour;
-	}
-
-	public Time getEndHour() {
-		return endHour;
-	}
-
-	public void setEndHour(Time endHour) {
-		this.endHour = endHour;
-	}
-
 	public boolean isRequiredId() {
 		return requiredId;
 	}
@@ -402,22 +425,6 @@ public class Activity {
 
 	public void setPaxs(List<PaxPrice> paxs) {
 		this.paxs = paxs;
-	}
-
-	public String getBeginHourText() {
-		return beginHourText;
-	}
-
-	public void setBeginHourText(String beginHourText) {
-		this.beginHourText = beginHourText;
-	}
-
-	public String getEndHourText() {
-		return endHourText;
-	}
-
-	public void setEndHourText(String endHourText) {
-		this.endHourText = endHourText;
 	}
 
 	public Integer getMinimumAge() {
@@ -451,4 +458,28 @@ public class Activity {
 	public void setStepToValidate(String stepToValidate) {
 		this.stepToValidate = stepToValidate;
 	}
+	
+	/********** Validation groups *************/
+	
+	public interface StepTitle {};
+	
+	public interface StepCategory {};
+	
+	public interface StepMeetingPoint {};
+	
+	public interface StepDescription {};
+	
+	public interface StepPeriod {};
+	
+	public interface StepSchedules {};
+	
+	public interface StepImages {};
+	
+	public interface StepParticipationCriterias {};
+	
+	public interface StepDefaultPrice {};
+	
+	public interface StepPaxs {};
+	
+	public interface StepGroupCapacity {};
 }

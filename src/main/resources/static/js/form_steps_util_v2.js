@@ -70,10 +70,6 @@ function changeReturnDate() {
 		jQuery("#endDate").datepicker('option', 'minDate', date);
 		jQuery("#endDate").datepicker('setDate', date);
 	}
-	
-}
-
-function onChangeTime() {
 }
 
 

@@ -50,6 +50,14 @@
 				</div>
 			</li>
 			<li class="nav-item step"  onclick="showTabFromNavBar('4');">
+				<div id="go-to-stepPeriod">
+					<span class="indication" th:text="#{period}"></span>
+					<p>
+						<span class="glyphicon glyphicon-ok"></span> 
+					</p>
+				</div>
+			</li>
+			<li class="nav-item step"  onclick="showTabFromNavBar('5');">
 				<div id="go-to-stepSchedules">
 					<span class="indication" th:text="#{schedule}"></span>
 					<p>
@@ -57,7 +65,7 @@
 					</p>
 				</div>
 			</li>
-			<li class="nav-item step" onclick="showTabFromNavBar('5');">
+			<li class="nav-item step" onclick="showTabFromNavBar('6');">
 				<div id="go-to-stepImages">
 					<span class="indication" th:text="#{images}"></span>
 					<p>
@@ -65,7 +73,7 @@
 					</p>
 				</div>
 			</li>
-			<li class="nav-item step" onclick="showTabFromNavBar('6');">
+			<li class="nav-item step" onclick="showTabFromNavBar('7');">
 				<div id="go-to-stepParticipationCriterias">
 					<span class="indication" th:text="#{participation_criterias}"></span>
 					<p>
@@ -73,7 +81,7 @@
 					</p>
 				</div>
 			</li>
-			<li class="nav-item step" onclick="showTabFromNavBar('7');">
+			<li class="nav-item step" onclick="showTabFromNavBar('8');">
 				<div id="go-to-stepDefaultPrice">
 					<span class="indication" th:text="#{price}"></span>
 					<p>
@@ -81,7 +89,7 @@
 					</p>
 				</div>
 			</li>
-			<li class="nav-item step" onclick="showTabFromNavBar('8');">
+			<li class="nav-item step" onclick="showTabFromNavBar('9');">
 				<div id="go-to-stepPaxs">
 					<span class="indication" th:text="#{pax_type}"></span>
 					<p>
@@ -89,7 +97,7 @@
 					</p>
 				</div>
 			</li>
-			<li class="nav-item step" onclick="showTabFromNavBar('9');">
+			<li class="nav-item step" onclick="showTabFromNavBar('10');">
 				<div id="go-to-stepCapacity">
 					<span class="indication" th:text="#{group_capacity}"></span>
 					<p>
@@ -97,7 +105,7 @@
 					</p>
 				</div>
 			</li>
-			<li class="nav-item step" onclick="showTabFromNavBar('10');">
+			<li class="nav-item step" onclick="showTabFromNavBar('11');">
 				<div id="go-to-stepValidate">
 					<span class="indication" th:text="#{validate_and_send}"></span>
 				</div>
@@ -108,15 +116,16 @@
 <!-- END Progression bar -->
 	
 <!-- BEGIN Creation form -->
-	<form th:id="form-activity-creation" th:action="@{/activity/create}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+<!-- 	<form th:id="form-activity-creation" th:action="@{/activity/stepA}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> -->
 	
 	<div class="col-lg-5">
 	
 <!-- Input setted with submitted input id -->
-	<input th:id="stepToValidate" type="hidden" th:field="*{stepToValidate}">
+<!-- 	<input th:id="stepToValidate" type="hidden" th:field="*{stepToValidate}"> -->
 	
+	<!-- STEP 1 : Title -->
+	<form th:id="form-step-title" th:action="@{/activity/stepTitle}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
 	
-<!-- STEP 1 : Title -->
 		<div id="step-title" class="tab" data-isvalid="false">
 <!-- Title and indications -->
 			<span class="title" th:text="#{title_step_name}"></span>
@@ -131,16 +140,27 @@
 				<span th:errors="*{title}"></span>
 			</div>
 			
+			<button type="submit" id="validateBtn" class="btn btn-lg btn-primary" onclick="validateCurrentTab()">Valider</button>
+			
+			<input id="testjs" type="text"/>
+			
+			<button id="testJsBtn" onclick="testJs();"></button>
+			
 		</div>
 		
-<!-- STEP 2 : Category -->
+	</form>
+	
+	
+	<!-- STEP 2 : Category -->
+	<form th:id="form-step-category" th:action="@{/activity/stepCategory}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+
 		<div id="step-category" class="tab" data-isvalid="false">
 			<span class="title" th:text="#{category_step_name}"></span>
 			<span class="indication" th:text="#{category_step_indication}"></span>
 <!-- Input -->
 			<div th:class="${#fields.hasErrors('category') ? 'form-group has-error' : 'form-group'}">
 				<select class="form-control form-control-lg" th:field="*{category}" onclick="changeStepToValidate()">
-					<option th:text="#{cat_info_message}" th:value="info" selected="selected"></option>
+					<option th:text="#{cat_info_message}" th:value="NULL" selected="selected"></option>
 					<option th:value="#{cat_art}" th:text="#{cat_art}"></option>
 					<option th:value="#{cat_sport}" th:text="#{cat_sport}"></option>
 					<option th:value="#{cat_nature}" th:text="#{cat_nature}"></option>
@@ -151,13 +171,19 @@
 				</select>
 			</div>
 <!--  Error message bloc -->
-			<div th:if="${#fields.hasErrors('title')}" class="alert alert-danger error-message-title" role="alert">
+			<div th:if="${#fields.hasErrors('category')}" class="alert alert-danger error-message-title" role="alert">
 				<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-				<span th:errors="*{title}"></span>
+				<span th:errors="*{category}"></span>
 			</div>
+			<button type="submit" id="validateBtn" class="btn btn-lg btn-primary" onclick="validateCurrentTab()">Valider</button>
 		</div>
 		
+	</form>
+	
+	
 <!-- STEP 3 : Description -->
+	<form th:id="form-step-description" th:action="@{/activity/stepDescription}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+
 		<div id="step-description" class="tab" data-isvalid="false">
 			<span class="title" th:text="#{description_step_name}"></span>
 			<span class="indication" th:text="#{description_step_indication}"></span>
@@ -189,9 +215,13 @@
 					<span th:errors="*{descriptionEsp}"></span>
 				</div>
 			</div>
+			<button type="submit" id="validateBtn" class="btn btn-lg btn-primary" onclick="validateCurrentTab()">Valider</button>
 		</div>
+	</form>
 		
 <!-- STEP 4 : MeetingPoint -->
+	<form th:id="form-step-meetingPoint" th:action="@{/activity/stepMeetingPoint}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+
 		<input type="hidden" th:field="*{latitude}"></input>
 		<input type="hidden" th:field="*{longitude}"></input>
 		<input type="hidden" id="zoom" name="zoom"></input>
@@ -202,9 +232,18 @@
 <!-- Input -->
 			<span th:text="#{meeting_point_name}"></span>
 			<input type="text" class="form-control form-input" th:field="*{meetingPoint}" th:placeholder="#{meeting_point_name}" oninput="this.className = ''" onclick="changeStepToValidate();" autocomplete="off" />
+			<div th:if="${#fields.hasErrors('meetingPoint')}" class="alert alert-danger error-message-title" role="alert">
+				<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+				<span th:errors="*{meetingPoint}"></span>
+			</div>
+			
 			
 			<span th:text="#{address}"></span>
 			<input type="text" class="form-control form-input" th:field="*{address}" th:placeholder="#{address}" oninput="this.className = ''" onclick="changeDestinationCityWithId(this.id); changeStepToValidate();" autocomplete="off" />
+			<div th:if="${#fields.hasErrors('address')}" class="alert alert-danger error-message-title" role="alert">
+				<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+				<span th:errors="*{address}"></span>
+			</div>
 			
 			<span th:text="#{city}"></span>
 			<input type="text" class="form-control form-input" th:field="*{city}" th:placeholder="#{city}" oninput="this.className = ''" onclick="changeDestinationCityWithId(this.id); changeStepToValidate();" autocomplete="off" />
@@ -214,82 +253,222 @@
 			
 			<span th:text="#{zip_code}"></span>				
 			<input type="text" class="form-control form-input" th:field="*{zipCode}" th:placeholder="#{zip_code}" oninput="this.className = ''" onclick="changeStepToValidate();" autocomplete="off" />	
-<!-- Google map -->			
+<!-- Google map			 -->
 			<div id="googleMap"></div>
+			
+			<button type="submit" id="validateBtn" class="btn btn-lg btn-primary" onclick="validateCurrentTab()">Valider</button>
 		</div>
+	</form>
 		
-<!-- STEP 5 : Schedules -->
-		<div class="tab" id="step-schedules" data-isvalid="false">
-			<span class="title" th:text="#{schedules_step_name}"></span>
-			<span class="indication" th:text="#{schedules_step_indication}"></span>
+<!-- STEP 5 : Period -->
+	<form th:id="form-step-period" th:action="@{/activity/stepPeriod}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+
+		<div class="tab" id="step-period" data-isvalid="false">
 <!-- Period  -->
 				<span th:text="#{start_date_period}"></span>
 				<input type="text" class="form-control form-input datepicker" th:field="*{beginDate}" onchange="changeReturnDate(); onChangeDate(this); changeStepToValidate();" />
+				
 				<span th:text="#{end_date_period}"></span>
 				<input type="text" class="form-control form-input datepicker" th:field="*{endDate}" onchange="onChangeDate(this); changeStepToValidate();" />
+				
+				<button type="submit" id="validateBtn" class="btn btn-lg btn-primary" onclick="validateCurrentTab()">Valider</button>
+				
+			</div>		
+		</form>
+		
+		
+<!-- STEP 6 : Schedules -->
+	<form th:id="form-step-schedules" th:action="@{/activity/stepSchedules}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+		
+		<div class="tab" id="step-schedules" data-isvalid="false">
+		
+			<span class="title" th:text="#{schedules_step_name}"></span>
+			<span class="indication" th:text="#{schedules_step_indication}"></span>
+		
+			<select id="selectWeekday" class="form-control" onchange="toggleScheduleDay();">
+						
+				<option value="createScheduleBloc1">Lundi</option>
+				<option value="createScheduleBloc2">Mardi</option>
+				<option value="createScheduleBloc3">Mercredi</option>
+				<option value="createScheduleBloc4">Jeudi</option>
+				<option value="createScheduleBloc5">Vendredi</option>
+				<option value="createScheduleBloc6">Samedi</option>
+				<option value="createScheduleBloc7">Dimanche</option>
+						
+			</select>
+						
+			<div th:each="currentSchedule : ${activity.usualSchedules}">
+			<div th:id="'createScheduleBloc' + ${currentSchedule.weekdayNumber + 1}" class="createScheduleBloc"> 
+				<input type="hidden" th:id="counterSessionCreated + ${currentSchedule.weekdayNumber + 1}" />
+				<div th:each="currentSession : ${currentSchedule.sessions}" >
+							
+				<div class="form-group sessionBloc"
+					th:id="'sessionBloc' + ${currentSchedule.weekdayNumber + 1} + ${currentSession.sessionNumber + 1}" 
+					th:name="'sessionBloc' + ${currentSchedule.weekdayNumber + 1} + ${currentSession.sessionNumber + 1}">
+										
+					 <input type="text"	
+						th:field="*{usualSchedules[__${currentSchedule.weekdayNumber}__].sessions[__${currentSession.sessionNumber}__].beginHour}" 
+						class="form-control clockpicker" 
+						data-settable="false"
+						onchange="onChangeTime(true);">
+													
+					<input type="text"
+						th:field="*{usualSchedules[__${currentSchedule.weekdayNumber}__].sessions[__${currentSession.sessionNumber}__].endHour}" 
+						class="form-control clockpicker"
+						data-settable="false" 
+						onchange="onChangeTime(false);">
+						
+<!-- 					<input type="time"	 -->
+<!-- 						th:field="*{usualSchedules[0].sessions[0].beginHour}"  -->
+<!-- 						class="form-control clockpicker"  -->
+<!-- 						data-settable="false" -->
+<!-- 						onchange="onChangeTime(true);"> -->
+													
+<!-- 					<input type="time" -->
+<!-- 						th:field="*{usualSchedules[0].sessions[0].endHour}"  -->
+<!-- 						class="form-control clockpicker" -->
+<!-- 						data-settable="false"  -->
+<!-- 						onchange="onChangeTime(false);"> -->
+				</div>
+			</div>
+			</div>
 		</div>
+			
+			<div class ="addOrRemoveScheduleBloc">
+<!-- Bouton pour ajouter des inputs -->
+				<button type="button" th:id="addExtraSessionBtn" class="btn" onclick="showExtraSession()">
+					<span class="glyphicon glyphicon-plus"></span>
+				</button>
+					  			
+<!-- Bouton pour masquer des inputs -->
+				<button type="button" th:id="removeExtraSessionBtn" class="btn" onclick="hideExtraSession()">
+					<span class="glyphicon glyphicon-minus"></span>
+				</button>
+				
+			</div>
+			
+			<button type="submit" id="validateBtn" class="btn btn-lg btn-primary" onclick="validateCurrentTab()">Valider</button>
+			
+		</div>
+	</form>
 		
 <!-- STEP 6 : Images -->
+	<form th:id="form-step-images" th:action="@{/activity/stepImages}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+
 		<div class="tab" id="step-images" data-isvalid="false">
 			<span class="title" th:text="#{images_step_name}"></span>
 			<span class="indication" th:text="#{images_step_indication}"></span>
+			<button type="submit" id="validateBtn" class="btn btn-lg btn-primary" onclick="validateCurrentTab()">Valider</button>
 		</div>
+	</form>
 		
 <!-- STEP 7 : participation criterias -->
+	<form th:id="form-step-participationCriterias" th:action="@{/activity/stepParticipationCriterias}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+
 		<div class="tab" id="step-participationCriterias" data-isvalid="false">
 			<span class="title" th:text="#{criterias_step_name}"></span>
 			<span class="indication" th:text="#{criterias_step_indication}"></span>
+			<button type="submit" id="validateBtn" class="btn btn-lg btn-primary" onclick="validateCurrentTab()">Valider</button>
 		</div>
-		
+	</form>
+			
 <!-- STEP 8 : Default price -->
+	<form th:id="form-step-defaultPrice" th:action="@{/activity/stepDefaultPrice}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+
 		<div class="tab" id="step-defaultPrice" data-isvalid="false">
 			<span class="title" th:text="#{defaultprice_step_name}"></span>
 			<span class="indication" th:text="#{defaultprice_step_indication}"></span>
+			<button type="submit" id="validateBtn" class="btn btn-lg btn-primary" onclick="validateCurrentTab()">Valider</button>
 		</div>
+	</form>	
 		
 <!-- STEP 9 : Paxs -->
+	<form th:id="form-step-paxs" th:action="@{/activity/stepPaxs}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+
 		<div class="tab" id="step-paxs" data-isvalid="false">
 			<span class="title" th:text="#{paxs_step_name}"></span>
 			<span class="indication" th:text="#{paxs_step_indication}"></span>
+			<button type="submit" id="validateBtn" class="btn btn-lg btn-primary" onclick="validateCurrentTab()">Valider</button>
 		</div>
-		
+	</form>
+			
 <!-- STEP 10 : Capacity group -->
+	<form th:id="form-step-groupCapacity" th:action="@{/activity/stepGroupCapacity}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
 		<div class="tab" id="step-capacity" data-isvalid="false">
 			<span class="title" th:text="#{capacitygroup_step_name}"></span>
 			<span class="indication" th:text="#{capacitygroup_step_indication}"></span>
+			<button type="submit" id="validateBtn" class="btn btn-lg btn-primary" onclick="validateCurrentTab()">Valider</button>
 		</div>
-		
+	</form>
+	
 		<!-- STEP 11 : Validation and submit -->
 		<div class="tab" id="step-validate" data-isvalid="false">
 			<span class="title" th:text="#{validateandsubmit_step_name}"></span>
 		</div>
 		
 		<!-- Navigation and submit buttons -->
-		<div class="btnStep">
-			<div>
-				<button type="button" id="modifyBtn" class="btn btn-lg btn-secondary" onclick="">Modifier</button>
-				<button type="submit" id="validateBtn" class="btn btn-lg btn-primary" onclick="validateCurrentTab()">Valider</button>
-			</div>
-		</div>
+<!-- 		<div class="btnStep"> -->
+<!-- 			<div> -->
+<!-- 				<button type="button" id="modifyBtn" class="btn btn-lg btn-secondary" onclick="">Modifier</button> -->
+<!-- 				<button type="submit" id="validateBtn" class="btn btn-lg btn-primary" onclick="validateCurrentTab()">Valider</button> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
 		
 	</div>
 	
-	</form>
+<!-- 	</form> -->
 	<!-- END Creation form -->
 	
-	<!-- BEGIN Informations bloc -->
-	<div class="col-lg-5 pax-bloc">
+	<!-- BEGIN Pax bloc -->
+	<div class="col-lg-5 display-pax-bloc">
 
 	</div>
-	<!-- END Informations bloc -->
+	<!-- END Pax bloc -->
+	
+	<!-- BEGIN Schedule bloc -->
+	<div class="col-lg-5 display-schedules-bloc">
+			
+		<div th:each="currentSchedule : ${activity.usualSchedules}">
+		<!--  Créer div pour chaque jour + jours custom -->
+			<div th:if="${currentSchedule.weekdayName}" class="panel-body">
+				<table class="table">
+						<thead>
+						     <tr class="primary">
+						         <th scope="col"><span th:text="${currentSchedule.weekdayName}"></span></th> <!-- Nom jour de la semaine ou custom -->
+						        <th scope="col">Begin</th>
+						        <th scope="col">End</th>
+						     </tr>
+						</thead>
+					<!-- TODO : Si on affiche le weekday alors c'est qu'on a setté au moins un input endHour -->
+					 <tbody th:if="${currentSession.endHour}" th:each="currentSession : ${currentSchedule.sessions}">
+						 <tr>
+						    <td class="success"><span th:text="${currentSession}"></span></td>
+						    <td class="danger"><span th:text="${currentSession.beginHour}"></span></td>
+						    <td class="danger"><span th:text="${currentSession.endHour}"></span></td>
+						</tr>
+					</tbody>
+				</table>
+				</div>
+			</div>
+		</div>
+		
+<!-- 	</div> -->
+	<!-- END Schedule bloc -->
+	
 </body>
 
 <script type="text/javascript">
 
+	// Current displayed schedule 
+	var currentDisplayedSchedule = "createScheduleBloc1";
+
 	jQuery('.datepicker').datepicker({
-	    format: 'mm/dd/yyyy',
+		dateFormat: 'dd/mm/yy',
+		format: 'dd-mm-yy',
 	    startDate: '-3d'
 	});
+	
+	jQuery('.clockpicker').clockpicker();
 
 	window.onload = function() {
 		// Init desc per lang
@@ -314,6 +493,8 @@
 			jQuery("#go-to-" + tabs[currentTab - 1].id).css("border", "solid 1px green");
 			changeStepToValidate();
 		}
+		
+		initSchedules();
 		
 		// Display the first step
 		if (jQuery("#stepNumber").val() >= 0) {
@@ -366,6 +547,160 @@
 	function changeDestinationCityWithId(id){
 		document.getElementById(id).value = "";
 	}
+	
+	function initSchedules() {
+		jQuery("#removeExtraSessionBtn").hide();
+		jQuery('.createScheduleBloc').hide();
+		jQuery('.sessionBloc').hide();
+	
+		jQuery('#selectWeekday').val(currentDisplayedSchedule);
+		jQuery("#" + currentDisplayedSchedule).show();
+	
+		// Activate the first input displayed
+		toggleInputsHour(11, true);
+	
+		for (var i = 1; i <= 7; i++) {
+			jQuery("#sessionBloc" + i + "1").show();
+			jQuery("#counterSessionCreated" + i).val(1);
+		}
+	}
+		
+		function showExtraSession() {
+			var weekdayDivId = jQuery("#selectWeekday").val();
+			var weekdayNumber = weekdayDivId.substr(weekdayDivId.length - 1);
+			var sessionCounterId = "counterSessionCreated" + weekdayNumber;
+		
+			// Increment session counter
+		    var newValueNumberSession = parseInt(jQuery("#" + sessionCounterId).val(), 10) + 1;
+		    jQuery("#" + sessionCounterId).val(newValueNumberSession);
+
+		    // Show add button
+		    jQuery("#addExtraSessionBtn").show();
+		    // Show remove button
+		    jQuery("#removeExtraSessionBtn").show();
+	    	
+		    // Display extra session
+			jQuery("#sessionBloc" + weekdayNumber + jQuery("#" + sessionCounterId).val()).show();
+	    
+		    // Activate inputs
+		   toggleInputsHour(weekdayNumber + jQuery("#" + sessionCounterId).val(), true);
+		    
+		    if (newValueNumberSession >= 10) {
+			    // Hide add button
+			    jQuery("#addExtraSessionBtn").hide();
+		    }
+		}
+	
+		function hideExtraSession() {
+			var weekdayDivId = jQuery("#selectWeekday").val();
+			var weekdayNumber = weekdayDivId.substr(weekdayDivId.length - 1);
+			var sessionCounterId = "counterSessionCreated" + weekdayNumber;
+			var numberDisplayedSessions = parseInt(jQuery("#" + sessionCounterId).val(), 10);
+			
+			console.log(weekdayDivId);
+			console.log(weekdayNumber);
+			console.log(sessionCounterId);
+			console.log(numberDisplayedSessions);
+		
+		  	if (numberDisplayedSessions == 2) {
+			    // Hide remove button
+			    jQuery("#removeExtraSessionBtn").hide();
+		  	} else if (numberDisplayedSessions <= 10) {
+		  		// Show add button
+			    jQuery("#addExtraSessionBtn").show();
+		  	}
+			// Hide extra session
+			jQuery("#sessionBloc" + weekdayNumber + jQuery("#" + sessionCounterId).val()).hide();
+		
+		    // Desactivate input
+			toggleInputsHour(weekdayNumber + jQuery("#" + sessionCounterId).val(), false);
+		
+		  	// Decrement session counter
+		  	jQuery("#" + sessionCounterId).val(parseInt(numberDisplayedSessions - 1));
+	   	
+		}
+		
+		function onChangeTime(isBegin) {
+			if (isBegin) {
+				console.log("ok");
+			} else {
+				console.log("ko");
+			}
+			console.log("Input values " + jQuery("#inputSessionBegin11").val());
+		}
+		
+		function toggleInputsHour(sessionBlocId, isValidable) {
+			var inputsToActivate = document.getElementById("sessionBloc" + sessionBlocId).getElementsByTagName("input");
+			console.log("inputs to activate (length) : " + inputsToActivate.length);
+			console.log(sessionBlocId);
+			console.log(document.getElementById("sessionBloc" + sessionBlocId));
+			
+			for (var j = 0; j < inputsToActivate.length; j++) {
+				 if(inputsToActivate[j] !== 'undefined') {
+					 inputsToActivate[j].setAttribute("data-settable", isValidable);
+					 if(!isValidable) {
+						 inputsToActivate[j].value = "";
+					 }
+				 }
+			}
+		}
+		
+		function toggleScheduleDay() {
+		
+			var weekday = jQuery('#selectWeekday').val();
+			var schedulesBloc, schedulesInputs;
+
+			jQuery("#" + currentDisplayedSchedule).hide();
+			console.log(jQuery("#" + weekday));
+			jQuery("#" + weekday).show();
+		
+// 			toggleSettableInputs(currentDisplayedSchedule, weekday);
+		
+			currentDisplayedSchedule = weekday;
+		}
+	
+		function toggleSettableInputs(scheduleToHide, scheduleToShow){
+		
+			schedulesBlocToHide = document.getElementById(scheduleToHide);
+			schedulesInputsToHide = schedulesBlocToHide.getElementsByTagName("input");
+		
+			schedulesBlocToShow = document.getElementById(scheduleToShow);
+			schedulesInputsToShow = schedulesBlocToShow.getElementsByTagName("input");
+		
+			if(schedulesInputsToHide.length > 0) {
+				for (var i = 0; i <= schedulesInputsToHide.length; i++) {
+					if(schedulesInputsToHide[i].type == "time") {
+						schedulesInputsToHide[i].setAttribute('settable', 'false');
+					}
+				}
+				for (var i = 0; i <= schedulesInputsToShow.length; i++) {
+					if(schedulesInputsToShow[i].type == "time") {
+						schedulesInputsToShow[i].setAttribute('settable', 'ture');
+					}
+				}
+			}
+		
+		}
+		
+		// Adapter aux schedules
+// 		function createPax() {
+			
+// 			// Retrieve schedules datas
+// 			// Que 2 inputs
+// 			// Récupérer weekay name / weekdayNumber / SessionNumber
+// 			var name = jQuery("#paxName").val();
+// 			var ageMin = jQuery("#paxAgeMin").val();
+// 			var ageMax = jQuery("#paxAgeMax").val();
+// 			var price = jQuery("#paxPrice").val();
+			
+// 			// Button labels supprimer
+// // 			var labelBtnModify = "Modifier";
+// 			var labelBtnDelete = "Supprimer";
+			
+// 			// Check if datas are valids
+// 			// Ajouter àla 
+			
+// 		}
 
 	
 </script>
