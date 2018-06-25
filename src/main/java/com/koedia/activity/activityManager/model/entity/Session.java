@@ -1,7 +1,5 @@
 package com.koedia.activity.activityManager.model.entity;
 
-import java.sql.Time;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -36,6 +34,9 @@ public class Session {
 	@Column(name = "end_hour")
 	@DateTimeFormat(pattern = "HH:mm")
 	private LocalDateTime endHour;
+	
+	@Column(name = "session_name")
+	private String sessionName;
 	
 	@Transient
 	private Integer sessionNumber;
@@ -78,5 +79,13 @@ public class Session {
 
 	public void setSessionNumber(Integer sessionNumber) {
 		this.sessionNumber = sessionNumber;
+	}
+
+	public String getSessionName() {
+		return sessionName;
+	}
+
+	public void setSessionName(String sessionName) {
+		this.sessionName = sessionName;
 	}
 }

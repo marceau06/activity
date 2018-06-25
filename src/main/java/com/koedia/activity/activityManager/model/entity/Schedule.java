@@ -49,7 +49,7 @@ public class Schedule {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="schedule_id")
 	@Size(min=1, max=10)
-	@Valid
+//	@Valid
 	private List<Session> sessions = new ArrayList<Session>();
 	
 	public Schedule(){

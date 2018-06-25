@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.koedia.activity.activityManager.model.entity.Activity;
 import com.koedia.activity.activityManager.model.entity.Activity.StepCategory;
@@ -361,7 +362,8 @@ public class ActivityController {
 		stepNumber = 0;
 		
 		ModelAndView mav = new ModelAndView("test");
-//		mav.addObject("TestJS", new String("test javascript"));
+		mav.addObject("activity", activity);
+		//		mav.addObject("TestJS", new String("test javascript"));
 		mav.addObject("stepNumber", stepNumber);
 		return mav;
 	}
@@ -464,10 +466,30 @@ public class ActivityController {
 	
 	
 	@PostMapping("stepSchedules")
-	public ModelAndView validateSchedules(@Validated(Activity.StepSchedules.class) Activity activity, BindingResult result) {
+	public ModelAndView validateSchedules(@Validated(Activity.StepSchedules.class) @ModelAttribute Activity activity, BindingResult result) {
 	    ModelAndView mav = new ModelAndView("test");
 	    mav.addObject("activity", activity);
 	    mav.addObject("stepNumber", 5);
+	    
+//	    int sizeDay1 = activity.getUsualSchedules().get(0).getSessions().;
+	    int sizeDay2 = activity.getUsualSchedules().get(1).getSessions().size();
+	    int sizeDay3 = activity.getUsualSchedules().get(2).getSessions().size();
+	    int sizeDay4 = activity.getUsualSchedules().get(3).getSessions().size();
+	    int sizeDay5 = activity.getUsualSchedules().get(4).getSessions().size();
+	    int sizeDay6 = activity.getUsualSchedules().get(5).getSessions().size();
+	    int sizeDay7 = activity.getUsualSchedules().get(6).getSessions().size();
+	    
+//		List<Schedule> usualSchedules = new ArrayList<Schedule>();
+//		usualSchedules = activity.getUsualSchedules();
+		
+//		usualSchedules.get(0).setWeekdayName("TEST LUNDI");
+		
+//		usualSchedules.get(0).getSessions().get(0).setSessionName("test session name");
+		
+//	    mav.addObject("usualSchedulesTEST", usualSchedules);
+	    
+	    
+	    
 //	    if (result.hasErrors()) {
 //	    	// Invalid
 //	    	System.out.println(result.getErrorCount());
@@ -480,6 +502,12 @@ public class ActivityController {
 //	    	mav.addObject("stepNumber", 5);
 //	    }
 	    
+	    return mav;
+	}
+	
+	@PostMapping("addExtraSession")
+	public ModelAndView addExtraSession(@ModelAttribute List<Session> sessions, Errors errors) {
+	    ModelAndView mav = new ModelAndView("test");
 	    return mav;
 	}
 	
