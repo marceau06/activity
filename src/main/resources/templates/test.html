@@ -280,67 +280,91 @@
 		</form>
 		
 		
+		
+		
+		
+		
 <!-- STEP 6 : Schedules -->
 	<form th:id="form-step-schedules" th:action="@{/activity/stepSchedules}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
 		
 		<div class="tab" id="step-schedules" data-isvalid="false">
 		
-			<span class="title" th:text="#{schedules_step_name}"></span>
-			<span class="indication" th:text="#{schedules_step_indication}"></span>
-		
-			<select id="selectWeekday" class="form-control" onchange="toggleScheduleDay();">
-						
-				<option value="createScheduleBloc1">Lundi</option>
-				<option value="createScheduleBloc2">Mardi</option>
-				<option value="createScheduleBloc3">Mercredi</option>
-				<option value="createScheduleBloc4">Jeudi</option>
-				<option value="createScheduleBloc5">Vendredi</option>
-				<option value="createScheduleBloc6">Samedi</option>
-				<option value="createScheduleBloc7">Dimanche</option>
-						
-			</select>
-				
-			<div th:each="currentSchedule : ${activity.usualSchedules}">
-				
-				<div th:id="'createScheduleBloc' + ${currentSchedule.weekdayNumber + 1}" class="createScheduleBloc"> 
-					<input type="hidden" th:id="counterSessionCreated + ${currentSchedule.weekdayNumber + 1}" />
-					
-					<div th:each="currentSession : ${currentSchedule.sessions}" >
-								
-						<div class="form-group sessionBloc"
-							th:id="'sessionBloc' + ${currentSchedule.weekdayNumber + 1} + ${currentSession.sessionNumber + 1}" 
-							th:name="'sessionBloc' + ${currentSchedule.weekdayNumber + 1} + ${currentSession.sessionNumber + 1}">
-											
-							<span th:text="${currentSchedule.weekdayNumber + 1}"></span>
-							<span th:text="${currentSession.sessionNumber + 1}"></span>
-												
-							 <input type="text"	
-								th:field="*{usualSchedules[__${currentSchedule.weekdayNumber}__].sessions[__${currentSession.sessionNumber}__].beginHour}" 
-								class="form-control clockpicker" 
-								onchange="onChangeTime(true);">
-															
-							<input type="text"
-								th:field="*{usualSchedules[__${currentSchedule.weekdayNumber}__].sessions[__${currentSession.sessionNumber}__].endHour}" 
-								class="form-control clockpicker"
-								onchange="onChangeTime(false);">
-								
-							<input type="hidden" th:field="*{usualSchedules[__${currentSchedule.weekdayNumber}__].sessions[__${currentSession.sessionNumber}__].beginHour}">
+	<!-- BEGIN Schedule bloc -->
+<!-- 	<div class="col-lg-5 display-schedules-bloc"> -->
+	
+		<div th:each="currentSchedule, statusSchedule : ${activity.usualSchedules}">
+		<!--  Créer div pour chaque jour + jours custom -->
+			<div th:if="${currentSchedule.sessions}" class="panel-body">
+				<table class="table">
+						<thead>
+						     <tr class="primary">
+						        <th scope="col">Jour n°<span th:text="${statusSchedule.index}"></span></th> <!-- Nom jour de la semaine ou custom -->
+						        <th scope="col">Begin</th>
+						        <th scope="col">End</th>
+						        <th scope="col">Add extra session</th>
+						     </tr>
+						</thead>
+					<!-- TODO : Si on affiche le weekday alors c'est qu'on a setté au moins un input endHour -->
+					 <tbody th:id="'sessionBloc' + ${statusSchedule.index} + ${statusSession.index}" 
+					 		th:each="currentSession, statusSession : ${currentSchedule.sessions}" 
+					 		class="sessionBloc">
+
+					 	<!-- Status -->
+						 <tr>
+						    <td class="success">Session N°<span th:text="${statusSession.index}"></span></td>
+						    
+						    <!-- beginHour -->
+						    <td class="danger">
+						    	<!-- IF : session is already setted -->
+						    	<span th:if="${currentSession.beginHour}" th:text="${currentSession.beginHour}"></span>
+<!-- 						    	<input type="hidden" th:field="*{usualSchedules[__${statusSchedule.index}__].sessions[__${statusSession.index}__].beginHour}"> -->
+
+ 						    	<!-- ELSE : session is not setted -->
+						    	<input th:unless="${currentSession.beginHour}"
+							    	type="text"	
+									th:field="*{usualSchedules[__${statusSchedule.index}__].sessions[__${statusSession.index}__].beginHour}" 
+									class="form-control clockpicker">
+						    </td>
+						    <!-- endHour -->
+						    <td class="danger">
+						    	<span th:if="${currentSession.endHour}" th:text="${currentSession.endHour}"></span>
+						    	<input th:unless="${currentSession.endHour}"
+							    	type="text"	
+									th:field="*{usualSchedules[__${statusSchedule.index}__].sessions[__${statusSession.index}__].endHour}" 
+									class="form-control clockpicker">
+						    </td>
+						    
+						    
+						    <td>
+						    <input type="hidden" th:field="*{usualSchedules[__${currentSchedule.weekdayNumber}__].sessions[__${currentSession.sessionNumber}__].beginHour}">
 							<input type="hidden" th:field="*{usualSchedules[__${currentSchedule.weekdayNumber}__].sessions[__${currentSession.sessionNumber}__].endHour}">
 							<input type="hidden" th:field="*{usualSchedules[__${currentSchedule.weekdayNumber}__].sessions[__${currentSession.sessionNumber}__].sessionNumber}">
 							<input type="hidden" th:field="*{usualSchedules[__${currentSchedule.weekdayNumber}__].weekdayNumber}">
-							
-							<div class ="addOrRemoveScheduleBloc">
-								<button type="submit" th:id="addExtraSessionBtn" class="btn" th:onclick="|addExtraSession('${currentSchedule.weekdayNumber}', '${currentSession.sessionNumber}')|">
-									<span class="glyphicon glyphicon-plus"></span>
-								</button>	
-							</div>
-							
-						</div>
-						
-					</div>
-					
+						    
+   							    <span th:text="${statusSchedule.index}"></span>
+	 						    <span th:text="${statusSession.index}"></span>
+<!--   							    <span th:text="${currentSession.sessionNumber - 1}"></span> -->
+  							    
+						    	<button type="button" 
+						    		th:id="addSessionBtn + ${statusSchedule.index} + ${statusSession.index}"
+						    		th:onclick="|addSession('${statusSchedule.index}', '${statusSession.index}')|">
+							    	<span class="glyphicon glyphicon-plus"></span>
+						    	</button>
+						    </td>
+						</tr>
+					</tbody>
+				</table>
 				</div>
+			</div>
+			
+			<button type="submit" id="validateBtn" class="btn btn-lg btn-primary" onclick="validateCurrentTab()">Valider</button>
+			
 		</div>
+	<!-- END Schedule bloc -->
+		</form>	
+			
+			
+			
 			
 <!-- Bouton pour masquer des inputs -->
 <!-- 				<button type="button" th:id="removeExtraSessionBtn" class="btn" onclick="hideExtraSession()"> -->
@@ -349,17 +373,70 @@
 			
 <!-- 			<button type="submit" id="validateBtn" class="btn btn-lg btn-primary" onclick="validateCurrentTab()">Valider</button> -->
 			
-		</div>
-	</form>
+<!-- 		</div> -->
+<!-- 	</form> -->
 		
 <!-- STEP 6 : Images -->
 	<form th:id="form-step-images" th:action="@{/activity/stepImages}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
 
-		<div class="tab" id="step-images" data-isvalid="false">
-			<span class="title" th:text="#{images_step_name}"></span>
-			<span class="indication" th:text="#{images_step_indication}"></span>
-			<button type="submit" id="validateBtn" class="btn btn-lg btn-primary" onclick="validateCurrentTab()">Valider</button>
+	<div class="tab" id="step-images" data-isvalid="false">
+	
+			<div>
+		<table>
+			<tr>
+				<td>
+					File to upload :
+				</td>
+				<td>
+					<input type="file" th:field="*{images[__${activity.nbImages}__].file}" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input type="submit" value="Upload" />
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="keepValues" th:if="!${#lists.isEmpty(activity.images)}">
+		<div th:each="image, status : ${activity.images}">
+			<input type="hidden" th:field="*{images[__${status.index}__].path}"/>
 		</div>
+	</div>
+	
+		<div th:if="!${#lists.isEmpty(activity.images)}" class="container">
+		  <div id="myCarousel" class="carousel slide" data-ride="carousel">
+		    Indicators
+		    <ol th:each="image, status : ${activity.images}" class="carousel-indicators">
+		      <li data-target="#myCarousel" data-slide-to="${status}" class="active"></li>
+		    </ol>
+		
+	<!-- 	    Wrapper for slides -->
+		    <div class="carousel-inner">
+	<!-- 		      Slides -->
+				  <div class="item active">
+				      <img th:src="${activity.images[0].path}" alt="" style="width:100%;">
+				 </div>
+				 
+			     <div class="item" th:each="image, status : ${activity.images}" th:if="${image.path != null}">
+			        <img th:src="${image.path}" alt="" style="width:100%;">
+			     </div>
+		    </div>
+		
+	<!-- 	    Left and right controls -->
+		    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+		      <span class="glyphicon glyphicon-chevron-left"></span>
+		      <span class="sr-only">Previous</span>
+		    </a>
+		    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+		      <span class="glyphicon glyphicon-chevron-right"></span>
+		      <span class="sr-only">Next</span>
+		    </a>
+		  </div>
+		</div>
+		
+	</div>
+	
 	</form>
 		
 <!-- STEP 7 : participation criterias -->
@@ -426,45 +503,42 @@
 	<!-- END Pax bloc -->
 	
 	<!-- BEGIN Schedule bloc -->
-	<div class="col-lg-5 display-schedules-bloc">
+<!-- 	<div class="col-lg-5 display-schedules-bloc"> -->
 	
-<!-- 	<form th:id="form-remove-session" th:action="@{/activity/removeSession}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> -->
-	
-		<div th:each="currentSchedule : ${activity.usualSchedules}">
-		<!--  Créer div pour chaque jour + jours custom -->
-			<div th:if="${currentSchedule.sessions}" class="panel-body">
-				<table class="table">
-						<thead>
-						     <tr class="primary">
-						        <th scope="col">Jour n°<span th:text="${currentSchedule.weekdayNumber}"></span></th> <!-- Nom jour de la semaine ou custom -->
-						        <th scope="col">Begin</th>
-						        <th scope="col">End</th>
-						        <th scope="col">Remove</th>
-						     </tr>
-						</thead>
-					<!-- TODO : Si on affiche le weekday alors c'est qu'on a setté au moins un input endHour -->
-					 <tbody th:each="currentSession, status : ${currentSchedule.sessions}">
-					 	<!-- Status -->
-						 <tr>
-						 	<td><span th:text="${status}"></span></td>
-						    <td class="success">
-							    <span th:text="${currentSession.sessionNumber}"></span>
-							    <span th:text="${status.index}"></span>
-						    </td>
-						    <td class="danger"><span th:text="${currentSession.beginHour}"></span></td>
-						    <td class="danger"><span th:text="${currentSession.endHour}"></span></td>
-						    <td><button type="button" th:id="removeExtraSessionBtn" class="btn" th:onclick="|removeExtraSession('${currentSchedule.weekdayNumber}', '${currentSession.sessionNumber}')|">
-							    	<span class="glyphicon glyphicon-minus">
-							    	</span>
-						    	</button>
-						    </td>
-						</tr>
-					</tbody>
-				</table>
-				</div>
-			</div>
-<!-- 			</form> -->
-		</div>
+<!-- 		<div th:each="currentSchedule : ${activity.usualSchedules}"> -->
+ 		<!--  Créer div pour chaque jour + jours custom -->
+<!-- 			<div th:if="${currentSchedule.sessions}" class="panel-body"> -->
+<!-- 				<table class="table"> -->
+<!-- 						<thead> -->
+<!-- 						     <tr class="primary"> -->
+<!-- 						        <th scope="col">Jour n°<span th:text="${currentSchedule.weekdayNumber}"></span></th> Nom jour de la semaine ou custom -->
+<!-- 						        <th scope="col">Begin</th> -->
+<!-- 						        <th scope="col">End</th> -->
+<!-- 						        <th scope="col">Remove</th> -->
+<!-- 						     </tr> -->
+<!-- 						</thead> -->
+<!-- 					TODO : Si on affiche le weekday alors c'est qu'on a setté au moins un input endHour -->
+<!-- 					 <tbody th:each="currentSession, status : ${currentSchedule.sessions}"> -->
+<!-- 					 	Status -->
+<!-- 						 <tr> -->
+<!--  						 	<td><span th:text="${status}"></span></td> --> 
+<!-- 						    <td class="success"> -->
+<!-- 							    <span th:text="${currentSession.sessionNumber}"></span> -->
+<!-- 							    <span th:text="${status.index}"></span> -->
+<!-- 						    </td> -->
+<!-- 						    <td class="danger"><span th:text="${currentSession.beginHour}"></span></td> -->
+<!-- 						    <td class="danger"><span th:text="${currentSession.endHour}"></span></td> -->
+<!-- 						    <td><button type="button" th:id="removeExtraSessionBtn" class="btn" th:onclick="|removeExtraSession('${currentSchedule.weekdayNumber}', '${currentSession.sessionNumber}')|"> -->
+<!-- 							    	<span class="glyphicon glyphicon-minus"> -->
+<!-- 							    	</span> -->
+<!-- 						    	</button> -->
+<!-- 						    </td> -->
+<!-- 						</tr> -->
+<!-- 					</tbody> -->
+<!-- 				</table> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
 	<!-- END Schedule bloc -->
 	
 </body>
@@ -561,6 +635,11 @@
 	}
 	
 	function initSchedules() {
+		
+		var test = jQuery("#sessionBloc00 :input");
+		
+		var inputs;
+		
 		jQuery("#removeExtraSessionBtn").hide();
 		jQuery('.createScheduleBloc').hide();
 		jQuery('.sessionBloc').hide();
@@ -570,85 +649,34 @@
 	
 		// Activate the first input displayed
 		toggleInputsHour(11, true);
-	
-		for (var i = 1; i <= 7; i++) {
-			jQuery("#sessionBloc" + i + "1").show();
-			jQuery("#counterSessionCreated" + i).val(1);
-		}
-	}
-	
-	// Lorsq'uon ajoute une session
-	function addExtraSession(weekdayNumber, sessionNumber) {
 		
-		var blocToHide = "#sessionBloc" + parseInt(weekdayNumber + 1) + parseInt(sessionNumber + 1);
-		var blocToShow = "#sessionBloc" + parseInt(weekdayNumber + 1) + parseInt(sessionNumber + 2);
-		
-		console.log(blocToHide);
-		console.log(blocToShow);
-		
-		jQuery("#sessionBloc" + weekdayNumber + sessionNumber).hide();
-		jQuery("#sessionBloc" + weekdayNumber + (sessionNumber + 1)).show();
-		
-		jQuery(blocToHide).hide();
-		jQuery(blocToShow).show();
-	}
-	
-		
-		function showExtraSession() {
-// 			var weekdayDivId = jQuery("#selectWeekday").val();
-// 			var weekdayNumber = weekdayDivId.substr(weekdayDivId.length - 1);
-// 			var sessionCounterId = "counterSessionCreated" + weekdayNumber;
-		
-// 			// Increment session counter
-// 		    var newValueNumberSession = parseInt(jQuery("#" + sessionCounterId).val(), 10) + 1;
-// 		    jQuery("#" + sessionCounterId).val(newValueNumberSession);
+		for (var i = 0; i < 7; i++) {
 
-// 		    // Show add button
-// 		    jQuery("#addExtraSessionBtn").show();
-// 		    // Show remove button
-// 		    jQuery("#removeExtraSessionBtn").show();
-	    	
-// 		    // Display extra session
-// 			jQuery("#sessionBloc" + weekdayNumber + jQuery("#" + sessionCounterId).val()).show();
-	    
-// 		    // Activate inputs
-// 		   toggleInputsHour(weekdayNumber + jQuery("#" + sessionCounterId).val(), true);
-		    
-// 		    if (newValueNumberSession >= 10) {
-// 			    // Hide add button
-// 			    jQuery("#addExtraSessionBtn").hide();
-// 		    }
-		}
-	
-		function hideExtraSession() {
-// 			var weekdayDivId = jQuery("#selectWeekday").val();
-// 			var weekdayNumber = weekdayDivId.substr(weekdayDivId.length - 1);
-// 			var sessionCounterId = "counterSessionCreated" + weekdayNumber;
-// 			var numberDisplayedSessions = parseInt(jQuery("#" + sessionCounterId).val(), 10);
+			// Show first input for every schedule
+			jQuery("#sessionBloc" + i + "0").show();
 			
-// 			console.log(weekdayDivId);
-// 			console.log(weekdayNumber);
-// 			console.log(sessionCounterId);
-// 			console.log(numberDisplayedSessions);
-		
-// 		  	if (numberDisplayedSessions == 2) {
-// 			    // Hide remove button
-// 			    jQuery("#removeExtraSessionBtn").hide();
-// 		  	} else if (numberDisplayedSessions <= 10) {
-// 		  		// Show add button
-// 			    jQuery("#addExtraSessionBtn").show();
-// 		  	}
-// 			// Hide extra session
-// 			jQuery("#sessionBloc" + weekdayNumber + jQuery("#" + sessionCounterId).val()).hide();
-		
-// 		    // Desactivate input
-// 			toggleInputsHour(weekdayNumber + jQuery("#" + sessionCounterId).val(), false);
-		
-// 		  	// Decrement session counter
-// 		  	jQuery("#" + sessionCounterId).val(parseInt(numberDisplayedSessions - 1));
-	   	
+			for (var j = 0; j < 9; j++) {
+				inputs = jQuery("#sessionBloc" + i + j + " :input");
+
+				if (inputs[0].value != "" && inputs[0].value.length > 0) {
+//	 				console.log("sessionBloc" + i + j + " - value = " + inputs[0].value);
+					jQuery("#sessionBloc" + i + j).show();
+					// TODO : Checker si premier input is null si oui, on le masque
+					if (jQuery("#sessionBloc00").val) {
+						
+					}
+				}
+			}
 		}
-		
+	}
+	
+	function addSession(weekdayNumber, sessionNumber) {
+		var blocToShow = "#sessionBloc" + weekdayNumber + (parseInt(sessionNumber) + 1);
+		var btnToHide = "#addSessionBtn" + weekdayNumber + (parseInt(sessionNumber));
+		jQuery(blocToShow).show();
+		jQuery(btnToHide).hide();
+	}
+	
 		function onChangeTime(isBegin) {
 			if (isBegin) {
 				console.log("ok");
@@ -712,6 +740,7 @@
 		}
 		
 		function removeExtraSession(weekdayNumber, sessionNumber) {
+			// TODO
 			console.log(weekdayNumber);
 			console.log(sessionNumber);
 			
@@ -720,8 +749,6 @@
 			
 			jQuery("#usualSchedules0.sessions0.beginHour").val("");
 		}
-
-	
 </script>
 
 </html>

@@ -29,6 +29,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.koedia.activity.activityManager.validation.EndDateAfterBeginDate;
+import com.koedia.common.tool.CollectionUtil;
 
 @Entity
 @Table(name = "activity")
@@ -128,12 +129,7 @@ public class Activity {
 	private List<Schedule> customSchedules = new ArrayList<Schedule>();
 	
 
-	// Step Images
-	@NotEmpty(groups = {StepImages.class})
-	@Column(name = "main_picture")
-	private String mainPicture;
-
-	@NotEmpty(groups = {StepImages.class})
+//	@NotEmpty(groups = {StepImages.class})
 	@Column(name = "second_picture")
 	private String secondPicture;
 	
@@ -178,8 +174,20 @@ public class Activity {
 	@Column(name = "active")
 	private boolean active;
 	
+	// Step Images
+	@NotEmpty(groups = {StepMainPicture.class})
+	@Column(name = "main_picture")
+	private String mainPicture;
+	
 	@Transient
 	private MultipartFile mainPictureFile;
+	
+	// Step paxs
+	@NotEmpty(groups = {StepImages.class})
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name="activity_id")
+	@Valid
+	private List<Image> images = new ArrayList<Image>();
 	
 	@Transient
 	private String stepToValidate;
@@ -459,6 +467,23 @@ public class Activity {
 		this.stepToValidate = stepToValidate;
 	}
 	
+	public List<Image> getImages() {
+		return images;
+	}
+
+	public void setImages(List<Image> images) {
+		this.images = images;
+	}
+	
+	public Integer getNbImages() {
+		if(!CollectionUtil.isEmpty(this.images)) {
+			if (this.images.size() >= 1) {
+				return (this.images.size());
+			}
+		}
+		return 0;
+	}
+
 	/********** Validation groups *************/
 	
 	public interface StepTitle {};
@@ -482,4 +507,6 @@ public class Activity {
 	public interface StepPaxs {};
 	
 	public interface StepGroupCapacity {};
+	
+	public interface StepMainPicture {};
 }

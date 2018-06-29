@@ -269,9 +269,6 @@ textarea.invalid {
 	flex-direction: column;
 }
 
-.sessionBloc {
-	border: solid 1px green;
-}
 /***** Google map ***********/
 
  #googleMap {

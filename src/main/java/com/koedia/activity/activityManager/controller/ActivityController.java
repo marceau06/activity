@@ -45,8 +45,8 @@ import com.koedia.activity.activityManager.model.entity.Activity.StepCategory;
 import com.koedia.activity.activityManager.model.entity.Activity.StepDescription;
 import com.koedia.activity.activityManager.model.entity.Activity.StepMeetingPoint;
 import com.koedia.activity.activityManager.model.entity.Activity.StepPeriod;
-import com.koedia.activity.activityManager.model.entity.Activity.StepSchedules;
 import com.koedia.activity.activityManager.model.entity.Activity.StepTitle;
+import com.koedia.activity.activityManager.model.entity.Image;
 import com.koedia.activity.activityManager.model.entity.Schedule;
 import com.koedia.activity.activityManager.model.entity.Session;
 import com.koedia.activity.activityManager.model.entity.User;
@@ -310,7 +310,7 @@ public class ActivityController {
 	}
 	
 	
-	private void saveImage(Activity activity) {
+	private void saveFile(Activity activity) {
 		
 		String picFileEndName = "mainpic" + Math.round(Math.random()*101);
 		
@@ -342,6 +342,28 @@ public class ActivityController {
 
 	}
 	
+	private void saveImage(Image image) {
+		
+		String fileName = image.getFile().getOriginalFilename();
+		
+		String absolutePicturePath = UPLOADED_FOLDER_ABSOLUTE + fileName;
+		String relativePicturePath = UPLOAD_FOLDER_RELATIVE + fileName;
+
+		if (image.getFile() != null && image.getFile().getSize() > 0) {
+			
+	    try {
+	    		image.getFile().transferTo(new File(absolutePicturePath));
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	    image.setPath(relativePicturePath);
+	    image.setUrl("http://activity.koedia.com:8080/static/img/" + fileName);
+		}
+
+	}
+	
 	
 	/********************************** Page de TEST **************************************************************/
 	@GetMapping("test")
@@ -363,13 +385,39 @@ public class ActivityController {
 		
 		ModelAndView mav = new ModelAndView("test");
 		mav.addObject("activity", activity);
-		//		mav.addObject("TestJS", new String("test javascript"));
+		mav.addObject("idSession", "11");
 		mav.addObject("stepNumber", stepNumber);
+		activity.getImages().add(new Image());
+		mav.addObject("activity", activity);
+		
 		return mav;
 	}
-
-	/******************* Validators ***************************/
 	
+	
+	/********************************** Page de TEST CAROUSEL BOOTSTRAP **************************************************************/
+//	@GetMapping("carousel")
+//	private ModelAndView carouselExample(@Validated(Activity.StepMainPicture.class) Activity activity) {
+//	
+//		ModelAndView mav = new ModelAndView("carousel");
+//
+//		activity.getImages().add(new Image("../img/itii.jpg"));
+//		mav.addObject("activity", activity);
+//		
+//		return mav;
+//	}
+//	
+//	
+//	@PostMapping("carousel/add")
+//	private ModelAndView carouselAdd(@Validated(Activity.StepImages.class) Activity activity, BindingResult result) {
+//		ModelAndView mav = new ModelAndView("carousel");
+//
+//		mav.addObject("activity", activity);
+//		
+//		return mav;
+//	}
+	
+	
+	/******************* Validators ***************************/
 	
 	@PostMapping("stepTitle")
 	public ModelAndView validateTitle(@Validated(Activity.StepTitle.class) Activity activity, BindingResult result) {
@@ -467,40 +515,10 @@ public class ActivityController {
 	
 	@PostMapping("stepSchedules")
 	public ModelAndView validateSchedules(@Validated(Activity.StepSchedules.class) @ModelAttribute Activity activity, BindingResult result) {
-	    ModelAndView mav = new ModelAndView("test");
+		
+		ModelAndView mav = new ModelAndView("test");
 	    mav.addObject("activity", activity);
 	    mav.addObject("stepNumber", 5);
-	    
-//	    int sizeDay1 = activity.getUsualSchedules().get(0).getSessions().;
-	    int sizeDay2 = activity.getUsualSchedules().get(1).getSessions().size();
-	    int sizeDay3 = activity.getUsualSchedules().get(2).getSessions().size();
-	    int sizeDay4 = activity.getUsualSchedules().get(3).getSessions().size();
-	    int sizeDay5 = activity.getUsualSchedules().get(4).getSessions().size();
-	    int sizeDay6 = activity.getUsualSchedules().get(5).getSessions().size();
-	    int sizeDay7 = activity.getUsualSchedules().get(6).getSessions().size();
-	    
-//		List<Schedule> usualSchedules = new ArrayList<Schedule>();
-//		usualSchedules = activity.getUsualSchedules();
-		
-//		usualSchedules.get(0).setWeekdayName("TEST LUNDI");
-		
-//		usualSchedules.get(0).getSessions().get(0).setSessionName("test session name");
-		
-//	    mav.addObject("usualSchedulesTEST", usualSchedules);
-	    
-	    
-	    
-//	    if (result.hasErrors()) {
-//	    	// Invalid
-//	    	System.out.println(result.getErrorCount());
-//	    	mav.addObject("stepNumber", 4);
-//	    } else if(!validateProperty(activity, "meetingPoint", result, StepSchedules.class)) {
-//	    	// Invalid
-//	    	mav.addObject("stepNumber", 4);
-//	    } else {
-//	    	// Valid
-//	    	mav.addObject("stepNumber", 5);
-//	    }
 	    
 	    return mav;
 	}
@@ -512,10 +530,15 @@ public class ActivityController {
 	}
 	
 	@PostMapping("stepImages")
-	public ModelAndView validateImages(@Validated(Activity.StepImages.class) Activity activity, Errors errors) {
-	    ModelAndView mav = new ModelAndView("test");
-	    return mav;
+	private ModelAndView carouselBootstrapAdd(@Validated(Activity.StepImages.class) @ModelAttribute("activity")Activity activity, BindingResult results) {
+		ModelAndView mav = new ModelAndView("test");
+		Image imageToSave = activity.getImages().get(activity.getImages().size() - 1);
+		
+		saveImage(imageToSave);
+		mav.addObject("activity", activity);
+		return mav;
 	}
+	
 	
 	@PostMapping("stepParticipationCriterias")
 	public ModelAndView validateParticipationCriterias(@Validated(Activity.StepParticipationCriterias.class) Activity activity, Errors errors) {
@@ -560,6 +583,17 @@ public class ActivityController {
 
 }
 
+
+/********************************** Page de TEST CAROUSEL **************************************************************/
+//@GetMapping("carouselbootstrap")
+//private ModelAndView carouselBootstrap(@ModelAttribute("activity") Activity activity) {
+//
+//	ModelAndView mav = new ModelAndView("carouselbootstrap");
+//	activity.getImages().add(new Image("../img/itii.jpg"));
+//	mav.addObject("activity", activity);
+//	
+//	return mav;
+//}
 	
 	
 	
