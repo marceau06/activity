@@ -1,0 +1,782 @@
+<!-- <!DOCTYPE html> -->
+<!-- <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"> -->
+<!-- <head th:include="fragments/header :: header"> -->
+<!-- </head> -->
+<!-- <body> -->
+
+
+<!-- 	<h1> -->
+<!-- 		<span th:text="#{activity_creation}"></span> -->
+<!-- 	</h1> -->
+
+<!-- 		<!-- One "tab" for each step in the form: --> -->
+
+<!-- 		<div class="container-fluid"> -->
+
+<!-- 			<!-- Barre latérale de progression --> -->
+<!-- 			<div class="col-lg-2 progbar"> -->
+
+<!-- 				<ul class="nav flex-column"> -->
+<!-- 					<li class="nav-item"> -->
+<!-- 						<div id="go-to-stepTitle" class="progbar-item" onclick="showTabFromNavBar('0');"> -->
+<!-- 							<span class="inputIndication" th:text="#{title}"></span> -->
+<!-- 						</div> -->
+<!-- 					</li> -->
+<!-- 					<li class="nav-item"> -->
+<!-- 						<div id="go-to-stepCategory" class="progbar-item" onclick="showTabFromNavBar('1');"> -->
+<!-- 							<span class="inputIndication" th:text="#{category}"></span> -->
+<!-- 						</div> -->
+<!-- 					</li> -->
+<!-- 					<li class="nav-item"> -->
+<!-- 						<div id="go-to-stepDescription" class="progbar-item" onclick="showTabFromNavBar('2');"> -->
+<!-- 							<span class="inputIndication" th:text="#{description}"></span> -->
+<!-- 						</div> -->
+<!-- 					</li> -->
+<!-- 					<li class="nav-item"> -->
+<!-- 						<div id="go-to-stepMeetingPoint" class="progbar-item" onclick="showTabFromNavBar('3');"> -->
+<!-- 							<span class="inputIndication" th:text="#{meeting_point}"></span> -->
+<!-- 						</div> -->
+<!-- 					</li> -->
+<!-- 					<li class="nav-item"> -->
+<!-- 						<div id="go-to-stepSchedules" class="progbar-item" onclick="showTabFromNavBar('4');"> -->
+<!-- 							<span class="inputIndication" th:text="#{schedule}"></span> -->
+<!-- 						</div> -->
+<!-- 					</li> -->
+<!-- 					<li class="nav-item"> -->
+<!-- 						<div id="go-to-stepImages" class="progbar-item" onclick="showTabFromNavBar('5');"> -->
+<!-- 							<span class="inputIndication" th:text="#{images}"></span> -->
+<!-- 						</div> -->
+<!-- 					</li> -->
+<!-- 					<li class="nav-item"> -->
+<!-- 						<div id="go-to-stepParticipationCriterias" class="progbar-item" onclick="showTabFromNavBar('6');"> -->
+<!-- 							<span class="inputIndication" th:text="#{participation_criterias}"></span> -->
+<!-- 						</div> -->
+<!-- 					</li> -->
+<!-- 					<li class="nav-item"> -->
+<!-- 						<div id="go-to-stepDefaultPrice" class="progbar-item" onclick="showTabFromNavBar('7');"> -->
+<!-- 							<span class="inputIndication" th:text="#{price}"></span> -->
+<!-- 						</div> -->
+<!-- 					</li> -->
+<!-- 					<li class="nav-item"> -->
+<!-- 						<div id="go-to-stepPaxs" class="progbar-item" onclick="showTabFromNavBar('8');"> -->
+<!-- 							<span class="inputIndication" th:text="#{pax_type}"></span> -->
+<!-- 						</div> -->
+<!-- 					</li> -->
+<!-- 					<li class="nav-item"> -->
+<!-- 						<div id="go-to-stepCapacity" class="progbar-item" onclick="showTabFromNavBar('9');"> -->
+<!-- 							<span class="inputIndication" th:text="#{group_capacity}"></span> -->
+<!-- 						</div> -->
+<!-- 					</li> -->
+<!-- 					<li class="nav-item"> -->
+<!-- 						<div id="go-to-stepValidate" class="progbar-item" onclick="showTabFromNavBar('10');"> -->
+<!-- 							<span class="inputIndication" th:text="#{validate_and_send}"></span> -->
+<!-- 						</div> -->
+<!-- 					</li> -->
+<!-- 				</ul> -->
+
+<!-- 			</div> -->
+			
+			
+<!-- 			<form th:action="@{/activity/create}" th:object="${activity}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> -->
+
+
+<!-- 			<!-- STEP 1 : Title --> -->
+
+<!-- 			<div class="col-lg-4 container-form"> -->
+
+<!-- 				<div class="tab form-row" id="stepTitle" data-isvalid="false"> -->
+<!-- 					<div class="row-form inputStyle"> -->
+<!-- 						<p> -->
+<!-- 							<span class="inputTitle" th:text="#{title}"></span> -->
+<!-- 						</p> -->
+<!-- 						<p> -->
+<!-- 							<span class="inputIndication" th:text="#{title_indication}"></span> -->
+<!-- 						</p> -->
+<!-- 					</div> -->
+
+<!-- 					<div class="form-group" th:class="${#fields.hasErrors('title')}? has-error"> -->
+
+<!-- 						<input type="text" th:field="*{title}" class="form-control form-control-lg" id="title" name="title" autocomplete="off" /> -->
+<!-- 						<span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" th:errorclass="fieldError">Title Error</span> -->
+
+<!-- 						<div class="alert alert-danger error-message-title" role="alert"> -->
+<!-- 							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> -->
+<!-- 							<span class="sr-only">Error:</span> -->
+<!-- 							Enter a valid title -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+
+
+<!-- 				STEP 1 : Category -->
+
+<!-- 				<div class="tab" id="stepCategory" data-isvalid="false"> -->
+<!-- 					<div class="row-form  inputStyle"> -->
+<!-- 						<p> -->
+<!-- 							<span class="inputTitle" th:text="#{category}"></span> -->
+<!-- 						</p> -->
+<!-- 						<p> -->
+<!-- 							<span class="inputIndication" th:text="#{title_indication}"></span> -->
+<!-- 						</p> -->
+<!-- 					</div> -->
+<!-- 					<div class="form-group" th:class="${#fields.hasErrors('category')}? has-error"> -->
+<!-- 						<select class="form-control form-control-lg" th:field="*{category}"> -->
+<!-- 							<option th:value="#{cat_art}" th:text="#{cat_art}"></option> -->
+<!-- 							<option th:value="#{cat_sport}" th:text="#{cat_sport}"></option> -->
+<!-- 							<option th:value="#{cat_nature}" th:text="#{cat_nature}"></option> -->
+<!-- 							<option th:value="#{cat_food}" th:text="#{cat_food}"></option> -->
+<!-- 							<option th:value="#{cat_entertainment}" th:text="#{cat_entertainment}"></option> -->
+<!-- 							<option th:value="#{cat_nightlife}" th:text="#{cat_nightlife}"></option> -->
+<!-- 							<option th:value="#{cat_discovery}" th:text="#{cat_discovery}"></option> -->
+<!-- 						</select> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+
+<!-- 				STEP 2 : description -->
+
+<!-- 				<div class="tab" id="stepDescription" data-isvalid="false"> -->
+<!-- 					<div class="row-form  inputStyle"> -->
+<!-- 						<p> -->
+<!-- 							<span class="inputTitle" th:text="#{description}"></span> -->
+<!-- 						</p> -->
+<!-- 						<p> -->
+<!-- 							<span class="inputIndication" th:text="#{title_indication}"></span> -->
+<!-- 						</p> -->
+<!-- 						<p> -->
+<!-- 							<span>Select the language of the description</span> -->
+<!-- 						</p> -->
+<!-- 						<select id="selectDescLang" class="form-control" onChange="toggleDescLang();"> -->
+<!-- 							<option>FR</option> -->
+<!-- 							<option>EN</option> -->
+<!-- 							<option>ES</option> -->
+<!-- 						</select> -->
+
+<!-- 						<br /> -->
+
+<!-- 						<div id="blocDescFr"> -->
+<!-- 							<div class="form-group" th:class="${#fields.hasErrors('descriptionFre')}? has-error"> -->
+<!-- 								<textarea th:field="*{descriptionFre}" class="form-control form-control-lg form-desc" oninput="this.className = 'form-control'" th:placeholder="#{desc_indication}"></textarea> -->
+<!-- 								<span th:if="${#fields.hasErrors('descriptionFre')}" th:errors="*{descriptionFre}" th:errorclass="fieldError">Description Error</span> -->
+
+<!-- 											 				<span id="charsCount"></span> 				 -->
+<!-- 											 				<span id="charsRequiredField" th:text="#{chars_required}"></span>  -->
+
+<!-- 								<div class="alert alert-danger error-message-descriptionFre" role="alert"> -->
+<!-- 									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> -->
+<!-- 									<span class="sr-only">Error:</span> -->
+<!-- 									Message erreur description -->
+<!-- 								</div> -->
+
+<!-- 							</div> -->
+<!-- 						</div> -->
+
+<!-- 						<div id="blocDescEn"> -->
+<!-- 							<div class="form-group" th:class="${#fields.hasErrors('descriptionEng')}? has-error"> -->
+<!-- 								<textarea th:field="*{descriptionEng}" class="form-control form-control-lg form-desc" oninput="this.className = 'form-control'" th:placeholder="#{desc_indication}"></textarea> -->
+<!-- 								<span th:if="${#fields.hasErrors('descriptionEng')}" th:errors="*{descriptionEng}" th:errorclass="fieldError">Description Error</span> -->
+
+<!-- 											 				<span id="charsCount"></span> 				 -->
+<!-- 											 				<span id="charsRequiredField" th:text="#{chars_required}"></span>  -->
+
+<!-- 								<div class="alert alert-danger error-message-descriptionEng" role="alert"> -->
+<!-- 									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> -->
+<!-- 									<span class="sr-only">Error:</span> -->
+<!-- 									Message erreur description -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+
+<!-- 						<div id="blocDescEs"> -->
+<!-- 							<div class="form-group" th:class="${#fields.hasErrors('descriptionEsp')}? has-error"> -->
+<!-- 								<textarea th:field="*{descriptionEsp}" class="form-control form-control-lg form-desc" oninput="this.className = 'form-control'" th:placeholder="#{desc_indication}"></textarea> -->
+<!-- 								<span th:if="${#fields.hasErrors('descriptionEsp')}" th:errors="*{descriptionEsp}" th:errorclass="fieldError">Description Error</span> -->
+
+<!-- 											 				<span id="charsCount"></span> 				 -->
+<!-- 											 				<span id="charsRequiredField" th:text="#{chars_required}"></span>  -->
+<!-- 								<div class="alert alert-danger error-message-descriptionEsp" role="alert"> -->
+<!-- 									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> -->
+<!-- 									<span class="sr-only">Error:</span> -->
+<!-- 									Message erreur description -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+
+
+<!-- 				STEP 3 : MeetingPoint, city, address and map -->
+
+<!-- 				<input type="hidden" th:field="*{latitude}"></input> -->
+<!-- 				<input type="hidden" th:field="*{longitude}"></input> -->
+<!-- 				<input type="hidden" id="zoom" name="zoom"></input> -->
+
+<!-- 				<div class="tab" id="stepMeetingPoint" data-isvalid="false"> -->
+<!-- 					<div class="inputStyle"> -->
+<!-- 						<p> -->
+<!-- 							<span class="inputTitle" th:text="#{meeting_point}"></span> -->
+<!-- 						</p> -->
+<!-- 						<p> -->
+<!-- 							<span class="inputIndication" th:text="#{meeting_point_indication}"></span> -->
+<!-- 						</p> -->
+
+<!-- 						<span th:text="#{meeting_point_name}"></span> -->
+<!-- 						<p> -->
+<!-- 							<input type="text" class="form-control input-place" value="" th:field="*{meetingPoint}" th:placeholder="#{meeting_point_name}" oninput="this.className = ''" autocomplete="off" /> -->
+<!-- 						</p> -->
+<!-- 						<span th:text="#{address}"></span> -->
+<!-- 						<p> -->
+<!-- 							<input type="text" class="form-control input-place" value="" th:field="*{address}" th:placeholder="#{address}" oninput="this.className = ''" onclick="changeDestinationCityWithId(this.id)" autocomplete="off" /> -->
+<!-- 						</p> -->
+<!-- 						<span th:text="#{city}"></span> -->
+<!-- 						<p> -->
+<!-- 							<input type="text" class="form-control input-place" value="" th:field="*{city}" th:placeholder="#{city}" oninput="this.className = ''" onclick="changeDestinationCityWithId(this.id)" autocomplete="off" /> -->
+<!-- 						</p> -->
+<!-- 						<span th:text="#{country}"></span> -->
+<!-- 						<p> -->
+<!-- 							<input type="text" class="form-control input-place" value="" th:field="*{country}" th:placeholder="#{country}" oninput="this.className = ''" autocomplete="off" /> -->
+<!-- 						</p> -->
+<!-- 						<span th:text="#{zip_code}"></span> -->
+<!-- 						<p> -->
+<!-- 							<input type="text" class="form-control input-place" value="" th:field="*{zipCode}" th:placeholder="#{zip_code}" oninput="this.className = ''" autocomplete="off" /> -->
+<!-- 						</p> -->
+<!-- 					</div> -->
+<!-- 					<div> -->
+<!-- 												<span  th:text="#{map}"></span> -->
+<!-- 						<div id="googleMap"></div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+
+
+<!-- 				STEP 4 : schedules  -->
+
+<!-- 				<div class="tab" id="stepSchedules" data-isvalid="false"> -->
+<!-- 					<div class="row-form "> -->
+<!-- 						<p> -->
+<!-- 							<span class="inputTitle" th:text="#{schedule}"></span> -->
+<!-- 						</p> -->
+<!-- 						<p> -->
+<!-- 							<span class="inputIndication" th:text="#{meeting_point_indication}"></span> -->
+<!-- 						</p> -->
+<!-- 						Period  -->
+<!-- 						<p> -->
+<!-- 							<span th:text="#{start_date_period}"></span> -->
+<!-- 							<input type="text" id="beginDateText" name="beginDateText" onchange="changeReturnDate(); onChangeDate();" /> -->
+<!-- 						</p> -->
+<!-- 						<div> -->
+<!-- 							<input type="date" th:field="*{beginDate}" /> -->
+<!-- 						</div> -->
+<!-- 						<p> -->
+<!-- 							<span th:text="#{end_date_period}"></span> -->
+<!-- 							<input type="text" id="endDateText" name="endDateText" onchange="onChangeDate();" /> -->
+<!-- 						</p> -->
+
+<!-- 						<div> -->
+<!-- 							<input type="date" th:field="*{endDate}" /> -->
+<!-- 						</div> -->
+						
+<!-- 						Horaires habituels -->
+<!-- 						<select id="selectWeekday" class="form-control" onchange="toggleScheduleDay();"> -->
+						
+<!-- 							<option value="createScheduleBloc1">Lundi</option> -->
+<!-- 							<option value="createScheduleBloc2">Mardi</option> -->
+<!-- 							<option value="createScheduleBloc3">Mercredi</option> -->
+<!-- 							<option value="createScheduleBloc4">Jeudi</option> -->
+<!-- 							<option value="createScheduleBloc5">Vendredi</option> -->
+<!-- 							<option value="createScheduleBloc6">Samedi</option> -->
+<!-- 							<option value="createScheduleBloc7">Dimanche</option> -->
+							
+<!-- 						</select> -->
+						
+<!-- 						<div th:each="currentSchedule : ${activity.usualSchedules}" th:id="'createScheduleBloc' + ${currentSchedule.weekdayNumber + 1}" class="createScheduleBloc">  -->
+<!-- 							Compteur -->
+<!-- 				  			<input type="hidden" th:id="counterSessionCreated + ${currentSchedule.weekdayNumber + 1}" /> -->
+<!-- 							<div th:each="currentSession : ${currentSchedule.sessions}" > -->
+								
+<!-- 									<div class="form-group clockpicker sessionBloc" -->
+<!-- 												th:id="'sessionBloc' + ${currentSchedule.weekdayNumber + 1} + ${currentSession.sessionNumber + 1}"  -->
+<!-- 												th:name="'sessionBloc' + ${currentSchedule.weekdayNumber + 1} + ${currentSession.sessionNumber + 1}"> -->
+										
+<!-- 										 <input type="time"											 -->
+<!-- 												th:value="*{usualSchedules[__${currentSchedule.weekdayNumber}__].sessions[__${currentSession.sessionNumber}__].beginHour}"  -->
+<!-- 												class="form-control"  -->
+<!-- 												data-settable="false" -->
+<!-- 												onchange=""> -->
+												
+<!-- 										 <input type="time" -->
+<!-- 												th:value="*{usualSchedules[__${currentSchedule.weekdayNumber}__].sessions[__${currentSession.sessionNumber}__].endHour}"  -->
+<!-- 												class="form-control" -->
+<!-- 												data-settable="false"  -->
+<!-- 												onchange=""> -->
+<!-- 									</div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+						
+<!-- 							Bouton pour ajouter des inputs -->
+<!-- 							<button type="button" th:id="addExtraSessionBtn" class="btn" onclick="showExtraSession()"> -->
+<!-- 				   				<span class="glyphicon glyphicon-plus"></span> -->
+<!-- 				  			</button> -->
+				  			
+<!-- 				  			Bouton pour masquer des inputs -->
+<!-- 							<button type="button" th:id="removeExtraSessionBtn" class="btn" onclick="hideExtraSession()"> -->
+<!-- 				   				<span class="glyphicon glyphicon-minus"></span> -->
+<!-- 				  			</button> -->
+				  			
+				  			
+<!-- 				  			<div> -->
+<!-- 				  				<p> -->
+<!-- 									<button type="button" class="btn btn-primary" id="creationScheduleBtn" onclick="createSchedule();">Ajouter</button> -->
+<!-- 								</p> -->
+<!-- 							</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+
+
+
+<!-- 				STEP 5 : Images and videos  -->
+<!-- 				<div class="tab" id="stepImages" data-isvalid="false"> -->
+<!-- 					<div class="row-form "> -->
+<!-- 						<p> -->
+<!-- 							<span class="inputTitle" th:text="#{images}"></span> -->
+<!-- 						</p> -->
+<!-- 						<p> -->
+<!-- 							<span class="inputIndication" th:text="#{download_cover_image}"></span> -->
+<!-- 						</p> -->
+<!-- 						<p> -->
+<!-- 							<input type="file" th:field="*{mainPictureFile}" th:placeholder="#{mainPictureFile}" oninput="this.className = ''" onchange="displayImg()" /> -->
+<!-- 						<p> -->
+<!-- 							<input id="imgDisplay" type="image" src="" value="overview" style="width: 150px; heigth: 150px;" /> -->
+<!-- 						</p> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+
+<!-- 				STEP 5 : Additional informations, criteria for participation -->
+<!-- 				<div class="tab" id="stepParticipationCriterias" data-isvalid="false"> -->
+<!-- 					<p> -->
+<!-- 						<span class="inputTitle" th:text="#{participation_criteria}"></span> -->
+<!-- 					</p> -->
+<!-- 					<p> -->
+<!-- 						<span class="inputIndication" th:text="#{download_cover_image}"></span> -->
+<!-- 					</p> -->
+<!-- 					<div class="row-form "> -->
+<!-- 						<span th:text="#{minimum_age}"></span> -->
+<!-- 						<div class="form-group"> -->
+<!-- 							<select class="form-control form-control-lg" th:field="*{minimumAge}"> -->
+<!-- 								<option th:value="0">0</option> -->
+<!-- 								<option th:value="1">1</option> -->
+<!-- 								<option th:value="2">2</option> -->
+<!-- 								<option th:value="3">3</option> -->
+<!-- 								<option th:value="4">4</option> -->
+<!-- 								<option th:value="5">5</option> -->
+<!-- 								<option th:value="6">6</option> -->
+<!-- 								<option th:value="7">7</option> -->
+<!-- 								<option th:value="8">8</option> -->
+<!-- 								<option th:value="9">9</option> -->
+<!-- 								<option th:value="10">10</option> -->
+<!-- 								<option th:value="11">11</option> -->
+<!-- 								<option th:value="12">12</option> -->
+<!-- 								<option th:value="13">13</option> -->
+<!-- 								<option th:value="14">14</option> -->
+<!-- 								<option th:value="15">15</option> -->
+<!-- 								<option th:value="16">16</option> -->
+<!-- 								<option th:value="17">17</option> -->
+<!-- 								<option th:value="18">18</option> -->
+<!-- 							</select> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+
+<!-- 					<div class="row-form "> -->
+<!-- 						<span th:text="#{required_id}"></span> -->
+<!-- 						<div class="form-check"> -->
+<!-- 							<input type="checkbox" class="form-check-input" th:field="*{requiredId}" /> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+				
+<!-- 				STEP 6 : Global price -->
+<!-- 				<div class="tab" id="stepDefaultPrice" data-isvalid="false"> -->
+<!-- 					<div class="row-form "> -->
+<!-- 						<p> -->
+<!-- 							<span class="inputTitle" th:text="#{price}"></span> -->
+<!-- 						</p> -->
+<!-- 						<p> -->
+<!-- 							<span class="inputIndication" th:text="#{price_indication}"></span> -->
+<!-- 						</p> -->
+
+<!-- 						<div class="form-group"> -->
+<!-- 							<p> -->
+<!-- 								<span class="inputIndication">Indiquez un prix par défaut</span> -->
+<!-- 							</p> -->
+
+<!-- 							<div id="global"> -->
+
+<!-- 								<span>Prix</span> -->
+<!-- 								<input class="form-control" type="text" th:id="paxDefaultPrice" th:field="*{paxs[0].price}" /> -->
+<!-- 								<input type="hidden" th:id="paxDefaultName" th:field="*{paxs[0].name}" /> -->
+<!-- 								<input type="hidden" th:id="paxDefaultAgeMin" th:field="*{paxs[0].ageMin}" /> -->
+<!-- 								<input type="hidden" th:id="paxDefaultAgeMax" th:field="*{paxs[0].ageMax}" /> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+
+<!-- 				STEP 7 : Price  -->
+<!-- 				<div class="tab" id="stepPaxs" data-isvalid="false"> -->
+
+<!-- 					<div class="row-form "> -->
+<!-- 						<p> -->
+<!-- 							<span class="inputTitle" th:text="#{price}"></span> -->
+<!-- 						</p> -->
+<!-- 						<p> -->
+<!-- 							<span class="inputIndication" th:text="#{price_indication}"></span> -->
+<!-- 						</p> -->
+
+<!-- 						<div class="form-group"> -->
+
+<!-- 							<p> -->
+<!-- 								<span class="inputIndication">Créez vos type de voyageur</span> -->
+<!-- 							</p> -->
+
+<!-- 							<div id="create"> -->
+<!-- 								<span>Nom du pax</span> -->
+<!-- 								<input class="form-control" type="text" th:id="paxName" th:name="paxName" placeholder="Create you pax category" /> -->
+<!-- 								<span>Age minimum</span> -->
+<!-- 								<input class="form-control" type="text" th:id="paxAgeMin" th:name="paxAgeMin" /> -->
+<!-- 								<span>Age maximum</span> -->
+<!-- 								<input class="form-control" type="text" th:id="paxAgeMax" th:name="paxAgeMax" /> -->
+<!-- 								<span>Prix</span> -->
+<!-- 								<input class="form-control" type="text" th:id="paxPrice" th:name="paxPrice" /> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+						
+<!-- 						<div> -->
+<!-- 							<button type="button" class="btn btn-primary" id="creationPaxBtn" onclick="createPax();">Ajouter</button> -->
+<!-- 						</div> -->
+
+<!-- 					</div> -->
+
+
+<!-- 				</div> -->
+
+<!-- 				STEP 8 : Group Capacity  -->
+<!-- 				<div class="tab" id="stepCapacity" data-isvalid="false"> -->
+<!-- 					<div class="row-form "> -->
+<!-- 						<p> -->
+<!-- 							<span class="inputTitle" th:text="#{group_capacity}"></span> -->
+<!-- 						</p> -->
+<!-- 						<p> -->
+<!-- 							<span class="inputIndication" th:text="#{group_capacity_indication}"></span> -->
+<!-- 						</p> -->
+<!-- 						<div> -->
+<!-- 							<p> -->
+<!-- 								<span th:text="#{minCapacityGroup}"></span> -->
+<!-- 								<b></b> -->
+<!-- 								<input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" th:field="*{minCapacityGroup}" autocomplete="off" /> -->
+<!-- 							</p> -->
+<!-- 						</div> -->
+<!-- 						<div> -->
+<!-- 							<p> -->
+<!-- 								<span th:text="#{maxCapacityGroup}"></span> -->
+<!-- 								<b></b> -->
+<!-- 								<input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" th:field="*{maxCapacityGroup}" autocomplete="off" /> -->
+<!-- 							</p> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+
+<!-- 				LAST STEP : Validate and submit form -->
+<!-- 				<div class="tab" id="stepValidate"> -->
+<!-- 					<div class="row-form "> -->
+<!-- 						<p> -->
+<!-- 							<span class="inputTitle" th:text="#{validate_and_send}"></span> -->
+<!-- 						</p> -->
+<!-- 						<p> -->
+<!-- 							<span class="inputIndication" th:text="#{validate_and_submit_indication}"></span> -->
+<!-- 						</p> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+
+
+<!-- 				NAVIGATION BUTTON & SUBMIT  -->
+<!-- 				<div class="btnStep"> -->
+<!-- 					<div> -->
+<!-- 						<button type="button" id="modifyBtn" class="btn btn-lg btn-secondary" onclick="toggleButtonAndSwitchInput(false)">MODIFIER</button> -->
+<!-- 						<button type="button" id="nextBtn" class="btn btn-lg btn-primary" onclick="nextPrev(1)">Next</button> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+
+<!-- 				Circles which indicates the steps of the form: -->
+<!-- 				We need as many circles as there are steps -->
+<!-- 				<div style="text-align: center; margin-top: 40px;"> -->
+<!-- 					<span class="step"></span> -->
+<!-- 					<span class="step"></span> -->
+<!-- 					<span class="step"></span> -->
+<!-- 					<span class="step"></span> -->
+<!-- 					<span class="step"></span> -->
+<!-- 					<span class="step"></span> -->
+<!-- 					<span class="step"></span> -->
+<!-- 					<span class="step"></span> -->
+<!-- 					<span class="step"></span> -->
+<!-- 					<span class="step"></span> -->
+<!-- 					<span class="step"></span> -->
+<!-- 				</div> -->
+
+<!-- 			</div> -->
+
+<!-- 			<!-- Display PAXS --> -->
+<!-- 			<div id="paxsCreated" class="col-lg-6 pax-bloc"> -->
+<!-- 			</div> -->
+			
+<!-- 			<!-- Display SCHEDULES --> -->
+<!-- <!-- 			<div id="schedulesCreated" class="col-lg-6 pax-bloc"> --> -->
+<!-- <!-- 				<table>  --> -->
+<!-- <!-- 					<tr>  --> -->
+<!-- <!-- 						<td style="border:1px solid black">JOURS</td>  --> -->
+<!-- <!-- 						<td style="border:1px solid black" colspan="2">HORAIRES</td>  --> -->
+<!-- <!-- 					</tr>  --> -->
+		
+<!-- <!-- 					<tr>  --> -->
+<!-- <!-- 						<td style="border:1px solid black">LUNDI</td>  --> -->
+<!-- <!-- 						<td colspan="2" rowspan="2" style="border:1px solid black">  --> -->
+<!-- <!-- 							<table>  --> -->
+<!-- <!-- 								<tr>  --> -->
+<!-- <!-- 									<td align="center">8h30</td>  --> -->
+<!-- <!-- 									<td align="center">9h30</td>  --> -->
+<!-- <!-- 								</tr>  --> -->
+<!-- <!-- 								<tr>  --> -->
+<!-- <!-- 									<td align="center">16h30</td>  --> -->
+<!-- <!-- 									<td align="center">17h30</td>  --> -->
+<!-- <!-- 								</tr>  --> -->
+<!-- <!-- 							</table>  --> -->
+<!-- <!-- 						</td>  --> -->
+<!-- <!-- 					</tr>  --> -->
+<!-- <!-- 					<tr>  --> -->
+<!-- <!-- 						<td style="border:1px solid black">JEUDI</td>  --> -->
+<!-- <!-- 					</tr>  --> -->
+<!-- <!-- 				</table> --> -->
+<!-- <!-- 			</div> --> -->
+		
+<!-- 		</form> -->
+<!-- 	</div> -->
+
+	
+
+<!-- 	<script th:inline="javascript" type="text/javascript"> -->
+		
+// 		// Taille min et max de la description
+// 	    var minNumCharsDescription = 200;
+// 		var maxNumCharsDescription = 1000;
+		
+// 		// Compteur de pax créés par l'utilisateur dans le formulaire
+// 		var countPaxCreation = 1;
+		
+// 		// Booléen passe à true lorsque l'utilisateur a créé un pax
+// 		var hasCreatedPax = false;
+		
+// 		// Current displayed schedule 
+// 		var currentDisplayedSchedule = "createScheduleBloc1";
+
+// 		window.onload = function() {
+
+// 			// Hide all error messages
+// 			jQuery('.alert').hide();
+// 			// Init schedules input
+// 			initSchedules();
+// 			// Init default price values
+// 			initDefaultPrice();
+// 			// Init google map
+// 			initMap(0, 0);
+// 			// Hide google map
+// 			document.getElementById("googleMap").style.display = "none";
+// 			// Display the current step
+// 			showTab(0);
+// 			// Init autocomplete
+// 			autocomplete("#address");
+// 			autocomplete("#city");
+// 			// Init desc per lang
+// 			jQuery('#blocDescFr').show();
+// 			jQuery('#blocDescEn').hide();
+// 			jQuery('#blocDescEs').hide();
+// 			// Hide modify button
+// 			jQuery("#modifyBtn").hide();
+// 		}
+
+// 		jQuery(function() {
+// 			jQuery("#beginDateText").datepicker();
+// 			jQuery("#endDateText").datepicker();
+// 			jQuery('.clockpicker').clockpicker();
+// 		});
+		
+
+// 		function toggleGoogleMap() {
+// 			var map = document.getElementById("googleMap");
+// 			if (map.style.display === "none") {
+// 				map.style.display = "block";
+// 			} else {
+// 				map.style.display = "none";
+// 			}
+// 		}
+
+// 		function toggleDescLang() {
+// 			var descLang = jQuery('#selectDescLang').val();
+// 			if (descLang == 'FR') {
+// 				jQuery('#blocDescFr').show();
+// 				jQuery('#blocDescEn').hide();
+// 				jQuery('#blocDescEs').hide();
+// 			} else if (descLang == 'EN') {
+// 				jQuery('#blocDescEn').show();
+// 				jQuery('#blocDescFr').hide();
+// 				jQuery('#blocDescEs').hide();
+// 			} else if (descLang == 'ES') {
+// 				jQuery('#blocDescEs').show();
+// 				jQuery('#blocDescEn').hide();
+// 				jQuery('#blocDescFr').hide();
+// 			} else {
+// 				jQuery('#blocDescFr').show();
+// 				jQuery('#blocDescEn').hide();
+// 				jQuery('#blocDescEs').hide();
+// 			}
+// 		}
+		
+// 		function toggleScheduleDay() {
+			
+// 			var weekday = jQuery('#selectWeekday').val();
+// 			var schedulesBloc, schedulesInputs;
+
+// 			jQuery("#" + currentDisplayedSchedule).hide();
+// 			jQuery("#" + weekday).show();
+			
+// 			toggleSettableInputs(currentDisplayedSchedule, weekday);
+			
+// 			currentDisplayedSchedule = weekday;
+// 		}
+		
+// 		function toggleSettableInputs(scheduleToHide, scheduleToShow){
+			
+// 			schedulesBlocToHide = document.getElementById(scheduleToHide);
+// 			schedulesInputsToHide = schedulesBlocToHide.getElementsByTagName("input");
+			
+// 			schedulesBlocToShow = document.getElementById(scheduleToShow);
+// 			schedulesInputsToShow = schedulesBlocToShow.getElementsByTagName("input");
+			
+// 			if(schedulesInputsToHide.length > 0) {
+// 				for (var i = 0; i <= schedulesInputsToHide.length; i++) {
+// 					if(schedulesInputsToHide[i].type == "time") {
+// 						schedulesInputsToHide[i].setAttribute('settable', 'false');
+// 					}
+// 				}
+// 				for (var i = 0; i <= schedulesInputsToShow.length; i++) {
+// 					if(schedulesInputsToShow[i].type == "time") {
+// 						schedulesInputsToShow[i].setAttribute('settable', 'ture');
+// 					}
+// 				}
+// 			}
+			
+// 		}
+		
+// 		function initDefaultPrice() {
+			
+// 			jQuery('#paxDefaultPrice').val("");
+// 			jQuery('#paxDefaultName').val("Default Pax");
+// 			jQuery('#paxDefaultAgeMin').val(0);
+// 			jQuery('#paxDefaultAgeMax').val(99);
+// 		}
+		
+// 		function initSchedules() {
+// 			jQuery("#removeExtraSessionBtn").hide();
+// 			jQuery('.createScheduleBloc').hide();
+// 			jQuery('.sessionBloc').hide();
+			
+// 			jQuery('#selectWeekday').val(currentDisplayedSchedule);
+// 			jQuery("#" + currentDisplayedSchedule).show();
+			
+// 			// Activate the first input displayed
+// 			toggleInputsHour(11, true);
+			
+// 			for (var i = 1; i <= 7; i++) {
+// 				jQuery("#sessionBloc" + i + "1").show();
+// 				jQuery("#counterSessionCreated" + i).val(1);
+// 			}
+// 		}
+		
+// 		function showExtraSession() {
+// 			var weekdayDivId = jQuery("#selectWeekday").val();
+// 			var weekdayNumber = weekdayDivId.substr(weekdayDivId.length - 1);
+// 			var sessionCounterId = "counterSessionCreated" + weekdayNumber;
+			
+// 			// Increment session counter
+// 		    var newValueNumberSession = parseInt(jQuery("#" + sessionCounterId).val(), 10) + 1;
+// 		    jQuery("#" + sessionCounterId).val(newValueNumberSession);
+
+// 		    // Show add button
+// 		    jQuery("#addExtraSessionBtn").show();
+// 		    // Show remove button
+// 		    jQuery("#removeExtraSessionBtn").show();
+		    	
+// 		    // Display extra session
+// 			jQuery("#sessionBloc" + weekdayNumber + jQuery("#" + sessionCounterId).val()).show();
+		    
+// 		    // Activate inputs
+// 		   toggleInputsHour(weekdayNumber + jQuery("#" + sessionCounterId).val(), true);
+			    
+// 		    if (newValueNumberSession >= 10) {
+// 			    // Hide add button
+// 			    jQuery("#addExtraSessionBtn").hide();
+// 		    }
+// 		}
+		
+// 		function hideExtraSession() {
+// 			var weekdayDivId = jQuery("#selectWeekday").val();
+// 			var weekdayNumber = weekdayDivId.substr(weekdayDivId.length - 1);
+// 			var sessionCounterId = "counterSessionCreated" + weekdayNumber;
+// 			var numberDisplayedSessions = parseInt(jQuery("#" + sessionCounterId).val(), 10);
+			
+// 		  	if (numberDisplayedSessions == 2) {
+// 			    // Hide remove button
+// 			    jQuery("#removeExtraSessionBtn").hide();
+// 		  	} else if (numberDisplayedSessions <= 10) {
+// 		  		// Show add button
+// 			    jQuery("#addExtraSessionBtn").show();
+// 		  	}
+// 			// Hide extra session
+// 			jQuery("#sessionBloc" + weekdayNumber + jQuery("#" + sessionCounterId).val()).hide();
+			
+// 		    // Desactivate input
+// 			toggleInputsHour(weekdayNumber + jQuery("#" + sessionCounterId).val(), false);
+			
+// 		  	// Decrement session counter
+// 		  	jQuery("#" + sessionCounterId).val(parseInt(numberDisplayedSessions - 1));
+		   	
+// 		}
+		
+		
+// 		function toggleInputsHour(sessionBlocId, isValidable) {
+// 			var inputsToActivate = document.getElementById("sessionBloc" + sessionBlocId).getElementsByTagName("input");
+// 			for (var j = 0; j < inputsToActivate.length; j++) {
+// 				 if(inputsToActivate[j]) {
+// 					 inputsToActivate[j].setAttribute("data-settable", isValidable);
+// 					 if(!isValidable) {
+// 						 inputsToActivate[j].val('');
+// 					 }
+// 				 }
+// 			}
+// 		}
+
+
+<!-- 	<script th:inline="javascript"> -->
+
+// 	/*<![CDATA[*/
+
+//     var username = /*[[${TestJS}]]*/ 'default';
+// 	jQuery("#testjs").val(username);
+	
+// 	function testJs() {
+// 	}
+
+// /*]]>*/
+<!-- </script> -->
+		
+		
+<!-- 	</script> -->
+
+<!-- </body> -->
+<!-- </html> -->

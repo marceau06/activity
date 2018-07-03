@@ -8,11 +8,13 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -20,20 +22,20 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.Future;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.koedia.activity.activityManager.validation.EndDateAfterBeginDate;
 import com.koedia.common.tool.CollectionUtil;
 
 @Entity
 @Table(name = "activity")
-@EndDateAfterBeginDate
+//@EndDateAfterBeginDate
 @EntityListeners(AuditingEntityListener.class)
 public class Activity {
 
@@ -46,29 +48,27 @@ public class Activity {
 	private Integer userId;
 	
 	// Step title
-	@NotEmpty(groups = {StepTitle.class})
-	@NotBlank
-	@Size(min = 5, max = 100, message = "{Size.activity.title}")
+	@Length(min = 5, max = 100, message = "{Size.activity.title}", groups = {StepTitle.class})
+	@NotEmpty(message = "{Size.activity.title}", groups = {StepTitle.class})
 	@Column(name = "title")
    	private String title;
 	
 	// Step Category
-	@NotEmpty(groups = {StepCategory.class})
+	@NotEmpty(message = "{NotEmpty.activity.category}", groups = {StepCategory.class})
 	@Column(name = "category")
    	private String category;
 	
  
 	// Step Description
-	@NotEmpty(groups = {StepDescription.class})
-	@Size(min = 20, max = 1000, message = "{Size.activity.description}")
+	@Length(min = 20, max = 1000, message = "{Size.activity.description}", groups = {StepDescription.class})
 	@Column(name = "description_fre")
    	private String descriptionFre;
 	
-	@Size(min = 20, max = 1000, groups = {StepDescription.class}, message = "{Size.activity.description}")
+	@Length(min = 20, max = 1000, message = "{Size.activity.description}", groups = {StepDescription.class})
 	@Column(name = "description_eng")
    	private String descriptionEng;
 	
-	@Size(min = 20, max = 1000, groups = {StepDescription.class}, message = "{Size.activity.description}")
+	@Length(min = 20, max = 1000, message = "{Size.activity.description}", groups = {StepDescription.class})
 	@Column(name = "description_esp")
    	private String descriptionEsp;
 	
@@ -82,15 +82,15 @@ public class Activity {
 	@Column(name = "address")
    	private String address;
 	
-//	@NotEmpty(groups = {StepMeetingPoint.class})
+	@NotEmpty(groups = {StepMeetingPoint.class})
 	@Column(name = "city")
 	private String city;
 	
-//	@NotEmpty(groups = {StepMeetingPoint.class})
+	@NotEmpty(groups = {StepMeetingPoint.class})
 	@Column(name="country")
 	private String country; 
 	
-//	@NotEmpty(groups = {StepMeetingPoint.class})	
+	@NotEmpty(groups = {StepMeetingPoint.class})	
 	@Column(name="zip_code")
 	private String zipCode;
 	
@@ -128,25 +128,25 @@ public class Activity {
 	@Valid
 	private List<Schedule> customSchedules = new ArrayList<Schedule>();
 	
-
-//	@NotEmpty(groups = {StepImages.class})
-	@Column(name = "second_picture")
-	private String secondPicture;
-	
-	
 	// Step Participation criterieas
-	@NotEmpty(groups = {StepParticipationCriterias.class})
+	@NotNull(groups = {StepParticipationCriterias.class})
 	@Column(name="required_id")
-	private boolean requiredId;
+	private Boolean requiredId;
 
-	@NotEmpty(groups = {StepParticipationCriterias.class})
+//	@NotEmpty(groups = {StepParticipationCriterias.class})
 	@Column(name="additional_infos")
 	private String additionalInfos;
 	
-	@NotEmpty(groups = {StepParticipationCriterias.class})
+	@NotNull(groups = {StepParticipationCriterias.class})
+	@Range(min = 1, max = 99)	
 	@Column(name="minimum_age")
 	private Integer minimumAge;
 	
+	@NotNull(groups = {StepDefaultPrice.class})
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "defaultpax_id")
+	@Valid
+	private PaxPrice defaultPax;
 	
 	// Step paxs
 	@NotEmpty(groups = {StepPaxs.class})
@@ -158,11 +158,13 @@ public class Activity {
 	private List<PaxPrice> paxs = new ArrayList<PaxPrice>();
 
 	// Step group capacity
-	@NotEmpty(groups = {StepGroupCapacity.class})
+	@NotNull(groups = {StepGroupCapacity.class})
+	@Min(1)
 	@Column(name="min_capacity_group")
 	private Integer minCapacityGroup;
 	
-	@NotEmpty(groups = {StepGroupCapacity.class})
+	@NotNull(groups = {StepGroupCapacity.class})
+	@Min(1)
 	@Column(name="max_capacity_group")
 	private Integer maxCapacityGroup;
 	
@@ -175,13 +177,6 @@ public class Activity {
 	private boolean active;
 	
 	// Step Images
-	@NotEmpty(groups = {StepMainPicture.class})
-	@Column(name = "main_picture")
-	private String mainPicture;
-	
-	@Transient
-	private MultipartFile mainPictureFile;
-	
 	// Step paxs
 	@NotEmpty(groups = {StepImages.class})
 	@OneToMany(cascade = CascadeType.ALL)
@@ -192,42 +187,9 @@ public class Activity {
 	@Transient
 	private String stepToValidate;
 	
-	
-
 	public Activity() {
 		super();
 	}
-
-//	public Activity(int id, int userId, String title, String descriptionFre, 
-//			String descriptionEng, String descriptionEsp, 
-//			String category, String address, Date beginDate, Date endDate,
-//			String mainPicture, String secondPicture, boolean active, 
-//			String city, String country, String zipCode,
-//			String additionalInfos, int minCapacityGroup, int maxCapacityGroup) {
-//		
-//		super();
-//		
-//		this.id = id;
-//		this.userId = userId;
-//		this.title = title;
-//		this.descriptionFre = descriptionFre;
-//		this.descriptionEng = descriptionEng;
-//		this.descriptionEsp = descriptionEsp;
-//		this.category = category;
-//		this.address = address;
-//		this.beginDate = beginDate;
-//		this.endDate = endDate;
-//		this.mainPicture = mainPicture;
-//		this.secondPicture = secondPicture;
-//		this.active = active;
-//		this.city = city;
-//		this.country = country;
-//		this.additionalInfos = additionalInfos;
-//		this.zipCode = zipCode;
-//		this.minCapacityGroup = minCapacityGroup;
-//		this.maxCapacityGroup = maxCapacityGroup;
-//	}
-
 
 	/********** Getters and setters *************/
 	
@@ -355,30 +317,6 @@ public class Activity {
 		this.country = country;
 	}
 
-	public String getMainPicture() {
-		return mainPicture;
-	}
-
-	public void setMainPicture(String mainPicture) {
-		this.mainPicture = mainPicture;
-	}
-
-	public String getSecondPicture() {
-		return secondPicture;
-	}
-
-	public void setSecondPicture(String secondPicture) {
-		this.secondPicture = secondPicture;
-	}
-
-	public MultipartFile getMainPictureFile() {
-		return mainPictureFile;
-	}
-
-	public void setMainPictureFile(MultipartFile mainPictureFile) {
-		this.mainPictureFile = mainPictureFile;
-	}
-
 	public String getZipCode() {
 		return zipCode;
 	}
@@ -403,11 +341,11 @@ public class Activity {
 		this.additionalInfos = additional_infos;
 	}
 
-	public boolean isRequiredId() {
+	public Boolean getRequiredId() {
 		return requiredId;
 	}
 
-	public void setRequiredId(boolean requiredId) {
+	public void setRequiredId(Boolean requiredId) {
 		this.requiredId = requiredId;
 	}
 
@@ -475,11 +413,17 @@ public class Activity {
 		this.images = images;
 	}
 	
+	public PaxPrice getDefaultPax() {
+		return defaultPax;
+	}
+
+	public void setDefaultPax(PaxPrice defaultPax) {
+		this.defaultPax = defaultPax;
+	}
+	
 	public Integer getNbImages() {
 		if(!CollectionUtil.isEmpty(this.images)) {
-			if (this.images.size() >= 1) {
-				return (this.images.size());
-			}
+			return (this.images.size());
 		}
 		return 0;
 	}

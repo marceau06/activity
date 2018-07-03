@@ -9,20 +9,21 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolation;
+import javax.validation.Valid;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import javax.xml.transform.Source;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
@@ -36,17 +37,20 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.koedia.activity.activityManager.model.entity.Activity;
 import com.koedia.activity.activityManager.model.entity.Activity.StepCategory;
+import com.koedia.activity.activityManager.model.entity.Activity.StepDefaultPrice;
 import com.koedia.activity.activityManager.model.entity.Activity.StepDescription;
+import com.koedia.activity.activityManager.model.entity.Activity.StepGroupCapacity;
 import com.koedia.activity.activityManager.model.entity.Activity.StepMeetingPoint;
+import com.koedia.activity.activityManager.model.entity.Activity.StepParticipationCriterias;
 import com.koedia.activity.activityManager.model.entity.Activity.StepPeriod;
 import com.koedia.activity.activityManager.model.entity.Activity.StepTitle;
 import com.koedia.activity.activityManager.model.entity.Image;
+import com.koedia.activity.activityManager.model.entity.PaxPrice;
 import com.koedia.activity.activityManager.model.entity.Schedule;
 import com.koedia.activity.activityManager.model.entity.Session;
 import com.koedia.activity.activityManager.model.entity.User;
@@ -57,16 +61,15 @@ import com.koedia.common.tool.StringUtil;
 @Controller
 @ComponentScan
 @RequestMapping("activity")
+@SessionAttributes(value = "activity", types={Activity.class})
 public class ActivityController {
 
 	private static String UPLOADED_FOLDER_ABSOLUTE= "/home/user/workspace_web_escurity/activityManager/src/main/resources/static/img/stored/";
 	
 	private static String UPLOAD_FOLDER_RELATIVE= "../img/stored/";
 	
-	private final static Map<String, Integer> inputStepNumber = new HashMap<String, Integer>();
-	private static ArrayList<Integer> validatedSteps = new ArrayList<Integer>();
+	private static ArrayList<String> validatedSteps = new ArrayList<String>();
 
-	
 	@Autowired
 	private ActivityService activityService;
 	
@@ -80,41 +83,31 @@ public class ActivityController {
 	@PostConstruct
 	private static void init() {
        validatedSteps.clear();
-	   inputStepNumber.put("title", 0);
-	   inputStepNumber.put("category", 1);
-	   inputStepNumber.put("descriptionFre", 2);
-	   inputStepNumber.put("descriptionEng", 2);
-	   inputStepNumber.put("descriptionEsp", 2);
-	   inputStepNumber.put("meetingPoint", 3);
-	   inputStepNumber.put("beginDate", 4);
-	   inputStepNumber.put("endDate", 5);
-	   inputStepNumber.put("images", 6);
-	   inputStepNumber.put("participationCriterias", 7);
-	   inputStepNumber.put("price", 8);
-	   inputStepNumber.put("paxType", 9);
-	   inputStepNumber.put("groupCapacity", 10);
 	}
 	
 	@InitBinder     
 	public void initBinder(WebDataBinder binder) {  
-		// Converts empty strings into null when a form is submitted 
 	   binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));  
-	   // Converts input text to date before validation
-//       CustomDateEditor editor = new CustomDateEditor(new SimpleDateFormat("dd/mm/yy"), true);
-//       binder.registerCustomEditor(Date.class, editor);
-       
+	   binder.registerCustomEditor(Integer.class, null, new CustomNumberEditor(Integer.class, true));
        binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("dd/mm/yy"), true, 10)); 
 	}
 	
-	/********************************** Redirection to activity creation form ******************************/
+	@ModelAttribute("activity")
+	public Activity populateForm() {
+	    return new Activity();
+	}
 	
+	/********************************** Redirection to activity creation form ******************************/
 	@GetMapping("create")
-	public ModelAndView goToCreationActivity(Activity activity) {
-		
+	private ModelAndView timepickerExample(@ModelAttribute("activity") Activity activity) {
+	
+		ModelAndView mav = new ModelAndView("activities-creation");
+
 		// Initialiser la liste des horaires en créant un horaire pour chacun des jours de la semaine
 		List<Schedule> usualSchedules = new ArrayList<Schedule>();
 		for (int i = 0; i < 7; i++) {
 			Schedule s = new Schedule(i);
+			s.setWeekdayName("weekDay N°"+i);
 			for (int j = 0; j < 9; j++) {
 				s.addSession(new Session(j));
 			}
@@ -122,8 +115,25 @@ public class ActivityController {
 		}
 		activity.setUsualSchedules(usualSchedules);
 		
-		ModelAndView mav = new ModelAndView("activities-creation");
+		// Initialiser la première div à afficher
+		int stepNumber = 0;
+		int currentTab = 0;
+		
+		// Initialiser la liste des images
+		activity.setImages(new ArrayList<Image>());
+		activity.getImages().add(new Image());
 
+		// Initialiser la liste des paxs
+		activity.setPaxs(new ArrayList<PaxPrice>());
+		activity.getPaxs().add(new PaxPrice());
+		
+		mav.addObject("activity", activity);
+		mav.addObject("currentTab", currentTab);
+		mav.addObject("stepNumber", stepNumber);
+		mav.addObject("validatedStep", validatedSteps);
+		
+		mav.addObject("activity", activity);
+		
 		return mav;
 	}
 	
@@ -324,21 +334,21 @@ public class ActivityController {
 		String absolutePicturePath = UPLOADED_FOLDER_ABSOLUTE + picFileEndName + ".jpg";
 		String relativePicturePath = UPLOAD_FOLDER_RELATIVE + picFileEndName + ".jpg";
 
-		MultipartFile mainPictureFile = activity.getMainPictureFile();
-				 
-		if (mainPictureFile != null && mainPictureFile.getSize() > 0) {
-			
-	        if (!mainPictureFile.getOriginalFilename().equals("")) {
-	        	activity.setMainPicture(relativePicturePath);
-	            try {
-					 mainPictureFile.transferTo(new File(absolutePicturePath));
-				} catch (IllegalStateException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-	        }
-		}
+//		MultipartFile mainPictureFile = activity.getMainPictureFile();
+//				 
+//		if (mainPictureFile != null && mainPictureFile.getSize() > 0) {
+//			
+//	        if (!mainPictureFile.getOriginalFilename().equals("")) {
+//	        	activity.setMainPicture(relativePicturePath);
+//	            try {
+//					 mainPictureFile.transferTo(new File(absolutePicturePath));
+//				} catch (IllegalStateException e) {
+//					e.printStackTrace();
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//	        }
+//		}
 
 	}
 	
@@ -365,63 +375,20 @@ public class ActivityController {
 	}
 	
 	
-	/********************************** Page de TEST **************************************************************/
-	@GetMapping("test")
-	private ModelAndView timepickerExample(@ModelAttribute("activity") Activity activity, Integer stepNumber) {
-	
-		// Initialiser la liste des horaires en créant un horaire pour chacun des jours de la semaine
-		List<Schedule> usualSchedules = new ArrayList<Schedule>();
-		for (int i = 0; i < 7; i++) {
-			Schedule s = new Schedule(i);
-			s.setWeekdayName("weekDay N°"+i);
-			for (int j = 0; j < 9; j++) {
-				s.addSession(new Session(j));
-			}
-			usualSchedules.add(s);
-		}
-		activity.setUsualSchedules(usualSchedules);
-		
-		stepNumber = 0;
-		
-		ModelAndView mav = new ModelAndView("test");
-		mav.addObject("activity", activity);
-		mav.addObject("idSession", "11");
-		mav.addObject("stepNumber", stepNumber);
-		activity.getImages().add(new Image());
-		mav.addObject("activity", activity);
-		
-		return mav;
-	}
-	
-	
-	/********************************** Page de TEST CAROUSEL BOOTSTRAP **************************************************************/
-//	@GetMapping("carousel")
-//	private ModelAndView carouselExample(@Validated(Activity.StepMainPicture.class) Activity activity) {
-//	
-//		ModelAndView mav = new ModelAndView("carousel");
-//
-//		activity.getImages().add(new Image("../img/itii.jpg"));
-//		mav.addObject("activity", activity);
-//		
-//		return mav;
-//	}
-//	
-//	
-//	@PostMapping("carousel/add")
-//	private ModelAndView carouselAdd(@Validated(Activity.StepImages.class) Activity activity, BindingResult result) {
-//		ModelAndView mav = new ModelAndView("carousel");
-//
-//		mav.addObject("activity", activity);
-//		
-//		return mav;
-//	}
-	
-	
 	/******************* Validators ***************************/
 	
+	/**
+	 * Title validator
+	 * @param activity
+	 * @param result
+	 * @return mav
+	 */
 	@PostMapping("stepTitle")
-	public ModelAndView validateTitle(@Validated(Activity.StepTitle.class) Activity activity, BindingResult result) {
-	    ModelAndView mav = new ModelAndView("test");
+	@Validated(Activity.StepTitle.class)
+	public ModelAndView validateTitle(@ModelAttribute("activity") Activity activity, BindingResult result) {
+	    ModelAndView mav = new ModelAndView("activities-creation");
+	    String stepName = "stepTitle";
+	    boolean isValid = false;
 	    
 	    // Spring annotations validation
 	    if (result.hasErrors()) {
@@ -433,16 +400,37 @@ public class ActivityController {
 	    	mav.addObject("stepNumber", 0);
 	    } else {
 	    	// Valid
+	    	isValid  = true;
+	    	// Got to next step
 	    	mav.addObject("stepNumber", 1);
 	    }
 	    
+	    if(isValid) {
+	    	if (!validatedSteps.contains(stepName)) {
+	    		validatedSteps.add(stepName);
+	    	}
+	    } else {
+	    	if (validatedSteps.contains(stepName)) {
+	    		validatedSteps.remove(stepName);
+	    	}
+	    }
+	    mav.addObject("validatedSteps", validatedSteps);
 	    mav.addObject("activity", activity);
 	    return mav;
 	}
 	
+	/**
+	 * Category validator
+	 * @param activity
+	 * @param result
+	 * @return mav
+	 */
 	@PostMapping("stepCategory")
-	public ModelAndView validateCategory(@Validated(Activity.StepCategory.class) Activity activity, BindingResult result) {
-	    ModelAndView mav = new ModelAndView("test");
+	@Validated(Activity.StepCategory.class)
+	public ModelAndView validateCategory(@ModelAttribute("activity") Activity activity, BindingResult result) {
+	    ModelAndView mav = new ModelAndView("activities-creation");
+	    String stepName = "stepCategory";
+	    boolean isValid = false;
 	    
 	    // Spring annotations validation
 	    if (result.hasErrors()) {
@@ -454,31 +442,75 @@ public class ActivityController {
 	    	mav.addObject("stepNumber", 1);
 	    } else {
 	    	// Valid
+	    	isValid  = true;
 	    	mav.addObject("stepNumber", 2);
 	    }
 	    
+	    if(isValid) {
+	    	if (!validatedSteps.contains(stepName)) {
+	    		validatedSteps.add(stepName);
+	    	}
+	    } else {
+	    	if (validatedSteps.contains(stepName)) {
+	    		validatedSteps.remove(stepName);
+	    	}
+	    }
+	    mav.addObject("validatedSteps", validatedSteps);
 	    mav.addObject("activity", activity);
 	    return mav;
 	}
 
+	/**
+	 * Description validator
+	 * @param activity
+	 * @param result
+	 * @return mav
+	 */
 	@PostMapping("stepDescription")
-	public ModelAndView validateDescription(@Validated(Activity.StepDescription.class) Activity activity, BindingResult result) {
-	    ModelAndView mav = new ModelAndView("test");
+	@Validated(Activity.StepDescription.class) 
+	public ModelAndView validateDescription(@ModelAttribute("activity") Activity activity, BindingResult result) {
+	    ModelAndView mav = new ModelAndView("activities-creation");
+	    String stepName = "stepDescription";
+	    boolean isValid = false;
 	    
-	    if(!validateProperty(activity, "descriptionFre", result, StepDescription.class)) {
+	    if (result.hasErrors()) {
+	    	// Invalid
+	    	mav.addObject("stepNumber", 2);
+	    } else if(!validateProperty(activity, "descriptionFre", result, StepDescription.class)) {
 	    	// Invalid
 	    	mav.addObject("stepNumber", 2);
 	    } else {
 	    	// Valid
+	    	isValid  = true;
 	    	mav.addObject("stepNumber", 3);
 	    }
 	    
+	    if(isValid) {
+	    	if (!validatedSteps.contains(stepName)) {
+	    		validatedSteps.add(stepName);
+	    	}
+	    } else {
+	    	if (validatedSteps.contains(stepName)) {
+	    		validatedSteps.remove(stepName);
+	    	}
+	    }
+	    mav.addObject("validatedSteps", validatedSteps);
+	    mav.addObject("activity", activity);
 	    return mav;
 	}
 
+	/**
+	 * Meeting point validator
+	 * @param activity
+	 * @param result
+	 * @return mav
+	 */
 	@PostMapping("stepMeetingPoint")
-	public ModelAndView validateMeetingPoint(@Validated(Activity.StepMeetingPoint.class) Activity activity, BindingResult result) {
-	    ModelAndView mav = new ModelAndView("test");
+	@Validated(Activity.StepMeetingPoint.class) 
+	public ModelAndView validateMeetingPoint(@ModelAttribute("activity") Activity activity, BindingResult result) {
+	    ModelAndView mav = new ModelAndView("activities-creation");
+	    String stepName = "stepMeetingPoint";
+	    boolean isValid = false;
 	    
 	    if (result.hasErrors()) {
 	    	// Invalid
@@ -488,14 +520,36 @@ public class ActivityController {
 	    	mav.addObject("stepNumber", 3);
 	    } else {
 	    	// Valid
+	    	isValid  = true;
 	    	mav.addObject("stepNumber", 4);
 	    }
 	    
+	    if(isValid) {
+	    	if (!validatedSteps.contains(stepName)) {
+	    		validatedSteps.add(stepName);
+	    	}
+	    } else {
+	    	if (validatedSteps.contains(stepName)) {
+	    		validatedSteps.remove(stepName);
+	    	}
+	    }
+	    mav.addObject("validatedSteps", validatedSteps);
+	    mav.addObject("activity", activity);
 	    return mav;
 	}
+	
+	/**
+	 * Period validator
+	 * @param activity
+	 * @param result
+	 * @return mav
+	 */
 	@PostMapping("stepPeriod")
-	public ModelAndView validatePeriod(@Validated(Activity.StepPeriod.class) Activity activity, BindingResult result) {
-	    ModelAndView mav = new ModelAndView("test");
+	@Validated(Activity.StepPeriod.class) 
+	public ModelAndView validatePeriod(@ModelAttribute("activity") Activity activity, BindingResult result) {
+	    ModelAndView mav = new ModelAndView("activities-creation");
+	    String stepName = "stepPeriod";
+	    boolean isValid = false;
 	    
 	    if (result.hasErrors()) {
 	    	// Invalid
@@ -506,17 +560,48 @@ public class ActivityController {
 	    	mav.addObject("stepNumber", 4);
 	    } else {
 	    	// Valid
+	    	isValid = true;
 	    	mav.addObject("stepNumber", 5);
 	    }
-	    
+	    if(isValid) {
+	    	if (!validatedSteps.contains(stepName)) {
+	    		validatedSteps.add(stepName);
+	    	}
+	    } else {
+	    	if (validatedSteps.contains(stepName)) {
+	    		validatedSteps.remove(stepName);
+	    	}
+	    }
+	    mav.addObject("validatedSteps", validatedSteps);
+	    mav.addObject("activity", activity);
 	    return mav;
 	}
 	
-	
+	/**
+	 * Schedules validator
+	 * @param activity
+	 * @param result
+	 * @return mav
+	 */
 	@PostMapping("stepSchedules")
-	public ModelAndView validateSchedules(@Validated(Activity.StepSchedules.class) @ModelAttribute Activity activity, BindingResult result) {
-		
-		ModelAndView mav = new ModelAndView("test");
+	@Validated(Activity.StepSchedules.class) 
+	public ModelAndView validateSchedules(@ModelAttribute("activity") Activity activity, BindingResult result) {
+		// TODO
+		ModelAndView mav = new ModelAndView("activities-creation");
+	    String stepName = "stepSchedules";
+	    boolean isValid = false;
+	    
+	    if(isValid) {
+	    	if (!validatedSteps.contains(stepName)) {
+	    		validatedSteps.add(stepName);
+	    	}
+	    } else {
+	    	if (validatedSteps.contains(stepName)) {
+	    		validatedSteps.remove(stepName);
+	    	}
+	    }
+	    
+	    mav.addObject("validatedSteps", validatedSteps);
 	    mav.addObject("activity", activity);
 	    mav.addObject("stepNumber", 5);
 	    
@@ -525,52 +610,206 @@ public class ActivityController {
 	
 	@PostMapping("addExtraSession")
 	public ModelAndView addExtraSession(@ModelAttribute List<Session> sessions, Errors errors) {
-	    ModelAndView mav = new ModelAndView("test");
+	    ModelAndView mav = new ModelAndView("activities-creation");
 	    return mav;
 	}
 	
+	/**
+	 * Pictures validator
+	 * @param activity
+	 * @param results
+	 * @return mav
+	 */
 	@PostMapping("stepImages")
-	private ModelAndView carouselBootstrapAdd(@Validated(Activity.StepImages.class) @ModelAttribute("activity")Activity activity, BindingResult results) {
-		ModelAndView mav = new ModelAndView("test");
+	@Validated(Activity.StepImages.class) 
+	private ModelAndView carouselBootstrapAdd(@ModelAttribute("activity") Activity activity, BindingResult results) {
+		// TODO
+		ModelAndView mav = new ModelAndView("activities-creation");
 		Image imageToSave = activity.getImages().get(activity.getImages().size() - 1);
 		
 		saveImage(imageToSave);
+		
+		mav.addObject("stepNumber", 6);
+		
 		mav.addObject("activity", activity);
 		return mav;
 	}
 	
 	
+	/**
+	 * Criterias validator
+	 * @param activity
+	 * @param result
+	 * @return mav
+	 */
 	@PostMapping("stepParticipationCriterias")
-	public ModelAndView validateParticipationCriterias(@Validated(Activity.StepParticipationCriterias.class) Activity activity, Errors errors) {
-	    ModelAndView mav = new ModelAndView("test");
+	@Validated(Activity.StepParticipationCriterias.class) 
+	public ModelAndView validateParticipationCriterias(@ModelAttribute("activity") Activity activity, BindingResult result) {
+	    ModelAndView mav = new ModelAndView("activities-creation");
+	    String stepName = "stepParticipationCriterias";
+	    boolean isValid = false;
+	    
+	    if (result.hasErrors()) {
+	    	// Invalid
+	    	System.out.println(result.getErrorCount());
+	    	mav.addObject("stepNumber", 7);
+	    } else if(!validateProperty(activity, "minimumAge", result, StepParticipationCriterias.class)) {
+	    	// Invalid
+	    	mav.addObject("stepNumber", 7);
+	    } else {
+	    	// Valid
+	    	isValid = true;
+	    	mav.addObject("stepNumber", 8);
+	    }
+	    
+	    if(isValid) {
+	    	if (!validatedSteps.contains(stepName)) {
+	    		validatedSteps.add(stepName);
+	    	}
+	    } else {
+	    	if (validatedSteps.contains(stepName)) {
+	    		validatedSteps.remove(stepName);
+	    	}
+	    }
+	    mav.addObject("validatedSteps", validatedSteps);
+	    mav.addObject("activity", activity);
 	    return mav;
 	}
 	
+	/**
+	 * Default price validator
+	 * @param activity
+	 * @param result
+	 * @return mav
+	 */
+	@PostMapping("stepDefaultPrice")
+	@Validated(Activity.StepDefaultPrice.class) 
+	public ModelAndView validateDefaultPrice(@ModelAttribute("activity") Activity activity, BindingResult result) {
+	    ModelAndView mav = new ModelAndView("activities-creation");
+	    String stepName = "stepDefaultPrice";
+	    boolean isValid = false;
+	    
+	    if (result.hasErrors()) {
+	    	// Invalid
+	    	System.out.println(result.getErrorCount());
+	    	mav.addObject("stepNumber", 8);
+	    } else if(!validatePaxBean(activity.getDefaultPax(), result)) {
+//	    	// Invalid
+	    	mav.addObject("stepNumber", 8);
+	    } else {
+	    	// Valid
+	    	isValid = true;
+	    	mav.addObject("stepNumber", 9);
+	    }
+	    
+	    if(isValid) {
+	    	if (!validatedSteps.contains(stepName)) {
+	    		validatedSteps.add(stepName);
+	    	}
+	    } else {
+	    	if (validatedSteps.contains(stepName)) {
+	    		validatedSteps.remove(stepName);
+	    	}
+	    }
+	    mav.addObject("validatedSteps", validatedSteps);
+	    mav.addObject("activity", activity);
+	    return mav;
+	}
+	
+	/**
+	 * Paxs list validator
+	 * @param activity
+	 * @param result
+	 * @return
+	 */
 	@PostMapping("stepPaxs")
-	public ModelAndView validatePaxs(@Validated(Activity.StepPaxs.class) Activity activity, Errors errors) {
-	    ModelAndView mav = new ModelAndView("test");
+	@Validated(Activity.StepPaxs.class) 
+	public ModelAndView validatePaxs(@ModelAttribute("activity") Activity activity, BindingResult result) {
+	    ModelAndView mav = new ModelAndView("activities-creation");
+	    // TODO
+	    if (result.hasErrors()) {
+	    	// Invalid
+	    	System.out.println(result.getErrorCount());
+	    } else if (!validateProperty(activity, "paxs", result, StepDefaultPrice.class)) {
+	    	// Invalid
+	    } else {
+	    	// Valid
+	    	activity.getPaxs().add(new PaxPrice());
+	    }
+    	mav.addObject("stepNumber", 9);
 	    return mav;
 	}
 	
+	/**
+	 * Group capacity validator
+	 * @param activity
+	 * @param result
+	 * @return mav
+	 */
 	@PostMapping("stepGroupCapacity")
-	public ModelAndView validateGroupCapacity(@Validated(Activity.StepGroupCapacity.class) Activity activity, Errors errors) {
-	    ModelAndView mav = new ModelAndView("test");
+	@Validated(Activity.StepGroupCapacity.class) 
+	public ModelAndView validateGroupCapacity(@ModelAttribute("activity") Activity activity, BindingResult result) {
+	    ModelAndView mav = new ModelAndView("activities-creation");
+	    String stepName = "stepGroupCapacity";
+	    boolean isValid = false;
+	    
+	    if (result.hasErrors()) {
+	    	// Invalid
+	    	System.out.println(result.getErrorCount());
+	    	mav.addObject("stepNumber", 10);
+	    } else if (!validateProperty(activity, "maxCapacityGroup", result, StepGroupCapacity.class) || !validateProperty(activity, "minCapacityGroup", result, StepGroupCapacity.class)) {
+	    	// Invalid
+	    	mav.addObject("stepNumber", 10);
+	    } else {
+	    	// Valid
+	    	isValid = true;
+	    	mav.addObject("stepNumber", 11);
+	    }
+	    if(isValid) {
+	    	if (!validatedSteps.contains(stepName)) {
+	    		validatedSteps.add(stepName);
+	    	}
+	    } else {
+	    	if (validatedSteps.contains(stepName)) {
+	    		validatedSteps.remove(stepName);
+	    	}
+	    }
+	    mav.addObject("validatedSteps", validatedSteps);
+	    mav.addObject("activity", activity);
 	    return mav;
 	}
+	
+	 @PostMapping("validateActivity")
+	 @Valid 
+	 public ModelAndView validateActivity(@ModelAttribute("activity") Activity activity, BindingResult result) {
+		 ModelAndView mav = new ModelAndView("activities-overview");
+		 
+		 if (result.hasErrors()) {
+		    	// Invalid
+		    	System.out.println(result.getErrorCount());
+		    	mav.setViewName("activities-creation");
+		    	mav.addObject("stepNumber", 11);
+		    } else if (!validateActivityBean(activity, result)) {
+		    	// Invalid
+		    	mav.setViewName("activities-creation");
+		    	mav.addObject("stepNumber", 11);
+		    } else {
+		    	// Valid
+		    	mav.addObject("activity", activity);
+		    }
+		 
+		 return mav;
+	 }
 	
 	private static boolean validateProperty(Activity activity, String propertyToValidate, BindingResult result, Class<?>... groupes) {
-		 
-		 Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-//		 Set<ConstraintViolation<Activity>> constraintViolations = validator.validateProperty(activity, propertyToValidate);
-		 
-		 Set<ConstraintViolation<Activity>> constraintViolations = validator.validate(activity, groupes);
+		
+		Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+		 Set<ConstraintViolation<Activity>> constraintViolations = validator.validateProperty(activity, propertyToValidate, groupes);
 
-		 
 		 if (constraintViolations.size() > 0) {
 			 System.out.println("Unable to validate bean data : ");
 			 
 			 for (ConstraintViolation<Activity> constraints : constraintViolations) {
-				 
 				 System.out.println("  " + constraints.getRootBeanClass().getSimpleName() + "." + constraints.getPropertyPath() + " " + constraints.getMessage());
 				 result.rejectValue(constraints.getPropertyPath().toString(), constraints.getMessageTemplate().replaceAll("[{}]", ""));
 			 }
@@ -580,21 +819,43 @@ public class ActivityController {
 			 return true;
 		 }
 	}
+	
+	
+	private static boolean validateActivityBean(Activity activity, BindingResult result) {
+		
+		Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+		Set<ConstraintViolation<Activity>> constraintViolations = validator.validate(activity);
+		
+		if (constraintViolations.size() > 0 ) {
+			System.out.println("Unable to validate bean data : ");
+			
+			for (ConstraintViolation<Activity> constraints : constraintViolations) {
+				System.out.println(constraints.getRootBeanClass().getSimpleName() + "." + constraints.getPropertyPath() + " " + constraints.getMessage());
+				result.rejectValue(constraints.getPropertyPath().toString(), constraints.getMessageTemplate().replaceAll("[{}]", ""));
+			}
+			return false;
+		} else {
+			System.out.println("Bean data are valid");
+			return true;
+		}
+	}
+	
+	private static boolean validatePaxBean(PaxPrice pax, BindingResult result) {
+		Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+		Set<ConstraintViolation<PaxPrice>> constraintViolations = validator.validate(pax);
+		
+		if (constraintViolations.size() > 0 ) {
+			System.out.println("Unable to validate bean data : ");
+			
+			for (ConstraintViolation<PaxPrice> constraints : constraintViolations) {
+				System.out.println(constraints.getRootBeanClass().getSimpleName() + "." + constraints.getPropertyPath() + " " + constraints.getMessage());
+				result.rejectValue(constraints.getPropertyPath().toString(), constraints.getMessageTemplate().replaceAll("[{}]", ""));
+			}
+			return false;
+		} else {
+			System.out.println("Bean data are valid");
+			return true;
+		}
+	}
 
 }
-
-
-/********************************** Page de TEST CAROUSEL **************************************************************/
-//@GetMapping("carouselbootstrap")
-//private ModelAndView carouselBootstrap(@ModelAttribute("activity") Activity activity) {
-//
-//	ModelAndView mav = new ModelAndView("carouselbootstrap");
-//	activity.getImages().add(new Image("../img/itii.jpg"));
-//	mav.addObject("activity", activity);
-//	
-//	return mav;
-//}
-	
-	
-	
-

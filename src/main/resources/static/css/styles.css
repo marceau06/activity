@@ -199,7 +199,7 @@ textarea.invalid {
   flex-wrap: wrap;
   display: none;
   padding: 10% 5% 5% 10%;
-  border: solid 0.2px black;
+/*   border: solid 0.2px black; */
 }
 
 .form-input {

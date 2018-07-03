@@ -12,7 +12,6 @@ function showTab(tabToShow) {
 
 	// If datas already are valids, we show modify button
 //	displayRightButton(tabs[tabToShow].id);
-	
 
 	// Display the correct step indicator:
 	fixStepIndicator(tabToShow)
@@ -20,26 +19,22 @@ function showTab(tabToShow) {
 
 // Switch between tabs from vertical left navbar
 function showTabFromNavBar(tabToShow) {
-
 	// Exit the function if any field in the current tab is invalid:
-	if (tabToShow < 0 || tabToShow > 10) {
+	if (tabToShow < 0 || tabToShow > 11) {
 		return false;
 	// Special case : Paxs step
-	} else if (tabToShow != 8) {
+	} else if (tabToShow != 9) {
 		jQuery("#paxsCreated").hide();
 	} else {
 		jQuery("#paxsCreated").show();
 	}
-	
 	// Hide the current tab
 	tabs[currentTab].style.display = "none";
-	
 	// Set the current tab value
 	currentTab = tabToShow;
-	
 	changeStepToValidate();
 	
-	if(currentTab <= 10) {
+	if(currentTab <= 11) {
 		showTab(currentTab);
 	}
 }

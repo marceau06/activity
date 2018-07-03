@@ -46,6 +46,14 @@ function initMap(latMeetingPoint, lngMeetingPoint, zoomSearch, radius) {
 
 function updateMarkerWithGeolocs(geocoder, map, marker, infowindow, latStr, lngStr) {
 
+	console.log(">updateMarkerWithGeolocs : lat = " + latStr + " lng = " + lngStr);
+	
+	jQuery("#latitude").val(parseFloat(latStr));
+	jQuery("#longitude").val(parseFloat(lngStr));
+	
+	console.log(jQuery("#latitude").val());
+	console.log(jQuery("#longitude").val());
+	
 	var latlng = {lat: parseFloat(latStr), lng: parseFloat(lngStr)};
 
 	geocoder.geocode({'location': latlng}, function(results, status) {
