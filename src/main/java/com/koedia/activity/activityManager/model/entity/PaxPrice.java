@@ -17,7 +17,7 @@ public class PaxPrice {
 	private Integer paxPriceId;
 	
 	@Column(name = "name")
-	private String name;
+	private String name = "default";
 	
 	@Column(name = "age_min")
 	private Integer ageMin;

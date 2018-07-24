@@ -1,5 +1,4 @@
 package com.koedia.activity.activityManager.controller;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,13 +11,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
+import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.xml.transform.Source;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +43,7 @@ import com.koedia.activity.activityManager.model.entity.Activity.StepCategory;
 import com.koedia.activity.activityManager.model.entity.Activity.StepDefaultPrice;
 import com.koedia.activity.activityManager.model.entity.Activity.StepDescription;
 import com.koedia.activity.activityManager.model.entity.Activity.StepGroupCapacity;
+import com.koedia.activity.activityManager.model.entity.Activity.StepImages;
 import com.koedia.activity.activityManager.model.entity.Activity.StepMeetingPoint;
 import com.koedia.activity.activityManager.model.entity.Activity.StepParticipationCriterias;
 import com.koedia.activity.activityManager.model.entity.Activity.StepPeriod;
@@ -80,10 +79,10 @@ public class ActivityController {
 	
 	
 	/********************************** Init method ******************************/
-	@PostConstruct
-	private static void init() {
-       validatedSteps.clear();
-	}
+//	@PostConstruct
+//	private static void init() {
+//       validatedSteps.clear();
+//	}
 	
 	@InitBinder     
 	public void initBinder(WebDataBinder binder) {  
@@ -102,7 +101,11 @@ public class ActivityController {
 	private ModelAndView timepickerExample(@ModelAttribute("activity") Activity activity) {
 	
 		ModelAndView mav = new ModelAndView("activities-creation");
-
+		
+		// TODO : Si le user souhaite reprendre son formulaire dans l'état où il l'avait laissé
+		validatedSteps.clear();
+		activity = new Activity();
+		
 		// Initialiser la liste des horaires en créant un horaire pour chacun des jours de la semaine
 		List<Schedule> usualSchedules = new ArrayList<Schedule>();
 		for (int i = 0; i < 7; i++) {
@@ -515,7 +518,7 @@ public class ActivityController {
 	    if (result.hasErrors()) {
 	    	// Invalid
 	    	mav.addObject("stepNumber", 3);
-	    } else if(!validateProperty(activity, "meetingPoint", result, StepMeetingPoint.class)) {
+	    } else if(!validateGroups(activity, result, StepMeetingPoint.class)) {
 	    	// Invalid
 	    	mav.addObject("stepNumber", 3);
 	    } else {
@@ -555,7 +558,7 @@ public class ActivityController {
 	    	// Invalid
 	    	System.out.println(result.getErrorCount());
 	    	mav.addObject("stepNumber", 4);
-	    } else if(!validateProperty(activity, "meetingPoint", result, StepPeriod.class)) {
+	    } else if(!validateGroups(activity, result, StepPeriod.class)) {
 	    	// Invalid
 	    	mav.addObject("stepNumber", 4);
 	    } else {
@@ -621,16 +624,34 @@ public class ActivityController {
 	 * @return mav
 	 */
 	@PostMapping("stepImages")
-	@Validated(Activity.StepImages.class) 
-	private ModelAndView carouselBootstrapAdd(@ModelAttribute("activity") Activity activity, BindingResult results) {
-		// TODO
+	@Validated(StepImages.class) 
+	private ModelAndView carouselBootstrapAdd(@ModelAttribute("activity") Activity activity, BindingResult result) {
 		ModelAndView mav = new ModelAndView("activities-creation");
-		Image imageToSave = activity.getImages().get(activity.getImages().size() - 1);
+	    String stepName = "stepImages";
+	    boolean isValid = false;
+	    mav.addObject("stepNumber", 6);
 		
-		saveImage(imageToSave);
-		
-		mav.addObject("stepNumber", 6);
-		
+	    Image imageToSave = activity.getImages().get(activity.getImages().size() - 1);
+	    	
+	    if (!isImage(imageToSave.getFile().getOriginalFilename()) || result.hasErrors() || !validateProperty(activity, "images", result, StepImages.class)) {
+		   	// Invalid
+			System.out.println(result.getErrorCount());
+		} else {
+		   	// Valid
+			saveImage(imageToSave);
+		   	isValid = true;
+		}
+	    
+	    if(isValid) {
+	    	if (!validatedSteps.contains(stepName)) {
+	    		validatedSteps.add(stepName);
+	    	}
+	    } else {
+	    	if (validatedSteps.contains(stepName)) {
+	    		validatedSteps.remove(stepName);
+	    	}
+	    }
+	    mav.addObject("validatedSteps", validatedSteps);
 		mav.addObject("activity", activity);
 		return mav;
 	}
@@ -726,6 +747,9 @@ public class ActivityController {
 	@Validated(Activity.StepPaxs.class) 
 	public ModelAndView validatePaxs(@ModelAttribute("activity") Activity activity, BindingResult result) {
 	    ModelAndView mav = new ModelAndView("activities-creation");
+	    String stepName = "stepPaxs";
+	    boolean isValid = false;
+	    
 	    // TODO
 	    if (result.hasErrors()) {
 	    	// Invalid
@@ -734,8 +758,21 @@ public class ActivityController {
 	    	// Invalid
 	    } else {
 	    	// Valid
+	    	isValid = true;
 	    	activity.getPaxs().add(new PaxPrice());
 	    }
+	    
+	    if(isValid) {
+	    	if (!validatedSteps.contains(stepName)) {
+	    		validatedSteps.add(stepName);
+	    	}
+	    } else {
+	    	if (validatedSteps.contains(stepName)) {
+	    		validatedSteps.remove(stepName);
+	    	}
+	    }
+	    mav.addObject("validatedSteps", validatedSteps);
+	    mav.addObject("showCreatedPax", isValid);
     	mav.addObject("stepNumber", 9);
 	    return mav;
 	}
@@ -796,7 +833,11 @@ public class ActivityController {
 		    } else {
 		    	// Valid
 		    	mav.addObject("activity", activity);
+				// Traitement & enregistrement en DB
+				activityService.saveActivity(activity);
 		    }
+		 mav.addObject("activityCreated", activity);
+		 mav.addObject("validatedSteps", validatedSteps);
 		 
 		 return mav;
 	 }
@@ -805,6 +846,25 @@ public class ActivityController {
 		
 		Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 		 Set<ConstraintViolation<Activity>> constraintViolations = validator.validateProperty(activity, propertyToValidate, groupes);
+
+		 if (constraintViolations.size() > 0) {
+			 System.out.println("Unable to validate bean data : ");
+			 
+			 for (ConstraintViolation<Activity> constraints : constraintViolations) {
+				 System.out.println("  " + constraints.getRootBeanClass().getSimpleName() + "." + constraints.getPropertyPath() + " " + constraints.getMessage());
+				 result.rejectValue(constraints.getPropertyPath().toString(), constraints.getMessageTemplate().replaceAll("[{}]", ""));
+			 }
+			 return false;
+		 } else {
+			 System.out.println("Bean data are valid");
+			 return true;
+		 }
+	}
+	
+	private static boolean validateGroups(Activity activity, BindingResult result, Class<?>... groupes) {
+		
+		Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+		 Set<ConstraintViolation<Activity>> constraintViolations = validator.validate(activity, groupes);
 
 		 if (constraintViolations.size() > 0) {
 			 System.out.println("Unable to validate bean data : ");
@@ -856,6 +916,31 @@ public class ActivityController {
 			System.out.println("Bean data are valid");
 			return true;
 		}
+	}
+
+
+
+	private boolean isImage(String filepath) {
+        File f = new File(filepath);
+        String mimetype= new MimetypesFileTypeMap().getContentType(f);
+        String type = mimetype.split("/")[0];
+        
+        if(type.equals("image")) {
+            System.out.println("It's an image");
+            return true;
+        } else { 
+            System.out.println("It's NOT an image");
+            return false;
+    	}
+	}
+
+	/********************************** Accès page de test **********************************************************/
+	@GetMapping("test")
+	public ModelAndView goToTest(@ModelAttribute("activity") Activity activity) {
+		// Redirection vers page test 
+		ModelAndView mav = new ModelAndView("test");
+		mav.addObject("activity", activity);
+		return mav;
 	}
 
 }

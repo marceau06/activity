@@ -15,8 +15,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -31,7 +29,6 @@ public class Schedule {
 	@Column(name = "schedule_id")
    	private Integer id;
 	
-	@NotNull
 	@Column(name = "activity_id")
 	private Integer activityId;
  

@@ -27,13 +27,13 @@ public class Session {
 		
 	@NotNull
 	@Column(name = "begin_hour")
-	@DateTimeFormat(pattern = "HH:mm")
-	private LocalDateTime beginHour;
+//	@DateTimeFormat(pattern = "HH:mm")
+	private String beginHour;
 	 
 	@NotNull
 	@Column(name = "end_hour")
-	@DateTimeFormat(pattern = "HH:mm")
-	private LocalDateTime endHour;
+//	@DateTimeFormat(pattern = "HH:mm")
+	private String endHour;
 	
 	@Column(name = "session_name")
 	private String sessionName;
@@ -57,19 +57,19 @@ public class Session {
 		this.id = id;
 	}
 
-	public LocalDateTime getBeginHour() {
+	public String getBeginHour() {
 		return beginHour;
 	}
 
-	public void setBeginHour(LocalDateTime beginHour) {
+	public void setBeginHour(String beginHour) {
 		this.beginHour = beginHour;
 	}
 
-	public LocalDateTime getEndHour() {
+	public String getEndHour() {
 		return endHour;
 	}
 
-	public void setEndHour(LocalDateTime endHour) {
+	public void setEndHour(String endHour) {
 		this.endHour = endHour;
 	}
 

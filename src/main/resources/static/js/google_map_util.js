@@ -1,15 +1,11 @@
 
 function initMap(latMeetingPoint, lngMeetingPoint, zoomSearch, radius) {
-
-	// Check parameters
-	if(!latMeetingPoint || !latMeetingPoint || !zoomSearch){
-		// TODO
-	} else {
-		// Options
-		var uluru = {
-				lat: parseFloat(latMeetingPoint), 
-				lng: parseFloat(lngMeetingPoint)
-		};
+		
+	// Options
+	var uluru = {
+			lat: parseFloat(latMeetingPoint), 
+			lng: parseFloat(lngMeetingPoint)
+	};
 
 		var map = new google.maps.Map(document.getElementById('googleMap'), {
 			zoom: parseFloat(zoomSearch),
@@ -41,7 +37,6 @@ function initMap(latMeetingPoint, lngMeetingPoint, zoomSearch, radius) {
 			marker = marker[0];
 			map = map[0];
 		});
-	}
 }
 
 function updateMarkerWithGeolocs(geocoder, map, marker, infowindow, latStr, lngStr) {

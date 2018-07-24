@@ -17,11 +17,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.Valid;
-import javax.validation.constraints.Future;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -30,6 +27,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.koedia.common.tool.CollectionUtil;
 
@@ -61,6 +59,7 @@ public class Activity {
  
 	// Step Description
 	@Length(min = 20, max = 1000, message = "{Size.activity.description}", groups = {StepDescription.class})
+	@NotEmpty(message = "{Size.activity.description}", groups = {StepDescription.class})
 	@Column(name = "description_fre")
    	private String descriptionFre;
 	
@@ -74,23 +73,24 @@ public class Activity {
 	
  
 	// Step MeetingPoint
-	@NotEmpty(groups = {StepMeetingPoint.class})
+	@NotEmpty(message = "{NotEmpty.activity.meetingpoint}", groups = {StepMeetingPoint.class})
 	@Column(name = "meeting_point")
 	private String meetingPoint;
 	
-	@NotEmpty(groups = {StepMeetingPoint.class})
+	@NotEmpty(message = "{NotEmpty.activity.address}", groups = {StepMeetingPoint.class})
+	@Length(min = 3, max = 1000, message="{Size.activity.address}", groups = {StepMeetingPoint.class})
 	@Column(name = "address")
    	private String address;
 	
-	@NotEmpty(groups = {StepMeetingPoint.class})
+	@NotEmpty(message = "{NotEmpty.activity.city}", groups = {StepMeetingPoint.class})
 	@Column(name = "city")
 	private String city;
 	
-	@NotEmpty(groups = {StepMeetingPoint.class})
+	@NotEmpty(message = "{NotEmpty.activity.country}", groups = {StepMeetingPoint.class})
 	@Column(name="country")
 	private String country; 
 	
-	@NotEmpty(groups = {StepMeetingPoint.class})	
+	@NotEmpty(message = "{NotEmpty.activity.zipcode}", groups = {StepMeetingPoint.class})	
 	@Column(name="zip_code")
 	private String zipCode;
 	
@@ -103,14 +103,16 @@ public class Activity {
 
    	// Step Schedules
 	@NotNull(groups = {StepPeriod.class})
-	@Future
-	@Temporal(TemporalType.DATE)
+//	@Future
+//	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "dd/MM/yyyy") 
 	@Column(name = "begin_date")
    	private Date beginDate;
 
 	@NotNull(groups = {StepPeriod.class})
-	@Future
-	@Temporal(TemporalType.DATE)
+//	@Future
+//	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "dd/MM/yyyy") 
 	@Column(name = "end_date")
 	private Date endDate;
 	
@@ -128,7 +130,7 @@ public class Activity {
 	@Valid
 	private List<Schedule> customSchedules = new ArrayList<Schedule>();
 	
-	// Step Participation criterieas
+	// Step Participation criterias
 	@NotNull(groups = {StepParticipationCriterias.class})
 	@Column(name="required_id")
 	private Boolean requiredId;
@@ -153,7 +155,6 @@ public class Activity {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name="activity_id")
     @OrderBy("price")
-	@Size(min=1, max=4)
 	@Valid
 	private List<PaxPrice> paxs = new ArrayList<PaxPrice>();
 

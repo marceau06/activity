@@ -32,13 +32,11 @@ function showTabFromNavBar(tabToShow) {
 	tabs[currentTab].style.display = "none";
 	// Set the current tab value
 	currentTab = tabToShow;
-	changeStepToValidate();
 	
 	if(currentTab <= 11) {
 		showTab(currentTab);
 	}
 }
-
 
 // Removes the "active" class of all steps
 function fixStepIndicator(tabToShow) {
@@ -50,101 +48,3 @@ function fixStepIndicator(tabToShow) {
 	// Adds the "active" class to the current step:
 	steps[tabToShow].className += " selected";
 }
-
-
-function onChangeDate(inputDate) {	
-	console.log(inputDate);
-	
-}
-
-//Change la date de retour
-function changeReturnDate() {
-	var date = jQuery("#beginDate").datepicker('getDate');
-	if (date && date.getDate) {
-		date.setDate(date.getDate() + 1);
-		jQuery("#endDate").datepicker('option', 'minDate', date);
-		jQuery("#endDate").datepicker('setDate', date);
-	}
-}
-
-
-//Removes the "active" class of all steps
-//function fixStepIndicator(tabToShow) {
-//	
-//	var i, steps = document.getElementsByClassName("step");
-//	
-//	for (i = 0; i < steps.length; i++) {
-//		steps[i].className = steps[i].className.replace(" active", "");
-//	}
-//	
-//	// Adds the "active" class to the current step:
-//	steps[tabToShow].className += "active";
-//}
-
-
-
-
-//function displayRightButton(currentTabId) {
-//	var areDatasValid = jQuery("#" + currentTabId).data('isvalid');
-//	
-//	if (areDatasValid) {
-//		// Show modify button
-//		toggleButtonAndSwitchInput(true);
-//	} else {
-//		// Show validate button
-//		toggleButtonAndSwitchInput(false);
-//	}
-//}
-//
-//function toggleButtonAndSwitchInput(onValidate) {
-//	
-//	// Retrieve current tab
-//	inputsOfCurrentTab = tabs[currentTab].getElementsByTagName("input");
-//	
-//	// If datas are valid
-//	if(onValidate) {
-//		
-//		// Hide validate button
-//		jQuery("#nextBtn").hide();
-//		
-//		// Show modify button
-//		jQuery("#modifyBtn").show();
-//		
-//		// Desactivate inputs
-//		for (i = 0; i < y.length; i++) {
-//			jQuery("#"+inputsOfCurrentTab[i].name).prop('readonly', true);
-//		}
-//		
-//		// notify navbar
-//		jQuery("#go-to-" + tabs[currentTab].id).css("background-color", "green");
-//		
-//		// Desactivate add button of pax creation tab
-//		if (tabs[currentTab].id === 'stepPaxs') {
-//			jQuery("#creationPaxBtn").hide();
-//			jQuery(".btnDeletePaxCreated").hide();
-//		}
-//	} else {
-//		
-//		// Hide modify button
-//		jQuery("#modifyBtn").hide();
-//		
-//		// Show validate button
-//		jQuery("#nextBtn").show();
-//		
-//		// Activate inputs
-//		for (i = 0; i < y.length; i++) {
-//			jQuery("#"+inputsOfCurrentTab[i].name).prop('readonly', false);
-//		}
-//		
-//		// notify navbar
-//		jQuery("#go-to-" + tabs[currentTab].id).css("background-color", "");
-//		
-//		// Cas particulier : création de paxs
-//		// Activate add button of pax creation tab
-//		if (tabs[currentTab].id === 'stepPaxs') {
-//			jQuery("#creationPaxBtn").show();
-//			jQuery(".btnDeletePaxCreated").show();
-//		}
-//	}
-	
-//}

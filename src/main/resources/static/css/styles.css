@@ -235,6 +235,7 @@ textarea.invalid {
 
 .pax-item {
 /* 	min-height : 400px; */
+	border: 1px solid black;
 }
 
 .display-pax-bloc {
@@ -311,14 +312,50 @@ body.homePage {
   	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
 
-.row {
-}
-
 .row-form {
-/* 	border: 0.5px solid black; */
 	font-size: 25px;
 	padding-top: 10px;
 	padding-bottom: 10px;
 	margin-top: 20px;
 	margin-bottom: 20px;
+}
+
+
+/**** Datepicker *****/
+.datepickerContainer {
+	position: relative;
+	display: block;
+}
+.datepickerContainer .cal {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	z-index: 4;
+}
+
+#registerLoginBloc {
+   padding-top: 100px;
+   padding-left: 1000px;
+   padding-right: 1000px;
+   margin-bottom: 100px;
+}
+
+#blocRegister {
+   display: none;
+   padding-left: auto;
+   padding-right: auto;
+}
+
+#blocRegisterContent {
+	display: flex;
+}
+
+#blocLogin {
+  display: none;
+   padding-left: auto;
+   padding-right: auto;
+}
+
+.statusChoice {
+	border:solid blue 1px;
 }

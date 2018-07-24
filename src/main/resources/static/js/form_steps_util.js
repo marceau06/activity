@@ -263,28 +263,30 @@ function displayImg() {
 
 // Retourne le nombre de nuits entre 2 dates
 function getNbNightsBetweenTwoDates(startDate, endDate) {
-	
 	return Math.round(Math.abs((endDate - startDate) / (24 * 60 * 60 * 1000)));
-	
 }
 
 // Change la date de retour
 function changeReturnDate() {
-	
 	var date = jQuery("#beginDateText").datepicker('getDate');
-	
 	if (date && date.getDate) {
 		date.setDate(date.getDate() + 1);
 		jQuery("#endDateText").datepicker('option', 'minDate', date);
 		jQuery("#endDateText").datepicker('setDate', date);
 	}
-	
 }
 
-function onChangeTime() {
-	
-//	jQuery("#beginHour").val(jQuery("#beginHour").val() + ":00");
-//	jQuery("#endHour").val(jQuery("#endHour").val() + ":00");
+function changeEndHour() { // Remove
+	var hour = jQuery("#beginDateText").datepicker('getDate');
+	if (date && date.getDate) {
+		date.setDate(date.getDate() + 1);
+		jQuery("#endDateText").datepicker('option', 'minDate', date);
+		jQuery("#endDateText").datepicker('setDate', date);
+	}
+	jQuery("#beginHour").val(jQuery("#beginHour").val() + ":00");
+	jQuer("#").val()
+	jQuery("#endHour").val(jQuery("#endHour").val() + ":00");
+	jQuery("#").val();
 }
 
 
