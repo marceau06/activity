@@ -37,22 +37,50 @@ public class LoginController {
     	return mav;
     }
     
-    // Go to registration page
-	@GetMapping("/registration")
-	public ModelAndView registration(){
-	
-		ModelAndView modelAndView = new ModelAndView("registration");
-		User user = new User();
-		modelAndView.addObject("user", user);
+    
+    /********************************** Redirection vers modification du compte **********************************/
+
+	@GetMapping("/register-particular")
+	public ModelAndView goToRegisterPartForm() {
 		
-		return modelAndView;
+		ModelAndView mav = new ModelAndView("register-particular");
+		User user = new User();
+		mav.addObject("user", user);
+
+		return mav;
 	}
+	
+	/********************************** Redirection vers modification du compte **********************************/
+
+	@GetMapping("/register-pro")
+	public ModelAndView goToRegisterProForm() {
+		
+		ModelAndView mav = new ModelAndView("register-pro");
+		User user = new User();
+		mav.addObject("user", user);
+
+		return mav;
+	}
+
+	
+    
+    
+    // Go to registration page
+//	@GetMapping("/registration")
+//	public ModelAndView registration(){
+//	
+//		ModelAndView modelAndView = new ModelAndView("registration");
+//		User user = new User();
+//		modelAndView.addObject("user", user);
+//		
+//		return modelAndView;
+//	}
 	
 	// Submit registration form
 	@PostMapping("/registration")
 	public ModelAndView createUser(@Valid User user, BindingResult bindingResult) {
 		
-		ModelAndView mav = new ModelAndView("registration");
+		ModelAndView mav = new ModelAndView("register-particular");
 		User userExists = userService.findUserByEmail(user.getEmail());
 		if (userExists != null) {
 			bindingResult.rejectValue("email", "error.user", "There is already a user registered with the email provided");
@@ -60,7 +88,7 @@ public class LoginController {
 		if (bindingResult.hasErrors()) {
 			// TODO Redirect to home with error message parameter
 		} else {
-			mav.setViewName("home");
+			mav.setViewName("account");
 			userService.saveUser(user);
 			mav.addObject("succesLogin", "User has been registered successfully");
 			mav.addObject("user", new User());

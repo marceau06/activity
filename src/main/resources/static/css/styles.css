@@ -335,8 +335,8 @@ body.homePage {
 
 #registerLoginBloc {
    padding-top: 100px;
-   padding-left: 1000px;
-   padding-right: 1000px;
+   padding-left: 40%;
+   padding-right: 40%;
    margin-bottom: 100px;
 }
 
@@ -344,6 +344,7 @@ body.homePage {
    display: none;
    padding-left: auto;
    padding-right: auto;
+   width: 150%;
 }
 
 #blocRegisterContent {
@@ -357,5 +358,61 @@ body.homePage {
 }
 
 .statusChoice {
-	border:solid blue 1px;
+	width: 100%;
+	heigth: 100%;
+	margin-right: 10px;
+}
+
+div.statusChoice a
+{
+	display:block;
+}
+
+.img-thumbnail {
+    border: 1px solid #ddd; 
+    border-radius: 4px;  
+    padding: 5px; 
+    width: 150px;
+}
+
+.img-thumbnail:hover {
+    box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+}
+
+#buttonBloc {
+    display: flex;
+    margin-left: 40px; 
+}
+
+#imgBloc {
+	display: flex;
+    flex-wrap: nowrap;
+	height: 325px;
+	margin-left: 40px; 
+}
+
+#listBloc {
+	border: 1px solid #ddd; 
+}
+
+#buttonBloc {
+	margin-top: 10px;
+}
+
+#listBlocContent {
+	border: 1px solid #ddd; 
+	margin-left: 10px;
+	margin-bottom: 50px;
+}
+
+#listBloc h1 {
+	margin-left: 40px; 
+} 
+
+#listBloc h3 {
+	margin-left: 40px; 
+}
+
+#listBloc p {
+	margin-left: 40px; 
 }

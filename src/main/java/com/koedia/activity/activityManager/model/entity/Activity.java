@@ -21,7 +21,6 @@ import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -100,7 +99,6 @@ public class Activity {
 	@Column(name = "longitude")
 	private Double longitude;
 	
-
    	// Step Schedules
 	@NotNull(groups = {StepPeriod.class})
 //	@Future

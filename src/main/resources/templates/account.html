@@ -67,7 +67,7 @@
 									<a th:href="@{/account/update}"><span th:text="#{update_account}"></span></a>
 								</div>
 								<div class="">
-									<a th:href="@{/activity/test}">Page de test</a>
+									<a th:href="@{/account/test}">Page de test</a>
 								</div>
 							</div>
 						</div>
@@ -80,67 +80,67 @@
         </nav>
         
         
-        <section class="col-lg-9">
-        	<div class="contResultBloc row" th:if="!${#lists.isEmpty(activitiesList)}" th:each="activity : ${activitiesList}">
-	        	<div class="col-lg-4">
-	        		<div class="row">
-						<img th:src="${activity.mainPicture}" class=""  height="200" width="450">
-	        		</div>
-	        		<div class="row">
-	        			<h2> 
-							<span th:text="${activity.title}"></span>
-						</h2>
-	        		</div>
-	        	</div>
-	        	<div class="col-lg-8 constResultInfos">
-	        		<!-- Category -->
-	        		<div class="row">
-	        			<h4>
-							<span th:text="${activity.category}"></span>
-						</h4>
-					</div>
-					<!-- Description -->
-					<div class="contDescriptionBloc row">
-		        		<div class="contDescriptionArea row">
-							<span th:text="${activity.descriptionFre}"></span>
-						</div>
-					</div>
-					<!-- Address -->
-					<div class="contAddressBloc row">
-						<p><span th:text="${activity.address}"></span></p>
-					</div>
-					<!-- Price -->
-					<div class="contPriceBloc row">
+<!--         <section class="col-lg-9"> -->
+<!--         	<div class="contResultBloc row" th:if="!${#lists.isEmpty(activitiesList)}" th:each="activity : ${activitiesList}"> -->
+<!-- 	        	<div class="col-lg-4"> -->
+<!-- 	        		<div class="row"> -->
+<!-- 						<img th:src="${activity.mainPicture}" class=""  height="200" width="450"> -->
+<!-- 	        		</div> -->
+<!-- 	        		<div class="row"> -->
+<!-- 	        			<h2>  -->
+<!-- 							<span th:text="${activity.title}"></span> -->
+<!-- 						</h2> -->
+<!-- 	        		</div> -->
+<!-- 	        	</div> -->
+<!-- 	        	<div class="col-lg-8 constResultInfos"> -->
+<!-- 	        		Category -->
+<!-- 	        		<div class="row"> -->
+<!-- 	        			<h4> -->
+<!-- 							<span th:text="${activity.category}"></span> -->
+<!-- 						</h4> -->
+<!-- 					</div> -->
+<!-- 					Description -->
+<!-- 					<div class="contDescriptionBloc row"> -->
+<!-- 		        		<div class="contDescriptionArea row"> -->
+<!-- 							<span th:text="${activity.descriptionFre}"></span> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					Address -->
+<!-- 					<div class="contAddressBloc row"> -->
+<!-- 						<p><span th:text="${activity.address}"></span></p> -->
+<!-- 					</div> -->
+<!-- 					Price -->
+<!-- 					<div class="contPriceBloc row"> -->
 							
-						<div class="col-lg-8 contButtonBloc">
-							<form th:action="@{/activity/toggle}" method="POST" enctype="multipart/form-data">
-								<input type="checkbox" data-toggle="toggle" th:attr="data-on=#{activate}" th:attr="data-on=#{deactivate}" th:checked="${activity.active}" onchange="submit();">
-								<input type="hidden" th:id="activityId" th:name="activityId" th:value="${activity.id}" />
-							</form>
-							<form th:action="@{/activity/edit}" method="GET" enctype="multipart/form-data" >
-								<button type="button"  class="btn btn-primary" onclick="submit();"><span th:text="#{edit}"></span></button>
-								<input type="hidden" th:id="activityId" th:name="activityId" th:value="${activity.id}" />
-							</form>
-							<form th:action="@{/activity/remove}" method="POST" enctype="multipart/form-data" >
-								<button type="button"  class="btn btn-secondary" onclick="submit();"><span th:text="#{remove}"></span></button>
-								<input type="hidden" th:id="activityId" th:name="activityId" th:value="${activity.id}" />
-							</form>
-							<form th:action="@{/activity/export}" method="POST" enctype="multipart/form-data" >
-								<button type="button"  class="btn btn-secondary" onclick="submit();">Export</button>
-								<input type="hidden" th:id="activityId" th:name="activityId" th:value="${activity.id}" />
-							</form>
-						</div>
+<!-- 						<div class="col-lg-8 contButtonBloc"> -->
+<!-- 							<form th:action="@{/activity/toggle}" method="POST" enctype="multipart/form-data"> -->
+<!-- 								<input type="checkbox" data-toggle="toggle" th:attr="data-on=#{activate}" th:attr="data-on=#{deactivate}" th:checked="${activity.active}" onchange="submit();"> -->
+<!-- 								<input type="hidden" th:id="activityId" th:name="activityId" th:value="${activity.id}" /> -->
+<!-- 							</form> -->
+<!-- 							<form th:action="@{/activity/edit}" method="GET" enctype="multipart/form-data" > -->
+<!-- 								<button type="button"  class="btn btn-primary" onclick="submit();"><span th:text="#{edit}"></span></button> -->
+<!-- 								<input type="hidden" th:id="activityId" th:name="activityId" th:value="${activity.id}" /> -->
+<!-- 							</form> -->
+<!-- 							<form th:action="@{/activity/remove}" method="POST" enctype="multipart/form-data" > -->
+<!-- 								<button type="button"  class="btn btn-secondary" onclick="submit();"><span th:text="#{remove}"></span></button> -->
+<!-- 								<input type="hidden" th:id="activityId" th:name="activityId" th:value="${activity.id}" /> -->
+<!-- 							</form> -->
+<!-- 							<form th:action="@{/activity/export}" method="POST" enctype="multipart/form-data" > -->
+<!-- 								<button type="button"  class="btn btn-secondary" onclick="submit();">Export</button> -->
+<!-- 								<input type="hidden" th:id="activityId" th:name="activityId" th:value="${activity.id}" /> -->
+<!-- 							</form> -->
+<!-- 						</div> -->
 				
-						<div class="col-lg-2 labelPrice">
-							<span th:text="#{price_per_pers}"></span>
-						</div>
-						<section class="col-lg-2 activityPrice">
-<!-- 						<p><span th:text="${activity.price}"></span> Euros</p> -->
-						</section>
-					</div>
-        		</div>
-        	</div>
-        </section>
+<!-- 						<div class="col-lg-2 labelPrice"> -->
+<!-- 							<span th:text="#{price_per_pers}"></span> -->
+<!-- 						</div> -->
+<!-- 						<section class="col-lg-2 activityPrice"> -->
+<!-- <!-- 						<p><span th:text="${activity.price}"></span> Euros</p> --> -->
+<!-- 						</section> -->
+<!-- 					</div> -->
+<!--         		</div> -->
+<!--         	</div> -->
+<!--         </section> -->
       </div>
     </div>
 

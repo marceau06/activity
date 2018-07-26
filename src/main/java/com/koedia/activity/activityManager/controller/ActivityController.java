@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -169,7 +170,16 @@ public class ActivityController {
 	/********************************** Enregistrer une activité *******************************************/
 
 	public void saveActivity(Activity activity) {
+		
 		activity.setCreationDate(new Date(Calendar.getInstance().getTime().getTime()));
+		activity.setUserId(getUserFromSession().getId());
+		
+		for (Iterator<Image> itr = activity.getImages().iterator(); itr.hasNext();) {
+		      if (itr.next().getPath() == null) { 
+		    	  itr.remove(); 
+		      }
+		 }
+		
 		try{
 			activityService.saveActivity(activity);
 		} catch(Exception ex) {
@@ -215,7 +225,7 @@ public class ActivityController {
 				activityService.saveActivity(activityToUpdate);
 			}
 			// Retrieve user's informations
-			retrieveUserInfos(mav);
+			addUserInfosToView(mav);
 		}
 		
 		return mav;
@@ -234,7 +244,7 @@ public class ActivityController {
 		ModelAndView mav = new ModelAndView("account");
 		
 		// Retrieve user's informations
-		retrieveUserInfos(mav);
+		addUserInfosToView(mav);
 		
 		return mav;
 	}
@@ -278,7 +288,7 @@ public class ActivityController {
 		ModelAndView mav = new ModelAndView("account");
 		
 		// Retrieve user's informations
-		retrieveUserInfos(mav);
+		addUserInfosToView(mav);
 		
 		return mav;
 	}
@@ -300,9 +310,9 @@ public class ActivityController {
 	
 	/********************************** Méthodes utiles **********************************************************/
 
-	private void retrieveUserInfos(ModelAndView mav) {
+	private void addUserInfosToView(ModelAndView mav) {
 		// Retrieve user
-		User user = (User)httpSession.getAttribute("user");
+		User user = getUserFromSession();
 		
 		// Retrieve activities created by user
 		List<Activity> allActivitiesForUser = activityService.findAllByUserId((Integer)httpSession.getAttribute("userId"));
@@ -322,38 +332,10 @@ public class ActivityController {
 		}
 	}
 	
-	
-	private void saveFile(Activity activity) {
-		
-		String picFileEndName = "mainpic" + Math.round(Math.random()*101);
-		
-		Integer userId = (Integer)httpSession.getAttribute("userId");
-		
-		if (userId != null) {
-			activity.setUserId(userId);
-			picFileEndName += "_user" + userId.toString();
-		}
-		
-		String absolutePicturePath = UPLOADED_FOLDER_ABSOLUTE + picFileEndName + ".jpg";
-		String relativePicturePath = UPLOAD_FOLDER_RELATIVE + picFileEndName + ".jpg";
-
-//		MultipartFile mainPictureFile = activity.getMainPictureFile();
-//				 
-//		if (mainPictureFile != null && mainPictureFile.getSize() > 0) {
-//			
-//	        if (!mainPictureFile.getOriginalFilename().equals("")) {
-//	        	activity.setMainPicture(relativePicturePath);
-//	            try {
-//					 mainPictureFile.transferTo(new File(absolutePicturePath));
-//				} catch (IllegalStateException e) {
-//					e.printStackTrace();
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//	        }
-//		}
-
+	private User getUserFromSession() {
+		return (User)httpSession.getAttribute("user");
 	}
+	
 	
 	private void saveImage(Image image) {
 		
@@ -834,7 +816,7 @@ public class ActivityController {
 		    	// Valid
 		    	mav.addObject("activity", activity);
 				// Traitement & enregistrement en DB
-				activityService.saveActivity(activity);
+		    	saveActivity(activity);
 		    }
 		 mav.addObject("activityCreated", activity);
 		 mav.addObject("validatedSteps", validatedSteps);
@@ -933,14 +915,4 @@ public class ActivityController {
             return false;
     	}
 	}
-
-	/********************************** Accès page de test **********************************************************/
-	@GetMapping("test")
-	public ModelAndView goToTest(@ModelAttribute("activity") Activity activity) {
-		// Redirection vers page test 
-		ModelAndView mav = new ModelAndView("test");
-		mav.addObject("activity", activity);
-		return mav;
-	}
-
 }

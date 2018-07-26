@@ -17,15 +17,12 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import com.koedia.activity.activityManager.model.entity.Role;
 
 @Entity
 @Table(name = "user")
@@ -49,9 +46,11 @@ public class User {
 	private String password;
 
 	@Column(name = "lastname") 
+	@NotEmpty(message = "*Please provide your lastname")
    	private String lastname;
  
    	@Column(name = "firstname") 
+	@NotEmpty(message = "*Please provide your firstname")
    	private String firstname;
 
    	@Column(name = "birthdate")
@@ -69,14 +68,34 @@ public class User {
    	@Column(name = "country")
    	private String country;
 
+   	@Column(name = "zip_code")
+   	private String zipCode;
+   	
    	@Column(name = "website_address")
    	private String websiteAddress;
+   	
+   	@Column(name = "business_type")
+   	private String businessType;
+	
+   	@Column(name = "company_name")
+   	private String companyName;
+   	
+   	@Column(name = "language")
+   	private String language;
    	
 	@Column(name = "active")
 	private int active;
 	
+   	@Column(name = "facebook_link")
+   	private String facebook;
+   	
+   	@Column(name = "twitter_link")
+   	private String twitter;
+   	
+   	@Column(name = "google_link")
+   	private String google;
+   	
 	@OneToMany
-	@Size(min=1, max=10)
 	private List<Activity> activities = new ArrayList<Activity>();
 	
 	@ManyToMany(cascade = CascadeType.ALL)
@@ -194,5 +213,61 @@ public class User {
 
 	public void setActivities(List<Activity> activities) {
 		this.activities = activities;
+	}
+
+	public String getBusinessType() {
+		return businessType;
+	}
+
+	public void setBusinessType(String businessType) {
+		this.businessType = businessType;
+	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
+	public String getZipCode() {
+		return zipCode;
+	}
+
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
+	public String getFacebook() {
+		return facebook;
+	}
+
+	public void setFacebook(String facebook) {
+		this.facebook = facebook;
+	}
+
+	public String getTwitter() {
+		return twitter;
+	}
+
+	public void setTwitter(String twitter) {
+		this.twitter = twitter;
+	}
+
+	public String getGoogle() {
+		return google;
+	}
+
+	public void setGoogle(String google) {
+		this.google = google;
 	}
 }

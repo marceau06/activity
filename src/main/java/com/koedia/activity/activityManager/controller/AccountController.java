@@ -40,6 +40,7 @@ public class AccountController {
 	@Autowired
 	HttpSession httpSession;
 	
+	
 	/********************************** Redirection par défaut vers espace perso **********************************/
 	
 	@GetMapping
@@ -76,6 +77,78 @@ public class AccountController {
 		return mav;
 	}
 	
+	
+	/********************************** Accès page de test **********************************************************/
+	@GetMapping("test")
+	public ModelAndView goToTestPage() {
+		ModelAndView mav = new ModelAndView("test");
+		User user = (User)httpSession.getAttribute("user");
+		mav.addObject("user", user);
+		addUserInfosToView(mav);
+		return mav;
+	}
+	
+	/********************************** Accès page de test **********************************************************/
+	@GetMapping("temp")
+	public ModelAndView goToTempPage() {
+		ModelAndView mav = new ModelAndView("temp");
+		User user = (User)httpSession.getAttribute("user");
+		mav.addObject("user", user);
+		addUserInfosToView(mav);
+		return mav;
+	}
+	
+	
+	/********************************** Accès page de test **********************************************************/
+	@GetMapping("dev")
+	public ModelAndView goToDevPage() {
+		ModelAndView mav = new ModelAndView("dev");
+		User user = (User)httpSession.getAttribute("user");
+		mav.addObject("user", user);
+		addUserInfosToView(mav);
+		return mav;
+	}
+	
+	/********************************** Accès page de test **********************************************************/
+	@GetMapping("devForm")
+	public ModelAndView goToDevFormPage() {
+		ModelAndView mav = new ModelAndView("devForm");
+		User user = (User)httpSession.getAttribute("user");
+		mav.addObject("user", user);
+		addUserInfosToView(mav);
+		return mav;
+	}	
+	
+	/********************************** Méthodes utiles **********************************************************/
+
+	private void addUserInfosToView(ModelAndView mav) {
+		// Retrieve user
+		User user = getUserFromSession();
+		
+		// Retrieve activities created by user
+		List<Activity> allActivitiesForUser = activityService.findAllByUserId((Integer)httpSession.getAttribute("userId"));
+		
+		// Add users informations in account view
+		mav.addObject("activitiesList", allActivitiesForUser);
+		mav.addObject("firstActivity", allActivitiesForUser.get(0));
+		mav.addObject("numberActivities", allActivitiesForUser.size());
+		mav.addObject("userId", user.getId());
+		mav.addObject("email", user.getEmail());
+		mav.addObject("address", user.getAddress());
+		mav.addObject("websiteAddress", user.getWebsiteAddress());
+		mav.addObject("phone", user.getPhone());
+		
+		// TODO Add all activities in the model to update them
+		for (int i= 0; i < allActivitiesForUser.size(); i++) {
+			mav.addObject(allActivitiesForUser.get(i));
+		}
+	}
+	
+	private User getUserFromSession() {
+		return (User)httpSession.getAttribute("user");
+	}
+	
+	
 
 	/********************************** Redirection vers modification du compte **********************************/
 
@@ -87,7 +160,6 @@ public class AccountController {
 
 		return mav;
 	}
-
 	
 	/********************************** Modifier infos d'un membre **********************************/
 
