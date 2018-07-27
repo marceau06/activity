@@ -19,7 +19,7 @@ function showTab(tabToShow) {
 
 // Switch between tabs from vertical left navbar
 function showTabFromNavBar(tabToShow) {
-	// Exit the function if any field in the current tab is invalid:
+	
 	if (tabToShow < 0 || tabToShow > 11) {
 		return false;
 	// Special case : Paxs step
@@ -28,6 +28,9 @@ function showTabFromNavBar(tabToShow) {
 	} else {
 		jQuery("#paxsCreated").show();
 	}
+	console.log(tabToShow);
+	console.log(currentTab);
+	
 	// Hide the current tab
 	tabs[currentTab].style.display = "none";
 	// Set the current tab value

@@ -1,11 +1,11 @@
 /******** General *************/
 
 html, body {
-	background-color: #f1f1f1;
+	background-color: #000000;
 	margin: 0;
 	padding: 0;
 	height: 100%;
-	color: #384452;
+	color: #ffffff;
 	font-family: sans-serif;
 	font-weight: 400;
 	padding-top: 50px;
@@ -136,10 +136,6 @@ a:hover, a:focus {
 	display: none;
 }
 
-.formContainer {
-
-}
-
 /************ Style Home ************/
 #home {
 	margin: 0;
@@ -182,7 +178,6 @@ input.invalid {
 }
 
 input[type="date"] {
-
 	display: none;	
 }
 
@@ -195,16 +190,30 @@ textarea.invalid {
 }
 
 .tab {
-  dispay: flex;
-  flex-wrap: wrap;
-  display: none;
-  padding: 10% 5% 5% 10%;
-/*   border: solid 0.2px black; */
+  margin-left: 30%;
+  margin-right: 30%;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap : wrap;
+  align-items: center;
+  width: 100%;
+}
+
+.flex-container > div {
+  width: 100%;
+  text-align: left;
+  display: flex;
+}
+
+.tab div {
+/* 	border: solid 0.2px white; */
 }
 
 .form-input {
-	min-width: 500px;
-	max-width: 600px;
+	max-width: 50%;
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
@@ -335,8 +344,8 @@ body.homePage {
 
 #registerLoginBloc {
    padding-top: 100px;
-   padding-left: 40%;
-   padding-right: 40%;
+   padding-left: 25%;
+   padding-right: 42%;
    margin-bottom: 100px;
 }
 
@@ -355,12 +364,15 @@ body.homePage {
   display: none;
    padding-left: auto;
    padding-right: auto;
+   margin-left: 45%;
 }
 
 .statusChoice {
 	width: 100%;
 	heigth: 100%;
 	margin-right: 10px;
+	margin-left: 10px;
+	color: black;
 }
 
 div.statusChoice a
@@ -392,7 +404,7 @@ div.statusChoice a
 }
 
 #listBloc {
-	border: 1px solid #ddd; 
+/* 	border: 1px solid #ddd;  */
 }
 
 #buttonBloc {
@@ -415,4 +427,20 @@ div.statusChoice a
 
 #listBloc p {
 	margin-left: 40px; 
+}
+
+#myCarousel {
+	max-width: 500px;
+}
+
+.form-container > .carousel-inner {
+	justify-content: flex-start;
+}
+
+.form-button {
+	margin-top: 20PX
+}
+
+.form-control {
+	margin-top: 20px;
 }

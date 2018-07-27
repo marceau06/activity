@@ -80,11 +80,6 @@ public class ActivityController {
 	
 	
 	/********************************** Init method ******************************/
-//	@PostConstruct
-//	private static void init() {
-//       validatedSteps.clear();
-//	}
-	
 	@InitBinder     
 	public void initBinder(WebDataBinder binder) {  
 	   binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));  
@@ -136,11 +131,54 @@ public class ActivityController {
 		mav.addObject("stepNumber", stepNumber);
 		mav.addObject("validatedStep", validatedSteps);
 		
-		mav.addObject("activity", activity);
-		
 		return mav;
 	}
 	
+	
+	/********************************** Accès page de test **********************************************************/
+	@GetMapping("devForm")
+	public ModelAndView goToDevFormPage(@ModelAttribute("activity") Activity activity) {
+		ModelAndView mav = new ModelAndView("devForm");
+		
+//		User user = (User)httpSession.getAttribute("user");
+//		mav.addObject("user", user);
+//		addUserInfosToView(mav);
+		
+		// TODO : Si le user souhaite reprendre son formulaire dans l'état où il l'avait laissé
+		validatedSteps.clear();
+		activity = new Activity();
+
+		// Initialiser la liste des horaires en créant un horaire pour chacun des jours de la semaine
+		List<Schedule> usualSchedules = new ArrayList<Schedule>();
+		for (int i = 0; i < 7; i++) {
+			Schedule s = new Schedule(i);
+			s.setWeekdayName("weekDay N°"+i);
+			for (int j = 0; j < 9; j++) {
+				s.addSession(new Session(j));
+			}
+			usualSchedules.add(s);
+		}
+		activity.setUsualSchedules(usualSchedules);
+
+		// Initialiser la première div à afficher
+		int stepNumber = 0;
+		int currentTab = 0;
+
+		// Initialiser la liste des images
+		activity.setImages(new ArrayList<Image>());
+		activity.getImages().add(new Image());
+
+		// Initialiser la liste des paxs
+		activity.setPaxs(new ArrayList<PaxPrice>());
+		activity.getPaxs().add(new PaxPrice());
+
+		mav.addObject("activity", activity);
+		mav.addObject("currentTab", currentTab);
+		mav.addObject("stepNumber", stepNumber);
+		mav.addObject("validatedStep", validatedSteps);
+
+		return mav;
+	}	
 	
 	/********************************** Redirection to activity update form *******************************/
 	
@@ -371,7 +409,8 @@ public class ActivityController {
 	@PostMapping("stepTitle")
 	@Validated(Activity.StepTitle.class)
 	public ModelAndView validateTitle(@ModelAttribute("activity") Activity activity, BindingResult result) {
-	    ModelAndView mav = new ModelAndView("activities-creation");
+//	    ModelAndView mav = new ModelAndView("activities-creation");
+	    ModelAndView mav = new ModelAndView("devForm");
 	    String stepName = "stepTitle";
 	    boolean isValid = false;
 	    
@@ -413,7 +452,8 @@ public class ActivityController {
 	@PostMapping("stepCategory")
 	@Validated(Activity.StepCategory.class)
 	public ModelAndView validateCategory(@ModelAttribute("activity") Activity activity, BindingResult result) {
-	    ModelAndView mav = new ModelAndView("activities-creation");
+//	    ModelAndView mav = new ModelAndView("activities-creation");
+	    ModelAndView mav = new ModelAndView("devForm");
 	    String stepName = "stepCategory";
 	    boolean isValid = false;
 	    
@@ -454,7 +494,8 @@ public class ActivityController {
 	@PostMapping("stepDescription")
 	@Validated(Activity.StepDescription.class) 
 	public ModelAndView validateDescription(@ModelAttribute("activity") Activity activity, BindingResult result) {
-	    ModelAndView mav = new ModelAndView("activities-creation");
+//	    ModelAndView mav = new ModelAndView("activities-creation");
+	    ModelAndView mav = new ModelAndView("devForm");
 	    String stepName = "stepDescription";
 	    boolean isValid = false;
 	    
@@ -493,7 +534,8 @@ public class ActivityController {
 	@PostMapping("stepMeetingPoint")
 	@Validated(Activity.StepMeetingPoint.class) 
 	public ModelAndView validateMeetingPoint(@ModelAttribute("activity") Activity activity, BindingResult result) {
-	    ModelAndView mav = new ModelAndView("activities-creation");
+//	    ModelAndView mav = new ModelAndView("activities-creation");
+	    ModelAndView mav = new ModelAndView("devForm");
 	    String stepName = "stepMeetingPoint";
 	    boolean isValid = false;
 	    
@@ -532,7 +574,8 @@ public class ActivityController {
 	@PostMapping("stepPeriod")
 	@Validated(Activity.StepPeriod.class) 
 	public ModelAndView validatePeriod(@ModelAttribute("activity") Activity activity, BindingResult result) {
-	    ModelAndView mav = new ModelAndView("activities-creation");
+//	    ModelAndView mav = new ModelAndView("activities-creation");
+	    ModelAndView mav = new ModelAndView("devForm");
 	    String stepName = "stepPeriod";
 	    boolean isValid = false;
 	    
@@ -572,7 +615,8 @@ public class ActivityController {
 	@Validated(Activity.StepSchedules.class) 
 	public ModelAndView validateSchedules(@ModelAttribute("activity") Activity activity, BindingResult result) {
 		// TODO
-		ModelAndView mav = new ModelAndView("activities-creation");
+//		ModelAndView mav = new ModelAndView("activities-creation");
+	    ModelAndView mav = new ModelAndView("devForm");
 	    String stepName = "stepSchedules";
 	    boolean isValid = false;
 	    
@@ -595,7 +639,8 @@ public class ActivityController {
 	
 	@PostMapping("addExtraSession")
 	public ModelAndView addExtraSession(@ModelAttribute List<Session> sessions, Errors errors) {
-	    ModelAndView mav = new ModelAndView("activities-creation");
+//	    ModelAndView mav = new ModelAndView("activities-creation");
+	    ModelAndView mav = new ModelAndView("devForm");
 	    return mav;
 	}
 	
@@ -608,7 +653,8 @@ public class ActivityController {
 	@PostMapping("stepImages")
 	@Validated(StepImages.class) 
 	private ModelAndView carouselBootstrapAdd(@ModelAttribute("activity") Activity activity, BindingResult result) {
-		ModelAndView mav = new ModelAndView("activities-creation");
+//		ModelAndView mav = new ModelAndView("activities-creation");
+	    ModelAndView mav = new ModelAndView("devForm");
 	    String stepName = "stepImages";
 	    boolean isValid = false;
 	    mav.addObject("stepNumber", 6);
@@ -648,7 +694,8 @@ public class ActivityController {
 	@PostMapping("stepParticipationCriterias")
 	@Validated(Activity.StepParticipationCriterias.class) 
 	public ModelAndView validateParticipationCriterias(@ModelAttribute("activity") Activity activity, BindingResult result) {
-	    ModelAndView mav = new ModelAndView("activities-creation");
+//	    ModelAndView mav = new ModelAndView("activities-creation");
+	    ModelAndView mav = new ModelAndView("devForm");
 	    String stepName = "stepParticipationCriterias";
 	    boolean isValid = false;
 	    
@@ -688,7 +735,8 @@ public class ActivityController {
 	@PostMapping("stepDefaultPrice")
 	@Validated(Activity.StepDefaultPrice.class) 
 	public ModelAndView validateDefaultPrice(@ModelAttribute("activity") Activity activity, BindingResult result) {
-	    ModelAndView mav = new ModelAndView("activities-creation");
+//	    ModelAndView mav = new ModelAndView("activities-creation");
+	    ModelAndView mav = new ModelAndView("devForm");
 	    String stepName = "stepDefaultPrice";
 	    boolean isValid = false;
 	    
@@ -728,7 +776,8 @@ public class ActivityController {
 	@PostMapping("stepPaxs")
 	@Validated(Activity.StepPaxs.class) 
 	public ModelAndView validatePaxs(@ModelAttribute("activity") Activity activity, BindingResult result) {
-	    ModelAndView mav = new ModelAndView("activities-creation");
+//	    ModelAndView mav = new ModelAndView("activities-creation");
+	    ModelAndView mav = new ModelAndView("devForm");
 	    String stepName = "stepPaxs";
 	    boolean isValid = false;
 	    
@@ -768,7 +817,8 @@ public class ActivityController {
 	@PostMapping("stepGroupCapacity")
 	@Validated(Activity.StepGroupCapacity.class) 
 	public ModelAndView validateGroupCapacity(@ModelAttribute("activity") Activity activity, BindingResult result) {
-	    ModelAndView mav = new ModelAndView("activities-creation");
+//	    ModelAndView mav = new ModelAndView("activities-creation");
+	    ModelAndView mav = new ModelAndView("devForm");
 	    String stepName = "stepGroupCapacity";
 	    boolean isValid = false;
 	    
@@ -801,8 +851,8 @@ public class ActivityController {
 	 @PostMapping("validateActivity")
 	 @Valid 
 	 public ModelAndView validateActivity(@ModelAttribute("activity") Activity activity, BindingResult result) {
-		 ModelAndView mav = new ModelAndView("activities-overview");
-		 
+//		 ModelAndView mav = new ModelAndView("activities-overview");
+		 ModelAndView mav = new ModelAndView("devForm");
 		 if (result.hasErrors()) {
 		    	// Invalid
 		    	System.out.println(result.getErrorCount());

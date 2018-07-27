@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="fragments/header :: header">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+</head>
+
+<body>
+   
+    <div class="container">
+      
+      <div class="row">
+        
+        <div class="col-lg-12">
+          Entete
+        </div>
+       
+        <nav class="col-lg-3">
+          	
+          	<div class="text-center img-rounded">
+				<img src="../img/koedia.jpg" class="rounded mx-auto d-block">
+			</div>
+			
+			<p></p>
+			
+			<div>
+				<div class="panel-group">
+				
+					<div class="panel panel-default hidden-sm">
+						<div class="panel-heading panel-title">
+							<span th:text="#{my_infos}"></span> 
+						</div>
+						<div class="panel-body align-center">
+							<div class="align-start">
+								<p>
+									<span class="glyphicon glyphicon-envelope"></span><span th:text="${email}"></span>
+								</p>
+								<p>
+									<span class="glyphicon glyphicon-globe"></span><span th:text="${websiteAddress}"></span>
+								</p>
+								<p>
+									<span class="glyphicon glyphicon-home"></span><span th:text="${address}">></span>
+								</p>
+								<p>
+									<span class="glyphicon glyphicon-phone"></span><span th:text="${phone}">></span>
+								</p>
+								<p>
+									<span class="badge"><span th:text="${numberActivities}"></span></span> <span th:text="#{activities_created}"></span> 
+							 	</p>
+
+							</div>
+						</div>
+					</div>
+					<div class="panel panel-default">
+						<div class="panel-heading panel-title">
+							<span th:text="#{activity}"></span> 
+						</div>
+						<div class="panel-body align-center">
+							<div class="align-start">
+								<div class="">
+									<a th:href="@{/activity/create}"><span th:text="#{create_activity}"></span></a>
+								</div>
+								<div class="">
+									<a th:href="@{/activity/list}"><span th:text="#{activities_list}"></span></a>
+								</div>
+								<div class="">
+									<a th:href="@{/account/update}"><span th:text="#{update_account}"></span></a>
+								</div>
+								<div class="">
+									<a th:href="@{/account/test}">Page de test</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+				
+			</div>
+			
+        </nav>
+        
+        
+<!--         <section class="col-lg-9"> -->
+<!--         	<div class="contResultBloc row" th:if="!${#lists.isEmpty(activitiesList)}" th:each="activity : ${activitiesList}"> -->
+<!-- 	        	<div class="col-lg-4"> -->
+<!-- 	        		<div class="row"> -->
+<!-- 						<img th:src="${activity.mainPicture}" class=""  height="200" width="450"> -->
+<!-- 	        		</div> -->
+<!-- 	        		<div class="row"> -->
+<!-- 	        			<h2>  -->
+<!-- 							<span th:text="${activity.title}"></span> -->
+<!-- 						</h2> -->
+<!-- 	        		</div> -->
+<!-- 	        	</div> -->
+<!-- 	        	<div class="col-lg-8 constResultInfos"> -->
+<!-- 	        		Category -->
+<!-- 	        		<div class="row"> -->
+<!-- 	        			<h4> -->
+<!-- 							<span th:text="${activity.category}"></span> -->
+<!-- 						</h4> -->
+<!-- 					</div> -->
+<!-- 					Description -->
+<!-- 					<div class="contDescriptionBloc row"> -->
+<!-- 		        		<div class="contDescriptionArea row"> -->
+<!-- 							<span th:text="${activity.descriptionFre}"></span> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					Address -->
+<!-- 					<div class="contAddressBloc row"> -->
+<!-- 						<p><span th:text="${activity.address}"></span></p> -->
+<!-- 					</div> -->
+<!-- 					Price -->
+<!-- 					<div class="contPriceBloc row"> -->
+							
+<!-- 						<div class="col-lg-8 contButtonBloc"> -->
+<!-- 							<form th:action="@{/activity/toggle}" method="POST" enctype="multipart/form-data"> -->
+<!-- 								<input type="checkbox" data-toggle="toggle" th:attr="data-on=#{activate}" th:attr="data-on=#{deactivate}" th:checked="${activity.active}" onchange="submit();"> -->
+<!-- 								<input type="hidden" th:id="activityId" th:name="activityId" th:value="${activity.id}" /> -->
+<!-- 							</form> -->
+<!-- 							<form th:action="@{/activity/edit}" method="GET" enctype="multipart/form-data" > -->
+<!-- 								<button type="button"  class="btn btn-primary" onclick="submit();"><span th:text="#{edit}"></span></button> -->
+<!-- 								<input type="hidden" th:id="activityId" th:name="activityId" th:value="${activity.id}" /> -->
+<!-- 							</form> -->
+<!-- 							<form th:action="@{/activity/remove}" method="POST" enctype="multipart/form-data" > -->
+<!-- 								<button type="button"  class="btn btn-secondary" onclick="submit();"><span th:text="#{remove}"></span></button> -->
+<!-- 								<input type="hidden" th:id="activityId" th:name="activityId" th:value="${activity.id}" /> -->
+<!-- 							</form> -->
+<!-- 							<form th:action="@{/activity/export}" method="POST" enctype="multipart/form-data" > -->
+<!-- 								<button type="button"  class="btn btn-secondary" onclick="submit();">Export</button> -->
+<!-- 								<input type="hidden" th:id="activityId" th:name="activityId" th:value="${activity.id}" /> -->
+<!-- 							</form> -->
+<!-- 						</div> -->
+				
+<!-- 						<div class="col-lg-2 labelPrice"> -->
+<!-- 							<span th:text="#{price_per_pers}"></span> -->
+<!-- 						</div> -->
+<!-- 						<section class="col-lg-2 activityPrice"> -->
+<!-- <!-- 						<p><span th:text="${activity.price}"></span> Euros</p> --> -->
+<!-- 						</section> -->
+<!-- 					</div> -->
+<!--         		</div> -->
+<!--         	</div> -->
+<!--         </section> -->
+      </div>
+    </div>
+
+</body>
+
+</html>
+
