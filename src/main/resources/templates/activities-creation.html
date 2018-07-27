@@ -231,42 +231,42 @@
 					<span class="indication" th:text="#{meetingpoint_step_indication}"></span>
 				</div>
 	<!-- Input -->
-				<span th:text="#{meeting_point_name}"></span>
-				<input type="text" class="form-control form-input" th:field="*{meetingPoint}" th:placeholder="#{meeting_point_name}" onclick="" autocomplete="off" />
-				<div th:if="${#fields.hasErrors('meetingPoint')}" class="alert alert-danger error-message-title" role="alert">
-					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-					<span th:errors="*{meetingPoint}"></span>
+				<div id="meetingPoint-container">
+					<span th:text="#{meeting_point_name}"></span>
+					<input type="text" class="form-control form-input" th:field="*{meetingPoint}" th:placeholder="#{meeting_point_name}" onclick="" autocomplete="off" />
+					<div th:if="${#fields.hasErrors('meetingPoint')}" class="alert alert-danger error-message-title" role="alert">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						<span th:errors="*{meetingPoint}"></span>
+					</div>
+					
+					<span th:text="#{address}"></span>
+					<input type="text" class="form-control form-input" th:field="*{address}" th:placeholder="#{address}" onclick="changeDestinationCityWithId(this.id); " autocomplete="off" />
+					<div th:if="${#fields.hasErrors('address')}" class="alert alert-danger error-message-title" role="alert">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						<span th:errors="*{address}"></span>
+					</div>
+					
+					<span th:text="#{city}"></span>
+					<input type="text" class="form-control form-input" th:field="*{city}" th:placeholder="#{city}" onclick="changeDestinationCityWithId(this.id); " autocomplete="off" />
+					<div th:if="${#fields.hasErrors('city')}" class="alert alert-danger error-message-title" role="alert">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						<span th:errors="*{city}"></span>
+					</div>
+					
+					<span th:text="#{country}"></span>
+					<input type="text" class="form-control form-input" th:field="*{country}" th:placeholder="#{country}" onclick="" autocomplete="off" />
+					<div th:if="${#fields.hasErrors('country')}" class="alert alert-danger error-message-title" role="alert">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						<span th:errors="*{country}"></span>
+					</div>
+					
+					<span th:text="#{zip_code}"></span>				
+					<input type="text" class="form-control form-input" th:field="*{zipCode}" th:placeholder="#{zip_code}" onclick="" autocomplete="off" />	
+					<div th:if="${#fields.hasErrors('zipCode')}" class="alert alert-danger error-message-title" role="alert">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						<span th:errors="*{zipCode}"></span>
+					</div>
 				</div>
-				
-				
-				<span th:text="#{address}"></span>
-				<input type="text" class="form-control form-input" th:field="*{address}" th:placeholder="#{address}" onclick="changeDestinationCityWithId(this.id); " autocomplete="off" />
-				<div th:if="${#fields.hasErrors('address')}" class="alert alert-danger error-message-title" role="alert">
-					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-					<span th:errors="*{address}"></span>
-				</div>
-				
-				<span th:text="#{city}"></span>
-				<input type="text" class="form-control form-input" th:field="*{city}" th:placeholder="#{city}" onclick="changeDestinationCityWithId(this.id); " autocomplete="off" />
-				<div th:if="${#fields.hasErrors('city')}" class="alert alert-danger error-message-title" role="alert">
-					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-					<span th:errors="*{city}"></span>
-				</div>
-				
-				<span th:text="#{country}"></span>
-				<input type="text" class="form-control form-input" th:field="*{country}" th:placeholder="#{country}" onclick="" autocomplete="off" />
-				<div th:if="${#fields.hasErrors('country')}" class="alert alert-danger error-message-title" role="alert">
-					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-					<span th:errors="*{country}"></span>
-				</div>
-				
-				<span th:text="#{zip_code}"></span>				
-				<input type="text" class="form-control form-input" th:field="*{zipCode}" th:placeholder="#{zip_code}" onclick="" autocomplete="off" />	
-				<div th:if="${#fields.hasErrors('zipCode')}" class="alert alert-danger error-message-title" role="alert">
-					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-					<span th:errors="*{zipCode}"></span>
-				</div>
-				
 	<!-- Google map			 -->
 				<div id="googleMap"></div>
 				<div class="form-button">

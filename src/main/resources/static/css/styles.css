@@ -444,3 +444,8 @@ div.statusChoice a
 .form-control {
 	margin-top: 20px;
 }
+
+#meetingPoint-container {
+	display: flex;
+	flex-direction: column;
+}
