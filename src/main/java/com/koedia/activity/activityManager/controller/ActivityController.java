@@ -102,11 +102,20 @@ public class ActivityController {
 		validatedSteps.clear();
 		activity = new Activity();
 		
+		List<String> weekDayList = new ArrayList<String>();
+		weekDayList.add("Lundi");
+		weekDayList.add("Mardi");
+		weekDayList.add("Mercredi");
+		weekDayList.add("Jeudi");
+		weekDayList.add("Vendredi");
+		weekDayList.add("Samedi");
+		weekDayList.add("Dimanche");
+		
 		// Initialiser la liste des horaires en créant un horaire pour chacun des jours de la semaine
 		List<Schedule> usualSchedules = new ArrayList<Schedule>();
 		for (int i = 0; i < 7; i++) {
 			Schedule s = new Schedule(i);
-			s.setWeekdayName("weekDay N°"+i);
+			s.setWeekdayName(weekDayList.get(i));
 			for (int j = 0; j < 9; j++) {
 				s.addSession(new Session(j));
 			}
@@ -136,13 +145,9 @@ public class ActivityController {
 	
 	
 	/********************************** Accès page de test **********************************************************/
-	@GetMapping("devForm")
-	public ModelAndView goToDevFormPage(@ModelAttribute("activity") Activity activity) {
-		ModelAndView mav = new ModelAndView("devForm");
-		
-//		User user = (User)httpSession.getAttribute("user");
-//		mav.addObject("user", user);
-//		addUserInfosToView(mav);
+	@GetMapping("activities-creation")
+	public ModelAndView goToActivityCreationPage(@ModelAttribute("activity") Activity activity) {
+		ModelAndView mav = new ModelAndView("activities-creation");
 		
 		// TODO : Si le user souhaite reprendre son formulaire dans l'état où il l'avait laissé
 		validatedSteps.clear();
@@ -190,7 +195,7 @@ public class ActivityController {
 	
 	/********************************** Redirection activities list ***************************************/
 	
-	@GetMapping("list")
+	@GetMapping("activities-list")
 	public ModelAndView goToListActivity(Activity activity) {
 		ModelAndView mav = new ModelAndView("activities-list");
 		
@@ -198,6 +203,8 @@ public class ActivityController {
 		List<Activity> allActivitiesForUser = activityService.findAllByUserId(8);
 		
 		mav.addObject("activitiesList", allActivitiesForUser);
+		
+		addUserInfosToView(mav);
 		
 		System.out.println(allActivitiesForUser.size());
 		
@@ -222,6 +229,14 @@ public class ActivityController {
 			activityService.saveActivity(activity);
 		} catch(Exception ex) {
 		}
+	}
+	
+	
+	@GetMapping("activity-view")
+	public ModelAndView goToActivityView(Activity activity) {
+		ModelAndView mav = new ModelAndView("activity-view");
+		addUserInfosToView(mav);
+		return mav;
 	}
 
 	/********************************** Mettre à jour une activité ***********************************************/
@@ -279,7 +294,7 @@ public class ActivityController {
 			}
 		
 		// Redirection vers page compte 
-		ModelAndView mav = new ModelAndView("account");
+		ModelAndView mav = new ModelAndView("activities-list");
 		
 		// Retrieve user's informations
 		addUserInfosToView(mav);
@@ -358,6 +373,8 @@ public class ActivityController {
 		// Add users informations in account view
 		mav.addObject("activitiesList", allActivitiesForUser);
 		mav.addObject("numberActivities", allActivitiesForUser.size());
+		mav.addObject("firstActivity", allActivitiesForUser.get(0));
+		mav.addObject("user", user);
 		mav.addObject("userId", user.getId());
 		mav.addObject("email", user.getEmail());
 		mav.addObject("address", user.getAddress());
@@ -410,7 +427,7 @@ public class ActivityController {
 	@Validated(Activity.StepTitle.class)
 	public ModelAndView validateTitle(@ModelAttribute("activity") Activity activity, BindingResult result) {
 //	    ModelAndView mav = new ModelAndView("activities-creation");
-	    ModelAndView mav = new ModelAndView("devForm");
+	    ModelAndView mav = new ModelAndView("activities-creation");
 	    String stepName = "stepTitle";
 	    boolean isValid = false;
 	    
@@ -453,7 +470,7 @@ public class ActivityController {
 	@Validated(Activity.StepCategory.class)
 	public ModelAndView validateCategory(@ModelAttribute("activity") Activity activity, BindingResult result) {
 //	    ModelAndView mav = new ModelAndView("activities-creation");
-	    ModelAndView mav = new ModelAndView("devForm");
+	    ModelAndView mav = new ModelAndView("activities-creation");
 	    String stepName = "stepCategory";
 	    boolean isValid = false;
 	    
@@ -495,7 +512,7 @@ public class ActivityController {
 	@Validated(Activity.StepDescription.class) 
 	public ModelAndView validateDescription(@ModelAttribute("activity") Activity activity, BindingResult result) {
 //	    ModelAndView mav = new ModelAndView("activities-creation");
-	    ModelAndView mav = new ModelAndView("devForm");
+	    ModelAndView mav = new ModelAndView("activities-creation");
 	    String stepName = "stepDescription";
 	    boolean isValid = false;
 	    
@@ -535,7 +552,7 @@ public class ActivityController {
 	@Validated(Activity.StepMeetingPoint.class) 
 	public ModelAndView validateMeetingPoint(@ModelAttribute("activity") Activity activity, BindingResult result) {
 //	    ModelAndView mav = new ModelAndView("activities-creation");
-	    ModelAndView mav = new ModelAndView("devForm");
+	    ModelAndView mav = new ModelAndView("activities-creation");
 	    String stepName = "stepMeetingPoint";
 	    boolean isValid = false;
 	    
@@ -575,7 +592,7 @@ public class ActivityController {
 	@Validated(Activity.StepPeriod.class) 
 	public ModelAndView validatePeriod(@ModelAttribute("activity") Activity activity, BindingResult result) {
 //	    ModelAndView mav = new ModelAndView("activities-creation");
-	    ModelAndView mav = new ModelAndView("devForm");
+	    ModelAndView mav = new ModelAndView("activities-creation");
 	    String stepName = "stepPeriod";
 	    boolean isValid = false;
 	    
@@ -616,9 +633,9 @@ public class ActivityController {
 	public ModelAndView validateSchedules(@ModelAttribute("activity") Activity activity, BindingResult result) {
 		// TODO
 //		ModelAndView mav = new ModelAndView("activities-creation");
-	    ModelAndView mav = new ModelAndView("devForm");
+	    ModelAndView mav = new ModelAndView("activities-creation");
 	    String stepName = "stepSchedules";
-	    boolean isValid = false;
+	    boolean isValid = true;
 	    
 	    if(isValid) {
 	    	if (!validatedSteps.contains(stepName)) {
@@ -640,7 +657,7 @@ public class ActivityController {
 	@PostMapping("addExtraSession")
 	public ModelAndView addExtraSession(@ModelAttribute List<Session> sessions, Errors errors) {
 //	    ModelAndView mav = new ModelAndView("activities-creation");
-	    ModelAndView mav = new ModelAndView("devForm");
+	    ModelAndView mav = new ModelAndView("activities-creation");
 	    return mav;
 	}
 	
@@ -654,7 +671,7 @@ public class ActivityController {
 	@Validated(StepImages.class) 
 	private ModelAndView carouselBootstrapAdd(@ModelAttribute("activity") Activity activity, BindingResult result) {
 //		ModelAndView mav = new ModelAndView("activities-creation");
-	    ModelAndView mav = new ModelAndView("devForm");
+	    ModelAndView mav = new ModelAndView("activities-creation");
 	    String stepName = "stepImages";
 	    boolean isValid = false;
 	    mav.addObject("stepNumber", 6);
@@ -695,7 +712,7 @@ public class ActivityController {
 	@Validated(Activity.StepParticipationCriterias.class) 
 	public ModelAndView validateParticipationCriterias(@ModelAttribute("activity") Activity activity, BindingResult result) {
 //	    ModelAndView mav = new ModelAndView("activities-creation");
-	    ModelAndView mav = new ModelAndView("devForm");
+	    ModelAndView mav = new ModelAndView("activities-creation");
 	    String stepName = "stepParticipationCriterias";
 	    boolean isValid = false;
 	    
@@ -736,7 +753,7 @@ public class ActivityController {
 	@Validated(Activity.StepDefaultPrice.class) 
 	public ModelAndView validateDefaultPrice(@ModelAttribute("activity") Activity activity, BindingResult result) {
 //	    ModelAndView mav = new ModelAndView("activities-creation");
-	    ModelAndView mav = new ModelAndView("devForm");
+	    ModelAndView mav = new ModelAndView("activities-creation");
 	    String stepName = "stepDefaultPrice";
 	    boolean isValid = false;
 	    
@@ -777,7 +794,7 @@ public class ActivityController {
 	@Validated(Activity.StepPaxs.class) 
 	public ModelAndView validatePaxs(@ModelAttribute("activity") Activity activity, BindingResult result) {
 //	    ModelAndView mav = new ModelAndView("activities-creation");
-	    ModelAndView mav = new ModelAndView("devForm");
+	    ModelAndView mav = new ModelAndView("activities-creation");
 	    String stepName = "stepPaxs";
 	    boolean isValid = false;
 	    
@@ -818,7 +835,7 @@ public class ActivityController {
 	@Validated(Activity.StepGroupCapacity.class) 
 	public ModelAndView validateGroupCapacity(@ModelAttribute("activity") Activity activity, BindingResult result) {
 //	    ModelAndView mav = new ModelAndView("activities-creation");
-	    ModelAndView mav = new ModelAndView("devForm");
+	    ModelAndView mav = new ModelAndView("activities-creation");
 	    String stepName = "stepGroupCapacity";
 	    boolean isValid = false;
 	    
@@ -851,8 +868,7 @@ public class ActivityController {
 	 @PostMapping("validateActivity")
 	 @Valid 
 	 public ModelAndView validateActivity(@ModelAttribute("activity") Activity activity, BindingResult result) {
-//		 ModelAndView mav = new ModelAndView("activities-overview");
-		 ModelAndView mav = new ModelAndView("devForm");
+		 ModelAndView mav = new ModelAndView("activity-view");
 		 if (result.hasErrors()) {
 		    	// Invalid
 		    	System.out.println(result.getErrorCount());
@@ -867,8 +883,9 @@ public class ActivityController {
 		    	mav.addObject("activity", activity);
 				// Traitement & enregistrement en DB
 		    	saveActivity(activity);
+		    	addUserInfosToView(mav);
 		    }
-		 mav.addObject("activityCreated", activity);
+		 mav.addObject("activity", activity);
 		 mav.addObject("validatedSteps", validatedSteps);
 		 
 		 return mav;

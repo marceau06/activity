@@ -22,12 +22,22 @@
 	.w3-sidebar {
 		width: 120px;background: #222;
 	}
+	
+	tr {
+		border-bottom: 1px solid white;
+	}
+	
 	#main {
 		margin-left: 120px
 	}
 	@media only screen and (max-width: 600px) {
 		#main {margin-left: 0}
 	}
+	
+	.customSchedule {
+		margin-top: 100px;
+	}
+
 </style>
 <body class="w3-black">
 
@@ -78,7 +88,7 @@
 	    <i class="fa fa-envelope w3-xlarge"></i>
 	    <p>PAXS</p>
 	  </div>
-	  <div id="go-to-stepCapacity" class="w3-bar-item w3-button w3-padding-large w3-hover-black" onclick="showTabFromNavBar('10');">
+	  <div id="go-to-stepGroupCapacity" class="w3-bar-item w3-button w3-padding-large w3-hover-black" onclick="showTabFromNavBar('10');">
 	    <i class="fa fa-envelope w3-xlarge"></i>
 	    <p>GROUP CAPACITY</p>
 	  </div>
@@ -182,9 +192,10 @@
 				</div>
 				<!-- Select description language -->
 				<select id="selectDescLang" class="form-control" onChange="toggleDescLang();">
-					<option th:value="FR" th:text="#{lang_fr}"></option>
+					<option th:value="FR" th:text="Francais"></option>
 					<option th:value="EN" th:text="#{lang_en}"></option>
 					<option th:value="ES" th:text="#{lang_es}"></option>
+					<option th:value="CUSTOM" th:text="Personnalisé"></option>
 				</select>
 	<!-- Input -->
 				<div id="blocDescFR" class="form-group">
@@ -202,6 +213,17 @@
 					</div>
 				</div>
 				<div id="blocDescES" class="form-group">
+					<textarea th:field="*{descriptionEsp}" class="form-control" oninput="this.className = 'form-control'" th:placeholder="#{desc_indication}" rows="3" onclick=""></textarea>
+					<div th:if="${#fields.hasErrors('descriptionEsp')}" class="alert alert-danger error-message-title" role="alert">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						<span th:errors="*{descriptionEsp}"></span>
+					</div>
+				</div>
+				<div id="blocDescCUSTOM" class="form-group" style="display: flex; flex-direction: column;">
+					<div>
+						<span class="indication">Set the language name</span>
+						<input type="text" class="form-control form-input" placeholder="Set language name" autocomplete="off" />
+					</div>
 					<textarea th:field="*{descriptionEsp}" class="form-control" oninput="this.className = 'form-control'" th:placeholder="#{desc_indication}" rows="3" onclick=""></textarea>
 					<div th:if="${#fields.hasErrors('descriptionEsp')}" class="alert alert-danger error-message-title" role="alert">
 						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -318,7 +340,7 @@
 						<table class="table">
 							<thead>
 								<tr class="primary">
-									<th scope="col">Jour n°<span th:text="${statusSchedule.index}"></span></th>
+									<th scope="col">Jour : <h3><span th:text="${currentSchedule.weekdayName}"></span></h3></th>
 									<!-- Nom jour de la semaine ou custom -->
 									<th scope="col">Begin</th>
 									<th scope="col">End</th>
@@ -329,9 +351,9 @@
 							<tbody th:id="'sessionBloc' + ${statusSchedule.index} + ${statusSession.index}" th:each="currentSession, statusSession : ${currentSchedule.sessions}" class="sessionBloc">
 								<!-- Status -->
 								<tr>
-									<td class="success">Session N°<span th:text="${statusSession.index}"></span></td>
+									<td class="">Session N°<span th:text="${statusSession.index}"></span></td>
 									<!-- beginHour -->
-									<td class="danger">
+									<td class="">
 										<!-- IF : session is already setted --> 
 										<span th:if="${currentSession.beginHour}" th:text="${currentSession.beginHour}"></span> 
 										<!-- ELSE : session is not setted --> 
@@ -341,10 +363,9 @@
 											class="form-control clockpicker startInputHour"
 											th:attr="data-session-id = 'begin' + ${statusSchedule.index} + '' + ${statusSession.index}" 
 											th:onchange="|changeEndHour(this)|"> 
-											<!-- th:onchange="|changeEndHour('${statusSchedule.index}', '${statusSession.index}')|"> -->
 									</td>
 									<!-- endHour -->
-									<td class="danger">
+									<td class="">
 										<span th:if="${currentSession.endHour}" th:text="${currentSession.endHour}"></span> 
 										<input th:unless="${currentSession.endHour}" 
 											type="text" 
@@ -359,17 +380,93 @@
 										<input type="hidden" th:field="*{usualSchedules[__${currentSchedule.weekdayNumber}__].sessions[__${currentSession.sessionNumber}__].endHour}"> 
 										<input type="hidden" th:field="*{usualSchedules[__${currentSchedule.weekdayNumber}__].sessions[__${currentSession.sessionNumber}__].sessionNumber}"> 
 										<input type="hidden" th:field="*{usualSchedules[__${currentSchedule.weekdayNumber}__].weekdayNumber}">
-										
+										<br>
 										<button type="button" th:id="addSessionBtn + ${statusSchedule.index} + ${statusSession.index}" th:onclick="|addSession('${statusSchedule.index}', '${statusSession.index}')|">
 											<span class="glyphicon glyphicon-plus"></span>
+										</button>
+										<button type="button" th:id="removeSessionBtn + ${statusSchedule.index} + ${statusSession.index}" th:onclick="|removeSession('${statusSchedule.index}', '${statusSession.index}')|">
+											<span class="glyphicon glyphicon-minus"></span>
 										</button>
 									</td>
 								</tr>
 							</tbody>
+							<tbody>
 						</table>
 					</div>
 				</div>
 			<button type="submit" id="validateBtn" class="btn btn-lg btn-primary">Valider</button>
+			
+			
+						<!-- Display SCHEDULES -->
+<!-- 			<div id="schedulesCreated" class="col-lg-6 pax-bloc"> -->
+<!-- 				<table>  -->
+<!-- 					<tr>  -->
+<!-- 						<td style="border:1px solid black">JOURS</td>  -->
+<!-- 						<td style="border:1px solid black" colspan="2">HORAIRES</td>  -->
+<!-- 					</tr>  -->
+		
+<!-- 					<tr>  -->
+<!-- 						<td style="border:1px solid black">LUNDI</td>  -->
+<!-- 						<td colspan="2" rowspan="2" style="border:1px solid black">  -->
+<!-- 							<table>  -->
+<!-- 								<tr>  -->
+<!-- 									<td align="center">8h30</td>  -->
+<!-- 									<td align="center">9h30</td>  -->
+<!-- 								</tr>  -->
+<!-- 								<tr>  -->
+<!-- 									<td align="center">16h30</td>  -->
+<!-- 									<td align="center">17h30</td>  -->
+<!-- 								</tr>  -->
+<!-- 							</table>  -->
+<!-- 						</td>  -->
+<!-- 					</tr>  -->
+<!-- 					<tr>  -->
+<!-- 						<td style="border:1px solid black">JEUDI</td>  -->
+<!-- 					</tr>  -->
+<!-- 				</table> -->
+<!-- 			</div> -->
+			
+			
+			<div class="customSchedule">
+				
+				<table>
+							<thead>
+								<tr class="primary">
+									<th scope="col">Jour : <h3>Custom</h3></th>
+									<!-- Nom jour de la semaine ou custom -->
+									<th scope="col">Begin</th>
+									<th scope="col">End</th>
+									<th scope="col">Add extra session</th>
+								</tr>
+							</thead>
+							
+				<tbody>
+				<tr>			
+								<td class="">Session N°<span>0</span></td>
+									<td>
+										<input 
+											type="text" 
+											class="form-control clockpicker startInputHourCustom" />
+									</td>
+									<td>
+										<input  
+											type="text" 
+											class="form-control clockpicker endInputHourCustom" />
+									</td>
+
+									<td>
+										<br>
+										<button type="button" th:id="addSessionBtnCustom">
+											<span class="glyphicon glyphicon-plus"></span>
+										</button>
+										<button type="button" th:id="removeSessionBtnCustom">
+											<span class="glyphicon glyphicon-minus"></span>
+										</button>
+									</td>
+								</tr>
+							</tbody>
+				</table>
+				</div>
 		</div>
 	</div>
 	<!-- END Schedule bloc -->
@@ -464,8 +561,25 @@
 				</select>
 			</div>
 				<div class="form-check row-form">
-					<span th:text="#{required_id}"></span> <input type="checkbox" class="form-check-input" th:field="*{requiredId}" />
+					<span th:text="#{required_id}"></span> 
+					<input type="checkbox" class="form-check-input" th:field="*{requiredId}" />
 				</div>
+				<div class="form-group" style="display: flex; flex-direction: column;">
+					<div>
+					<span class="indication">Devise utilisée</span>	
+					<select class="form-control form-control-lg">
+						<option th:value="0">Euros</option>
+						<option th:value="1">Dollar</option>
+						<option th:value="2">Livre</option>
+						<option th:value="3">Yen</option>
+					</select>
+					</div>
+					<div>
+					 	<span class="indication">Additional informations</span>
+						<textarea class="form-control" placeholder="Set additional informations" oninput="this.className = 'form-control'" rows="3" ></textarea>
+					</div>
+				</div>	
+					
 				<div class="form-button">
 					<button type="submit" id="validateBtn" class="btn btn-lg btn-primary">Valider</button>
 				</div>
@@ -509,10 +623,10 @@
 				</div>
 				<div class="row-form">
 				<!-- TODO : Utiliser get size of list -->
-					SIZE
-					<span th:text="${#lists.size(activity.paxs)}"></span>
-					FIN SIZE
-					<span th:text="${#lists.size(activity.paxs)-1}"></span>
+<!-- 					SIZE -->
+<!-- 					<span th:text="${#lists.size(activity.paxs)}"></span> -->
+<!-- 					FIN SIZE -->
+<!-- 					<span th:text="${#lists.size(activity.paxs)-1}"></span> -->
 					<span>Nom du pax</span>
 					<input class="form-control" type="text" th:field="*{paxs[__${#lists.size(activity.paxs)-1}__].name}" placeholder="Create you pax category" />
 					<span>Age minimum</span>
@@ -523,8 +637,33 @@
 					<input class="form-control" type="text" th:field="*{paxs[__${#lists.size(activity.paxs)-1}__].price}" />
 				</div>
 				<div class="form-button">
-					<button type="submit" id="validateBtn" class="btn btn-lg btn-primary" onclick="createPax()">Valider</button>
+					<button type="submit" id="validateBtn" onclick="createPax();" class="btn btn-lg btn-primary" >Créer</button>
 				</div>
+			</div>
+			<div id="paxsCreated" th:if="${pax.ageMin}"  th:each="pax : ${activity.paxs}" class="col-lg-12 pax-bloc" style="margin-left: 50px; color: white; display: flex;">
+				<table>
+				<tr>
+					<td>
+						Nom :  <h5><b><span th:text="${pax.name}" ></span></b></h5>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Age minimum : <h5><b><span th:text="${pax.ageMin}" ></span></b></h5>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Age maximum :  <h5><b><span th:text="${pax.ageMax}" ></span></b></h5>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Prix : <h5><b><span th:text="${pax.price}" ></span></b></h5>
+					</td>
+				</tr>
+				
+				</table>
 			</div>
 		</div>
 	</form>
@@ -569,6 +708,10 @@
 	/*<![CDATA[*/var validatedSteps = /*[[${validatedSteps}]]*/null;/*]]>*/
 	/*<![CDATA[*/var showCreatedPax = /*[[${showCreatedPax}]]*/false;/*]]>*/
 
+	window.onready = function() {
+		jQuery(".tab").hide();
+	}
+	
 	window.onload = function() {
 
 		jQuery(".tab").hide();
@@ -577,6 +720,7 @@
 		jQuery('#blocDescFR').show();
 		jQuery('#blocDescEN').hide();
 		jQuery('#blocDescES').hide();
+		jQuery('#blocDescCUSTOM').hide();
 
 		// Hide google map
 		document.getElementById("googleMap").style.display = "none";
@@ -627,18 +771,27 @@
 			jQuery('#blocDescFR').show();
 			jQuery('#blocDescEN').hide();
 			jQuery('#blocDescES').hide();
+			jQuery('#blocDescCUSTOM').hide();
 		} else if (descLang == 'EN') {
 			jQuery('#blocDescEN').show();
 			jQuery('#blocDescFR').hide();
 			jQuery('#blocDescES').hide();
+			jQuery('#blocDescCUSTOM').hide();
 		} else if (descLang == 'ES') {
 			jQuery('#blocDescES').show();
+			jQuery('#blocDescEN').hide();
+			jQuery('#blocDescFR').hide();
+			jQuery('#blocDescCUSTOM').hide();
+		} else if (descLang == 'CUSTOM') {
+			jQuery('#blocDescCUSTOM').show(); 
+			jQuery('#blocDescES').hide();
 			jQuery('#blocDescEN').hide();
 			jQuery('#blocDescFR').hide();
 		} else {
 			jQuery('#blocDescFr').show();
 			jQuery('#blocDescEn').hide();
 			jQuery('#blocDescEs').hide();
+			jQuery('#blocDescCUSTOM').hide();
 		}
 	}
 
@@ -664,8 +817,8 @@
 				if (inputs[0].value != "" && inputs[0].value.length > 0) {
 					jQuery("#sessionBloc" + i + j).show();
 					// TODO : Checker si premier input is null si oui, on le masque
-					if (jQuery("#sessionBloc00").val) {
-
+					if (jQuery("#sessionBloc00").val() === 'undefined' || jQuery("#sessionBloc00").val() === null) {
+// 						jQuery("#sessionBloc00").hide();
 					}
 				}
 			}
@@ -678,8 +831,30 @@
 	function addSession(weekdayNumber, sessionNumber) {
 		var blocToShow = "#sessionBloc" + weekdayNumber + (parseInt(sessionNumber) + 1);
 		var btnToHide = "#addSessionBtn" + weekdayNumber + (parseInt(sessionNumber));
+		var btnRemoveToHide = "#removeSessionBtn" + weekdayNumber + (parseInt(sessionNumber));
+		var btnToShow = "#addSessionBtn" + weekdayNumber + (parseInt(sessionNumber) + 1);
+		var btnRemoveToShow = "#removeSessionBtn" + weekdayNumber + (parseInt(sessionNumber) + 1);
+		
 		jQuery(blocToShow).show();
+		jQuery(btnToShow).show();
+		jQuery(btnRemoveToShow).show();
 		jQuery(btnToHide).hide();
+		jQuery(btnRemoveToHide).hide();
+	}
+	
+	// Hide input of another session (After clicking on -)
+	function removeSession(weekdayNumber, sessionNumber) {
+		var blocToHide = "#sessionBloc" + weekdayNumber + (parseInt(sessionNumber));
+		var btnAddToHide = "#addSessionBtn" + weekdayNumber + (parseInt(sessionNumber));
+		var btnRemoveToHide = "#removeSessionBtn" + weekdayNumber + (parseInt(sessionNumber));
+		var btnAddToShow = "#addSessionBtn" + weekdayNumber + (parseInt(sessionNumber) - 1);
+		var btnRemoveToShow = "#removeSessionBtn" + weekdayNumber + (parseInt(sessionNumber) - 1);
+		
+		jQuery(btnRemoveToShow).show();
+		jQuery(btnAddToShow).show();
+		jQuery(blocToHide).hide();
+		jQuery(btnAddToHide).hide();
+		jQuery(btnRemoveToHide).hide();
 	}
 
 	function onChangeTime(isBegin) {
@@ -741,6 +916,47 @@
 	function removeExtraSession(weekdayNumber, sessionNumber) {
 		jQuery("#usualSchedules0.sessions0.beginHour").val("");
 	}
+	
+	
+	function createPax(paxList) {
+		
+		jQuery("#paxsCreated").show();
+// 		// Retrieve pax datas
+// 		var name = jQuery("#paxName").val();
+// 		var ageMin = jQuery("#paxAgeMin").val();
+// 		var ageMax = jQuery("#paxAgeMax").val();
+// 		var price = jQuery("#paxPrice").val();
+		
+// 		// Button labels
+// 		var labelBtnModify = "Modifier";
+// 		var labelBtnDelete = "Supprimer";
+		
+// 			// Create div
+// 			jQuery("#paxsCreated").append(
+// 					'<div class="pax-item" id="' + countPaxCreation + '">'
+// 					+'<p> <span class="pax-infos">' + name + '</span> </p>'
+// 					+'<input type="hidden" id="paxs[' + countPaxCreation + '].name" name="paxs[' + countPaxCreation + '].name" value="' + name + '" />'
+// 					+'<p> <span class="pax-infos">' + ageMin + '</span> </p>'
+// 					+ '<input type="hidden" id="paxs[' + countPaxCreation + '].ageMin" name="paxs[' + countPaxCreation + '].ageMin" value="' + ageMin + '" />'
+// 					+'<p> <span class="pax-infos">' + ageMax + '</span> </p>'
+// 					+ '<input type="hidden" id="paxs[' + countPaxCreation + '].ageMax" name="paxs[' + countPaxCreation + '].ageMax" value="' + ageMax + '" />'
+// 					+'<p> <span class="pax-infos">' + price + '</span> </p>'
+// 					+ '<input type="hidden" id="paxs[' + countPaxCreation + '].price" name="paxs[' + countPaxCreation + '].price" value="' + price + '" />'
+// //					+'<p> <button class="btnModifyPaxCreated" id="btnModifyPaxCreated' + countPaxCreation + '" onclick="modifyPax(' + countPaxCreation + ');">' + labelBtnModify + '</button> </p>'
+// 					+'<p> <button class="btnDeletePaxCreated" id="btnDeletePaxCreated' + countPaxCreation + '" onclick="deletePax(' + countPaxCreation + ');">' + labelBtnDelete + '</button> </p>'
+// 					+ '</div>');
+			
+// 			countPaxCreation ++;
+// 			hasCreatedPax = true;
+			
+// 			// Remove inputs values
+// 			jQuery("#paxName").val("");
+// 			jQuery("#paxAgeMin").val("");
+// 			jQuery("#paxAgeMax").val("");
+// 			jQuery("#paxPrice").val("");
+		
+	}
+	
 </script>
 
 </body>

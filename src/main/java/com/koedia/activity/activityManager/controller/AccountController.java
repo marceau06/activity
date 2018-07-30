@@ -104,6 +104,37 @@ public class AccountController {
 		return mav;
 	}
 	
+	/********************************** Accès page emails **********************************************************/
+	@GetMapping("emails-manager")
+	public ModelAndView goToEmailsManagerPage() {
+		ModelAndView mav = new ModelAndView("emails-manager");
+		User user = (User)httpSession.getAttribute("user");
+		mav.addObject("user", user);
+		addUserInfosToView(mav);
+		return mav;
+	}
+	
+	
+	/********************************** Accès page booking **********************************************************/
+	@GetMapping("bookings-manager")
+	public ModelAndView goToBookingManagerPage() {
+		ModelAndView mav = new ModelAndView("bookings-manager");
+		User user = (User)httpSession.getAttribute("user");
+		mav.addObject("user", user);
+		addUserInfosToView(mav);
+		return mav;
+	}
+	
+	/********************************** Accès page historique **********************************************************/
+	@GetMapping("history")
+	public ModelAndView goToHistoryrPage() {
+		ModelAndView mav = new ModelAndView("history");
+		User user = (User)httpSession.getAttribute("user");
+		mav.addObject("user", user);
+		addUserInfosToView(mav);
+		return mav;
+	}
+	
 	/********************************** Méthodes utiles **********************************************************/
 
 	private void addUserInfosToView(ModelAndView mav) {
