@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="fragments/header :: header">
+</head>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body, h1, h2, h3, h4, h5, h6 {
+	font-family: "Raleway", Arial, Helvetica, sans-serif;
+	padding-bottom: 10px;
+}
+
+h2 {
+	padding-top: 50px;
+}
+</style>
+<body>
+		<!-- Sidebar/menu -->
+	<nav class="w3-sidebar w3-light-grey w3-collapse w3-top" style="z-index: 3; width: 260px" id="mySidebar">
+		<div class="w3-container w3-display-container w3-padding-16">
+			<form action="/action_page.php" target="_blank">
+				<h2>Recherche</h2>
+				<p>
+					<label><i class="fa fa-calendar-check-o"></i> Référence</label>
+				</p>
+				<input class="w3-input w3-border" type="text" placeholder="Référence" name="CheckIn" required>
+				<p>
+					<label><i class="fa fa-calendar-o"></i> Réservation entre le :</label>
+				</p>
+				<input class="w3-input w3-border" type="text" placeholder="DD MM YYYY" name="CheckIn" required>
+				<p>
+					<label><i class="fa fa-calendar-check-o"></i> Et le</label>
+				</p>
+				<input class="w3-input w3-border" type="text" placeholder="DD MM YYYY" name="CheckIn" required>
+				<p>
+					<label><i class="fa fa-calendar-o"></i> Début période</label>
+				</p>
+				<input class="w3-input w3-border" type="text" placeholder="DD MM YYYY" name="CheckIn" required>
+				<p>
+					<label><i class="fa fa-calendar-check-o"></i> Fin période</label>
+				</p>
+				<input class="w3-input w3-border" type="text" placeholder="DD MM YYYY" name="CheckIn" required>
+				<p>
+					<label><i class="fa fa-male"></i> Nom d'un participant</label>
+				</p>
+				<input class="w3-input w3-border" type="text" placeholder="Nom participant" name="CheckIn" required>
+				<p>
+					<label><i class="fa fa-male"></i> Statut de la réservation</label>
+				</p>
+				<select class="form-control form-control-lg">
+					<option th:value="2">Tous</option>
+					<option th:value="0">Confirmée</option>
+					<option th:value="1">En demande</option>
+					<option th:value="3">Rejetée</option>
+					<option th:value="4">Annulée</option>
+					<option th:value="4">En erreur</option>
+				</select>
+				<p>
+					<button class="w3-button w3-block w3-green w3-left-align" type="submit"><i class="fa fa-search w3-margin-right"></i>Recherche</button>
+				</p>
+			</form>
+		</div>
+	</nav>
+	<div class="w3-container" style="margin-left: 260px">
+	<div class="w3-content w3-border-left w3-border-right">
+		<div class="title_page">
+			<h1>Gestion des réservations</h1>	
+		</div>
+		<div>
+
+		<div id="listBlocContent" class="w3-container w3-card w3-white w3-round" th:if="!${#lists.isEmpty(activitiesList)}" th:each="activity, status : ${activitiesList}">
+			<br>
+
+			<h1><span th:text="${activity.title}"></span></h1>
+			<h3><span th:text="${activity.category}"></span></h3>
+
+			<hr class="w3-clear">
+			<div>
+				<p>
+					<span th:text="${activity.address}"></span>
+				</p>
+			</div>
+			<!-- images -->
+			<div>
+				<span th:text="${activity.descriptionFre}"></span>
+			</div>
+			<div id="buttonBloc">
+<!-- 				<form th:action="@{/activity/toggle}" method="POST" enctype="multipart/form-data"> -->
+<!-- 					<input type="checkbox" data-toggle="toggle" th:attr="data-on=#{activate}" th:attr="data-on=#{deactivate}" th:checked="${activity.active}" onchange="submit();"> <input type="hidden" th:id="activityId" th:name="activityId" th:value="${activity.id}" /> -->
+<!-- 				</form> -->
+<!-- 				<form th:action="@{/activity/edit}" method="GET" enctype="multipart/form-data"> -->
+<!-- 					<button type="submit" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-pencil"></span>  Edit</button> <input type="hidden" th:id="activityId" th:name="activityId" th:value="${activity.id}" /> -->
+<!-- 				</form> -->
+<!-- 				<form th:action="@{/activity/remove}" method="POST" enctype="multipart/form-data"> -->
+<!-- 					<button type="submit" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-remove"></span>  Remove</button> <input type="hidden" th:id="activityId" th:name="activityId" th:value="${activity.id}" /> -->
+<!-- 				</form> -->
+			</div>
+		</div>
+	</div>
+	</div>
+</div>
+	</body>
+	<script type="text/javascript" src="../js/slideshow.js"></script>
+</html>	

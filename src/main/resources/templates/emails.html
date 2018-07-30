@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="fragments/header :: header">
+</head>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body, h1, h2, h3, h4, h5, h6 {
+	font-family: "Raleway", Arial, Helvetica, sans-serif
+}
+
+.mySlides {
+	display: none
+}
+</style>
+							
+						
+						<div class="form-group">
+							<h3>Emails management</h3>
+							<div class="remarkLabel">For each email type, you have two choices : either leave the default configuration or save your configuration.</div> 		
+							
+							<div class="paratitle">Booking request</div>
+							<div class="row mrgBtmDiv inputForm">
+											
+								<div class="col-xs-12 col-sm-12 col-lg-12">
+									<div class="displayInline">
+										<input id="bookingEmailConfigType1" name="bookingEmailConfigType" onclick="javascript:emailConfigType('booking','DEF');" type="radio">
+										<label class="labelinline" for="bookingEmailConfigType1">Leave the default configuration</label> 
+									</div>
+									<div class="displayInline">
+										<input id="bookingEmailConfigType2" name="bookingEmailConfigType" onclick="javascript:emailConfigType('booking','PER');" type="radio">
+										<label class="labelinline" for="bookingEmailConfigType2">Configuration customized</label>
+									</div>
+								</div>	
+										
+								<div class="col-xs-12 col-sm-4 col-lg-2">
+									<label class="mediumfirstcolumn">Subject * :</label>
+									<input id="bookingEmailConfig.subject" name="bookingEmailConfig.subject" class="emailsubject" value="Booking : #|bookingref|#" type="text">
+									
+								</div>
+								<div class="col-xs-12 col-sm-4 col-lg-2">
+									<label class="mediumfirstcolumn">From (name) :</label>
+									<input id="bookingEmailConfig.fromName" name="bookingEmailConfig.fromName" class="email" value="[Meli-support] supplier booking" type="text">
+									
+								</div>	
+								<div class="col-xs-12 col-sm-4 col-lg-2">
+									<label class="mediumfirstcolumn">Original Email :</label>
+									<input id="bookingEmailConfig.fromAddress" name="bookingEmailConfig.fromAddress" class="email" value="support-meli@koedia.com" type="text">
+									
+								</div>	
+								<div class="col-xs-12 col-sm-4 col-lg-2">
+									<label class="mediumfirstcolumn">Hidden copy Email :</label>
+									<input id="bookingEmailConfig.hcAddress" name="bookingEmailConfig.hcAddress" class="email" value="support-meli@koedia.com" type="text">
+									
+								</div>	
+								<div class="col-xs-12 col-sm-4 col-lg-2">
+									<label class="mediumfirstcolumn">Response Email :</label>
+									<input id="bookingEmailConfig.replyToAddress" name="bookingEmailConfig.replyToAddress" class="email" value="support-meli@koedia.com" type="text">
+									
+								</div>
+								
+									
+										<div class="col-xs-12 col-sm-4 col-lg-2">
+											<label class="mediumfirstcolumn">Body of the email * :</label>
+											No template found
+										</div>					
+									
+									
+								
+							</div>
+					
+							<div>
+								<div class="paratitle">Cancellation request</div>
+								<div class="row mrgBtmDiv inputForm">
+											
+									<div class="col-xs-12 col-sm-12 col-lg-12">
+										<div class="displayInline">
+											<input id="cancelEmailConfigType1" name="cancelEmailConfigType" onclick="javascript:emailConfigType('cancel', 'DEF');" type="radio">
+											<label class="labelinline" for="cancelEmailConfigType1">Leave the default configuration</label>
+										</div>
+										<div class="displayInline">
+											<input id="cancelEmailConfigType2" name="cancelEmailConfigType" onclick="javascript:emailConfigType('cancel', 'PER');" type="radio">
+											<label class="labelinline" for="cancelEmailConfigType2">Configuration customized</label>
+										</div>
+									</div>		
+									
+									<div class="col-xs-12 col-sm-4 col-lg-2">
+										<label class="mediumfirstcolumn">Subject * :</label>
+										<input id="cancelEmailConfig.subject" name="cancelEmailConfig.subject" class="emailsubject" value="Booking cancellation : #|bookingref|#" type="text">
+										
+									</div>	
+									<div class="col-xs-12 col-sm-4 col-lg-2">
+										<label class="mediumfirstcolumn">From (name) :</label>
+										<input id="cancelEmailConfig.fromName" name="cancelEmailConfig.fromName" class="email" value="[Meli-support] supplier cancellation" type="text">
+										
+									</div>	
+									<div class="col-xs-12 col-sm-4 col-lg-2">
+										<label class="mediumfirstcolumn">Original Email :</label>
+										<input id="cancelEmailConfig.fromAddress" name="cancelEmailConfig.fromAddress" class="email" value="support-meli@koedia.com" type="text">
+										
+									</div>	
+									<div class="col-xs-12 col-sm-4 col-lg-2">
+										<label class="mediumfirstcolumn">Hidden copy Email :</label>
+										<input id="cancelEmailConfig.hcAddress" name="cancelEmailConfig.hcAddress" class="email" value="support-meli@koedia.com" type="text">
+										
+									</div>	
+									<div class="col-xs-12 col-sm-4 col-lg-2">
+										<label class="mediumfirstcolumn">Response Email :</label>
+										<input id="cancelEmailConfig.replyToAddress" name="cancelEmailConfig.replyToAddress" class="email" value="support-meli@koedia.com" type="text">
+										
+									</div>
+									
+										
+											<div class="col-xs-12 col-sm-4 col-lg-2">
+												<label class="mediumfirstcolumn">Body of the email * :</label>
+												No template found
+											</div>					
+										
+										
+									
+								</div>
+							</div>
+						</div>
+						<div class="globalfunctionnality">
+							<span class="inputLeftDiv">
+								<input class="btnSaveInfos" value="Save informations" onclick="javascript:submitFrom('save');" type="button">
+							</span>
+						</div>		
+</html>					
